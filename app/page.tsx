@@ -80,7 +80,7 @@ export default function Home() {
     <>
       {/* Hero Section */}
       <section className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-b from-charcoal-dark to-charcoal">
-        <div className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center opacity-20"></div>
+        <div className="absolute inset-0 bg-[url('/images/gallery/hero-bg.jpg')] bg-cover bg-center opacity-30"></div>
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold text-gold mb-6">
             Luxury Restrooms for
@@ -181,12 +181,12 @@ export default function Home() {
                 See more in our gallery &rarr;
               </Link>
             </div>
-            <div className="bg-charcoal rounded-lg aspect-video flex items-center justify-center border border-gold/20">
-              <p className="text-cream/50 text-center px-8">
-                [Trailer Photo Placeholder]
-                <br />
-                <span className="text-sm">Add your trailer image to /public/images/</span>
-              </p>
+            <div className="relative rounded-lg aspect-video overflow-hidden border border-gold/20">
+              <img
+                src="/images/gallery/exterior-1.jpg"
+                alt="Upscale Outhouse luxury bathroom trailer"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
           </div>
         </div>
@@ -256,7 +256,7 @@ export default function Home() {
           <p className="mt-6 text-cream/60">
             Or call us at{' '}
             <a href="tel:+15591234567" className="text-gold hover:text-gold-light">
-              (559) 123-4567
+              (559) 663-0356
             </a>
           </p>
         </div>

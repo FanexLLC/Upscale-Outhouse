@@ -20,8 +20,15 @@ export default function Header() {
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="text-2xl font-bold text-gold">
-              Upscale Outhouse
+            <Link href="/" className="flex items-center gap-3">
+              <img
+                src="/images/gallery/Logo.jpg"
+                alt="Upscale Outhouse"
+                className="h-12 w-auto"
+              />
+              <span className="text-xl font-bold text-gold hidden sm:block">
+                Upscale Outhouse
+              </span>
             </Link>
           </div>
 

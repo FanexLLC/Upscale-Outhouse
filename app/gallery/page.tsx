@@ -1,18 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import type { Metadata } from 'next';
 import Image from 'next/image';
 import Lightbox from '@/components/ui/Lightbox';
 
-// Placeholder images - replace with actual trailer photos
 const galleryImages = [
-  { src: '/images/gallery/trailer-exterior-1.jpg', alt: 'Luxury bathroom trailer exterior view' },
-  { src: '/images/gallery/trailer-interior-1.jpg', alt: 'Elegant interior with vanity' },
-  { src: '/images/gallery/trailer-interior-2.jpg', alt: 'Spacious restroom stalls' },
-  { src: '/images/gallery/trailer-interior-3.jpg', alt: 'Premium fixtures and finishes' },
-  { src: '/images/gallery/trailer-exterior-2.jpg', alt: 'Trailer at wedding venue' },
-  { src: '/images/gallery/trailer-interior-4.jpg', alt: 'Climate controlled comfort' },
+  { src: '/images/gallery/exterior-1.jpg', alt: 'Luxury bathroom trailer exterior view' },
+  { src: '/images/gallery/exterior-2.jpg', alt: 'Trailer setup at event venue' },
+  { src: '/images/gallery/exterior-3.jpg', alt: 'Premium trailer exterior' },
+  { src: '/images/gallery/womens-interior.jpg', alt: 'Elegant women\'s interior' },
+  { src: '/images/gallery/layout.jpg', alt: 'Spacious interior layout' },
+  { src: '/images/gallery/hero-bg.jpg', alt: 'Trailer overview' },
 ];
 
 export default function GalleryPage() {
@@ -65,17 +63,6 @@ export default function GalleryPage() {
                 onClick={() => openLightbox(index)}
                 className="relative aspect-[4/3] bg-charcoal rounded-lg overflow-hidden border border-gold/20 hover:border-gold/40 transition-colors group"
               >
-                {/* Placeholder - replace with actual Image component when photos are added */}
-                <div className="absolute inset-0 flex items-center justify-center bg-charcoal">
-                  <div className="text-center text-cream/50 p-4">
-                    <svg className="h-12 w-12 mx-auto mb-2 opacity-50" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                    </svg>
-                    <p className="text-sm">{image.alt}</p>
-                    <p className="text-xs mt-1">Add image to /public/images/gallery/</p>
-                  </div>
-                </div>
-                {/* Uncomment when images are added:
                 <Image
                   src={image.src}
                   alt={image.alt}
@@ -83,7 +70,6 @@ export default function GalleryPage() {
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
-                */}
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
               </button>
             ))}
