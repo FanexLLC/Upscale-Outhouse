@@ -43,7 +43,7 @@ export default function ContactPage() {
                       href="tel:+15591234567"
                       className="text-cream/80 hover:text-gold transition-colors text-lg"
                     >
-                      (559) 123-4567
+                      (559) 663-0356
                     </a>
                     <p className="text-cream/60 text-sm mt-1">
                       Call or text anytime
@@ -64,7 +64,7 @@ export default function ContactPage() {
                       href="mailto:info@upscaleouthouse.com"
                       className="text-cream/80 hover:text-gold transition-colors"
                     >
-                      info@upscaleouthouse.com
+                      upscaleouthouse@gmail.com
                     </a>
                     <p className="text-cream/60 text-sm mt-1">
                       We respond within 24 hours
@@ -106,7 +106,7 @@ export default function ContactPage() {
                       rel="noopener noreferrer"
                       className="text-cream/80 hover:text-gold transition-colors"
                     >
-                      @upscaleouthouse
+                      @upscale_outhouse
                     </a>
                     <p className="text-cream/60 text-sm mt-1">
                       Follow us for updates and photos

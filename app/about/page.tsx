@@ -153,7 +153,7 @@ export default function AboutPage() {
             <div>Hanford</div>
           </div>
           <p className="mt-8 text-gold-light">
-            Free delivery within 50 miles &bull; $2/mile beyond
+            Free delivery within 50 miles
           </p>
         </div>
       </section>
