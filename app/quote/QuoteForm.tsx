@@ -130,6 +130,10 @@ export default function QuoteForm() {
       script.onload = () => {
         setGoogleLoaded(true);
       };
+      script.onerror = () => {
+        console.error('Failed to load Google Maps script');
+        // Still allow form to work without autocomplete
+      };
       document.head.appendChild(script);
     } else if (window.google) {
       setGoogleLoaded(true);
@@ -139,53 +143,57 @@ export default function QuoteForm() {
   // Initialize Places Autocomplete
   useEffect(() => {
     if (googleLoaded && inputRef.current && !autocompleteRef.current) {
-      autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
-        componentRestrictions: { country: 'us' },
-        fields: ['address_components', 'formatted_address', 'geometry', 'place_id'],
-        types: ['address'],
-      });
+      try {
+        autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
+          componentRestrictions: { country: 'us' },
+          fields: ['address_components', 'formatted_address', 'geometry', 'place_id'],
+          types: ['address'],
+        });
 
-      autocompleteRef.current.addListener('place_changed', () => {
-        const place = autocompleteRef.current?.getPlace();
-        if (place && place.formatted_address && place.geometry?.location) {
-          const lat = place.geometry.location.lat();
-          const lng = place.geometry.location.lng();
+        autocompleteRef.current.addListener('place_changed', () => {
+          const place = autocompleteRef.current?.getPlace();
+          if (place && place.formatted_address && place.geometry?.location) {
+            const lat = place.geometry.location.lat();
+            const lng = place.geometry.location.lng();
 
-          // Parse address components
-          let city = '';
-          let state = '';
-          let zip = '';
+            // Parse address components
+            let city = '';
+            let state = '';
+            let zip = '';
 
-          if (place.address_components) {
-            for (const component of place.address_components) {
-              if (component.types.includes('locality')) {
-                city = component.long_name;
-              } else if (component.types.includes('administrative_area_level_1')) {
-                state = component.short_name;
-              } else if (component.types.includes('postal_code')) {
-                zip = component.long_name;
+            if (place.address_components) {
+              for (const component of place.address_components) {
+                if (component.types.includes('locality')) {
+                  city = component.long_name;
+                } else if (component.types.includes('administrative_area_level_1')) {
+                  state = component.short_name;
+                } else if (component.types.includes('postal_code')) {
+                  zip = component.long_name;
+                }
               }
             }
+
+            setFormData((prev) => ({
+              ...prev,
+              eventLocation: place.formatted_address || '',
+              eventLat: lat,
+              eventLng: lng,
+              eventCity: city,
+              eventState: state,
+              eventZip: zip,
+            }));
+
+            // Clear location error
+            setErrors((prev) => {
+              const newErrors = { ...prev };
+              delete newErrors.eventLocation;
+              return newErrors;
+            });
           }
-
-          setFormData((prev) => ({
-            ...prev,
-            eventLocation: place.formatted_address || '',
-            eventLat: lat,
-            eventLng: lng,
-            eventCity: city,
-            eventState: state,
-            eventZip: zip,
-          }));
-
-          // Clear location error
-          setErrors((prev) => {
-            const newErrors = { ...prev };
-            delete newErrors.eventLocation;
-            return newErrors;
-          });
-        }
-      });
+        });
+      } catch (error) {
+        console.error('Failed to initialize Google Places Autocomplete:', error);
+      }
     }
   }, [googleLoaded]);
 
