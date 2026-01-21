@@ -80,15 +80,24 @@ export default function Home() {
     <>
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center">
-        {/* Background Image - properly sized */}
+        {/* Background Image - positioned to show trailer centered */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/images/gallery/hero-bg.jpg')" }}
+          className="absolute inset-0 bg-cover bg-no-repeat"
+          style={{
+            backgroundImage: "url('/images/gallery/hero-bg.jpg')",
+            backgroundPosition: "center 40%"
+          }}
         />
         {/* Elegant gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-charcoal-dark/70 via-charcoal-dark/50 to-charcoal-dark/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-charcoal-dark/60 via-charcoal-dark/40 to-charcoal-dark/70" />
 
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto py-20">
+          {/* Centered Logo */}
+          <img
+            src="/images/gallery/Logo.jpg"
+            alt="Upscale Outhouse"
+            className="h-32 md:h-40 w-auto mx-auto mb-8 rounded-lg shadow-xl"
+          />
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             <span className="text-gold">Luxury Restrooms</span>
             <br />

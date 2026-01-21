@@ -21,11 +21,13 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-3">
-              <img
-                src="/images/gallery/Logo.jpg"
-                alt="Upscale Outhouse"
-                className="h-12 w-auto"
-              />
+              <div className="h-14 w-14 rounded-lg overflow-hidden bg-charcoal-dark flex items-center justify-center">
+                <img
+                  src="/images/gallery/Logo.jpg"
+                  alt="Upscale Outhouse"
+                  className="h-full w-full object-cover"
+                />
+              </div>
               <span className="text-xl font-bold text-gold hidden sm:block">
                 Upscale Outhouse
               </span>
