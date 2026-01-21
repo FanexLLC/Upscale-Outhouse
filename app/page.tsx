@@ -79,28 +79,35 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-b from-charcoal-dark to-charcoal">
-        <div className="absolute inset-0 bg-[url('/images/gallery/hero-bg.jpg')] bg-cover bg-center opacity-30"></div>
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold text-gold mb-6">
-            Luxury Restrooms for
+      <section className="relative min-h-[90vh] flex items-center justify-center">
+        {/* Background Image - properly sized */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/images/gallery/hero-bg.jpg')" }}
+        />
+        {/* Elegant gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-charcoal-dark/70 via-charcoal-dark/50 to-charcoal-dark/80" />
+
+        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto py-20">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <span className="text-gold">Luxury Restrooms</span>
             <br />
-            <span className="text-cream">Unforgettable Events</span>
+            <span className="text-cream">for Unforgettable Events</span>
           </h1>
-          <p className="text-xl md:text-2xl text-cream/80 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-cream/90 mb-10 max-w-2xl mx-auto leading-relaxed">
             Premium bathroom trailer rentals for weddings, corporate events, and special
             occasions throughout Central California.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/quote"
-              className="bg-gold text-charcoal-dark px-8 py-4 rounded text-lg font-semibold hover:bg-gold-light transition-colors"
+              className="bg-gold text-charcoal-dark px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gold-light transition-all shadow-lg hover:shadow-xl"
             >
               Get an Instant Quote
             </Link>
             <Link
               href="/gallery"
-              className="border-2 border-gold text-gold px-8 py-4 rounded text-lg font-semibold hover:bg-gold hover:text-charcoal-dark transition-colors"
+              className="border-2 border-cream/80 text-cream px-8 py-4 rounded-lg text-lg font-semibold hover:bg-cream hover:text-charcoal-dark transition-all"
             >
               View Gallery
             </Link>
@@ -109,13 +116,13 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-charcoal">
+      <section className="py-20 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal-dark mb-4">
               Why Choose Upscale Outhouse?
             </h2>
-            <p className="text-cream/80 text-lg max-w-2xl mx-auto">
+            <p className="text-charcoal/80 text-lg max-w-2xl mx-auto">
               We provide more than just portable restrooms — we deliver a luxury experience
               that elevates your event.
             </p>
@@ -125,11 +132,11 @@ export default function Home() {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="bg-charcoal-dark p-6 rounded-lg border border-gold/20 hover:border-gold/40 transition-colors"
+                className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gold/10"
               >
                 <div className="text-gold mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold text-gold mb-2">{feature.title}</h3>
-                <p className="text-cream/70">{feature.description}</p>
+                <h3 className="text-xl font-semibold text-charcoal-dark mb-2">{feature.title}</h3>
+                <p className="text-charcoal/70">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -144,11 +151,11 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-gold mb-6">
                 Experience True Luxury
               </h2>
-              <p className="text-cream/80 text-lg mb-6">
+              <p className="text-cream text-lg mb-6">
                 Our premium bathroom trailer features everything your guests need for a
                 comfortable, upscale experience:
               </p>
-              <ul className="space-y-3 text-cream/80">
+              <ul className="space-y-3 text-cream">
                 <li className="flex items-center gap-3">
                   <span className="text-gold">&#10003;</span>
                   Multiple private restroom stalls
@@ -193,13 +200,13 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-charcoal">
+      <section className="py-20 bg-cream-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal-dark mb-4">
               What Our Clients Say
             </h2>
-            <p className="text-cream/80 text-lg">
+            <p className="text-charcoal/70 text-lg">
               Don&apos;t just take our word for it — hear from our satisfied customers.
             </p>
           </div>
@@ -208,13 +215,13 @@ export default function Home() {
             {testimonials.map((testimonial, index) => (
               <div
                 key={index}
-                className="bg-charcoal-dark p-8 rounded-lg border border-gold/20"
+                className="bg-white p-8 rounded-xl shadow-md"
               >
                 <div className="text-gold text-4xl mb-4">&ldquo;</div>
-                <p className="text-cream/80 mb-6 italic">{testimonial.quote}</p>
+                <p className="text-charcoal/80 mb-6 italic">{testimonial.quote}</p>
                 <div>
-                  <p className="text-gold font-semibold">{testimonial.author}</p>
-                  <p className="text-cream/60 text-sm">{testimonial.event}</p>
+                  <p className="text-charcoal-dark font-semibold">{testimonial.author}</p>
+                  <p className="text-charcoal/60 text-sm">{testimonial.event}</p>
                 </div>
               </div>
             ))}
@@ -228,34 +235,34 @@ export default function Home() {
           <h2 className="text-3xl md:text-4xl font-bold text-gold mb-4">
             Serving Central California
           </h2>
-          <p className="text-cream/80 text-lg max-w-2xl mx-auto mb-8">
+          <p className="text-cream text-lg max-w-2xl mx-auto mb-8">
             Based in Fresno, we proudly serve events within 150 miles, including
             Bakersfield, Visalia, Merced, Modesto, and the entire Central Valley.
           </p>
-          <p className="text-gold-light">
+          <p className="text-gold-light font-medium">
             Free delivery within 50 miles of Fresno
           </p>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-b from-charcoal to-charcoal-dark">
+      <section className="py-24 bg-cream">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-charcoal-dark mb-6">
             Ready to Elevate Your Event?
           </h2>
-          <p className="text-cream/80 text-lg mb-8">
+          <p className="text-charcoal/70 text-lg mb-8">
             Get an instant quote in seconds. No obligation, no hassle.
           </p>
           <Link
             href="/quote"
-            className="inline-block bg-gold text-charcoal-dark px-10 py-4 rounded text-lg font-semibold hover:bg-gold-light transition-colors"
+            className="inline-block bg-gold text-charcoal-dark px-10 py-4 rounded-lg text-lg font-semibold hover:bg-gold-light transition-all shadow-lg hover:shadow-xl"
           >
             Get Your Free Quote
           </Link>
-          <p className="mt-6 text-cream/60">
+          <p className="mt-6 text-charcoal/60">
             Or call us at{' '}
-            <a href="tel:+15591234567" className="text-gold hover:text-gold-light">
+            <a href="tel:+15596630356" className="text-gold hover:text-gold-olive font-medium">
               (559) 663-0356
             </a>
           </p>

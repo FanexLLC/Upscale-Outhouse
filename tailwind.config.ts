@@ -16,11 +16,16 @@ const config: Config = {
           light: '#F4E5A5',
           olive: '#8B7F3C',
         },
+        // Warmer, more elegant palette
         charcoal: {
-          DEFAULT: '#2D3748',
-          dark: '#1A202C',
+          DEFAULT: '#3D3D3D',
+          dark: '#2A2A2A',
+          light: '#4A4545',
         },
-        cream: '#F7FAFC',
+        cream: {
+          DEFAULT: '#FAF8F5',
+          dark: '#F0EBE3',
+        },
       },
     },
   },
