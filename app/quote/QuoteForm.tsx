@@ -214,6 +214,12 @@ export default function QuoteForm() {
   const validateStep1 = (): boolean => {
     const newErrors: ValidationErrors = {};
 
+    // Sync location input value before validation
+    const locationValue = inputRef.current?.value || formData.eventLocation;
+    if (locationValue !== formData.eventLocation) {
+      setFormData((prev) => ({ ...prev, eventLocation: locationValue }));
+    }
+
     if (!formData.startDate) {
       newErrors.startDate = 'Start date is required';
     }
@@ -235,7 +241,7 @@ export default function QuoteForm() {
     if (!formData.guestCount) {
       newErrors.guestCount = 'Guest count is required';
     }
-    if (!formData.eventLocation.trim()) {
+    if (!locationValue.trim()) {
       newErrors.eventLocation = 'Event location is required';
     }
 
@@ -528,13 +534,16 @@ export default function QuoteForm() {
                 ref={inputRef}
                 type="text"
                 placeholder="Start typing an address..."
-                value={formData.eventLocation}
-                onChange={(e) => {
-                  updateField('eventLocation', e.target.value);
-                  // Clear coordinates if user manually edits
-                  if (formData.eventLat) {
-                    updateField('eventLat', null);
-                    updateField('eventLng', null);
+                defaultValue={formData.eventLocation}
+                onBlur={(e) => {
+                  // Sync value on blur if user typed manually without selecting
+                  if (e.target.value !== formData.eventLocation) {
+                    updateField('eventLocation', e.target.value);
+                    // Clear coordinates if manually edited
+                    if (formData.eventLat) {
+                      updateField('eventLat', null);
+                      updateField('eventLng', null);
+                    }
                   }
                 }}
                 className={inputClass('eventLocation')}
