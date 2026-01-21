@@ -4,6 +4,10 @@ import { calculateDistance } from '@/lib/google-maps';
 import { calculateQuote, PRICING } from '@/lib/pricing';
 import { EventType } from '@prisma/client';
 
+// Force Node.js runtime for API compatibility
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 // Map form event types to Prisma enum
 const eventTypeMap: Record<string, EventType> = {
   wedding: 'WEDDING',
