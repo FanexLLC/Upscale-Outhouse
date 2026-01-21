@@ -1,0 +1,177 @@
+// Prisma schema for Upscale Outhouse
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Quote status enum
+enum QuoteStatus {
+  PENDING
+  CONVERTED
+  EXPIRED
+}
+
+// Booking status enum
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+// Event type enum
+enum EventType {
+  WEDDING
+  CORPORATE
+  BIRTHDAY
+  GRADUATION
+  OTHER
+}
+
+// Quotes table - stores quote requests before payment
+model Quote {
+  id                String      @id @default(cuid())
+
+  // Event details
+  startDate         DateTime
+  endDate           DateTime
+  startTime         String
+  endTime           String
+  eventType         EventType
+  guestCount        String
+  hasWaterHookup    Boolean     @default(false)
+  additionalDetails String?
+
+  // Location
+  eventAddress      String
+  eventCity         String?
+  eventState        String?
+  eventZip          String?
+  eventLat          Float?
+  eventLng          Float?
+
+  // Contact info
+  customerName      String
+  customerEmail     String
+  customerPhone     String
+
+  // Pricing
+  numberOfDays      Int
+  distanceMiles     Float?
+  baseRental        Float
+  discountPercent   Float       @default(0)
+  discountAmount    Float       @default(0)
+  rentalAfterDiscount Float
+  deliveryFee       Float       @default(0)
+  totalAmount       Float
+  depositAmount     Float       @default(100)
+
+  // Status tracking
+  status            QuoteStatus @default(PENDING)
+  convertedToBooking Boolean    @default(false)
+  bookingId         String?
+  booking           Booking?    @relation(fields: [bookingId], references: [id])
+
+  // Metadata
+  ipAddress         String?
+  userAgent         String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  expiresAt         DateTime?
+
+  @@index([customerEmail])
+  @@index([startDate])
+  @@index([status])
+}
+
+// Bookings table - confirmed reservations with payment
+model Booking {
+  id                String        @id @default(cuid())
+
+  // Event details (copied from quote)
+  startDate         DateTime
+  endDate           DateTime
+  startTime         String
+  endTime           String
+  eventType         EventType
+  guestCount        String
+  hasWaterHookup    Boolean       @default(false)
+  additionalDetails String?
+
+  // Location
+  eventAddress      String
+  eventCity         String?
+  eventState        String?
+  eventZip          String?
+  eventLat          Float?
+  eventLng          Float?
+
+  // Customer info
+  customerName      String
+  customerEmail     String
+  customerPhone     String
+
+  // Pricing
+  numberOfDays      Int
+  distanceMiles     Float?
+  baseRental        Float
+  discountPercent   Float         @default(0)
+  discountAmount    Float         @default(0)
+  rentalAfterDiscount Float
+  deliveryFee       Float         @default(0)
+  totalAmount       Float
+  depositAmount     Float         @default(100)
+
+  // Payment tracking
+  depositPaid       Boolean       @default(false)
+  depositPaidAt     DateTime?
+  balancePaid       Boolean       @default(false)
+  balancePaidAt     DateTime?
+
+  // Stripe integration
+  stripePaymentId   String?
+  stripeCustomerId  String?
+  stripeInvoiceId   String?
+
+  // Google Calendar integration
+  googleEventId     String?
+
+  // Status
+  status            BookingStatus @default(PENDING)
+  notes             String?
+
+  // Relations
+  quotes            Quote[]
+
+  // Metadata
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  @@index([customerEmail])
+  @@index([startDate])
+  @@index([status])
+}
+
+// Blocked dates - for manual blocking by admin
+model BlockedDate {
+  id        String   @id @default(cuid())
+  date      DateTime
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@unique([date])
+  @@index([date])
+}
+
+// Settings table - configurable business settings
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
