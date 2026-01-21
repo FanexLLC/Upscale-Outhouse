@@ -33,7 +33,7 @@ const faqs = [
   },
   {
     question: 'How many guests can the trailer accommodate?',
-    answer: 'Our luxury trailer comfortably serves events with up to 200+ guests. For larger events or multi-day festivals, please contact us to discuss additional units.',
+    answer: 'Our luxury trailer comfortably serves events with up to 250+ guests. For larger events or multi-day festivals, please contact us to discuss additional units.',
   },
   {
     question: 'Is the trailer climate controlled?',
