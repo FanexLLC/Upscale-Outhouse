@@ -34,7 +34,9 @@ export async function calculateDistance(
   destinationLat: number,
   destinationLng: number
 ): Promise<DistanceResult> {
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  // Use server-side key for Distance Matrix API (no NEXT_PUBLIC_ prefix)
+  // Falls back to public key if server key not set
+  const apiKey = process.env.GOOGLE_MAPS_SERVER_API_KEY || process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
   if (!apiKey) {
     return {
@@ -52,16 +54,24 @@ export async function calculateDistance(
 
     const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin}&destinations=${destination}&units=imperial&key=${apiKey}`;
 
-    const response = await fetch(url);
+    // Disable caching to ensure fresh results
+    const response = await fetch(url, { cache: 'no-store' });
     const data = await response.json();
 
     if (data.status !== 'OK') {
+      // Log full error for debugging
+      console.error('Distance Matrix API error:', {
+        status: data.status,
+        error_message: data.error_message,
+        origin,
+        destination,
+      });
       return {
         distanceMiles: 0,
         durationMinutes: 0,
         deliveryFee: 0,
         isWithinServiceArea: false,
-        errorMessage: `Distance Matrix API error: ${data.status}`,
+        errorMessage: `Distance Matrix API error: ${data.status}${data.error_message ? ` - ${data.error_message}` : ''}`,
       };
     }
 
