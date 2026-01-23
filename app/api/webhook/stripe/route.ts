@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import { constructWebhookEvent } from '@/lib/stripe';
 import { prisma } from '@/lib/db';
 import { sendCustomerConfirmationEmail, sendOwnerNotificationEmail } from '@/lib/email';
+import { createCalendarEvent, isCalendarConfigured } from '@/lib/google-calendar';
 import Stripe from 'stripe';
 
 export async function POST(request: NextRequest) {
@@ -129,6 +130,51 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
   } catch (emailError) {
     // Log email error but don't fail the webhook
     console.error('Failed to send confirmation emails:', emailError);
+  }
+
+  // Create Google Calendar event
+  if (isCalendarConfigured()) {
+    try {
+      const calendarEventData = {
+        bookingId: booking.id,
+        customerName: booking.customerName,
+        customerEmail: booking.customerEmail,
+        customerPhone: booking.customerPhone,
+        eventAddress: booking.eventAddress,
+        eventCity: booking.eventCity,
+        eventState: booking.eventState,
+        eventZip: booking.eventZip,
+        startDate: booking.startDate,
+        endDate: booking.endDate,
+        startTime: booking.startTime,
+        endTime: booking.endTime,
+        eventType: booking.eventType,
+        guestCount: booking.guestCount,
+        hasWaterHookup: booking.hasWaterHookup,
+        numberOfDays: booking.numberOfDays,
+        totalAmount: booking.totalAmount,
+        depositAmount: booking.depositAmount,
+        depositPaid: true,
+        balancePaid: booking.balancePaid,
+        additionalDetails: booking.additionalDetails,
+      };
+
+      const googleEventId = await createCalendarEvent(calendarEventData);
+
+      if (googleEventId) {
+        // Store the Google Calendar event ID in the booking
+        await prisma.booking.update({
+          where: { id: bookingId },
+          data: { googleEventId },
+        });
+        console.log(`Google Calendar event created for booking ${bookingId}: ${googleEventId}`);
+      }
+    } catch (calendarError) {
+      // Log calendar error but don't fail the webhook
+      console.error('Failed to create Google Calendar event:', calendarError);
+    }
+  } else {
+    console.log('Google Calendar not configured - skipping event creation');
   }
 }
 
