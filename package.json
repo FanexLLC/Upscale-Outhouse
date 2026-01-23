@@ -7,13 +7,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed:admin": "npx tsx scripts/seed-admin.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "@stripe/stripe-js": "^8.6.3",
+    "bcryptjs": "^3.0.3",
     "dlv": "^1.1.3",
     "next": "14.2.35",
+    "next-auth": "^4.24.13",
     "prisma": "^5.22.0",
     "react": "^18",
     "react-dom": "^18",
@@ -21,6 +24,7 @@
     "stripe": "^20.2.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/google.maps": "^3.58.1",
     "@types/node": "20.19.30",
     "@types/react": "^18",
@@ -30,6 +34,8 @@
     "eslint-config-next": "14.2.35",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "5.9.3"
   }
 }

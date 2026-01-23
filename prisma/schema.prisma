@@ -175,3 +175,20 @@ model Setting {
   value     Json
   updatedAt DateTime @updatedAt
 }
+
+// User role enum
+enum UserRole {
+  ADMIN
+  OWNER
+}
+
+// User table - for admin authentication
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  name          String?
+  role          UserRole  @default(ADMIN)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+}
