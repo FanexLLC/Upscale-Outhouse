@@ -40,3 +40,11 @@ nul
 next-env.d.ts
 
 /lib/generated/prisma
+
+# Credentials (never commit these!)
+credentials/
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!*.config.json

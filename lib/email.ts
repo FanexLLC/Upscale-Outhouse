@@ -13,7 +13,9 @@ function getResend(): Resend {
   return resendInstance;
 }
 
-const FROM_EMAIL = process.env.BUSINESS_EMAIL || 'noreply@upscaleouthouse.com';
+// Resend requires a verified domain or their test address
+// For production, verify upscaleouthouse.com in Resend and use: bookings@upscaleouthouse.com
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
 const OWNER_EMAIL = process.env.OWNER_EMAIL || process.env.BUSINESS_EMAIL || 'info@upscaleouthouse.com';
 const BUSINESS_PHONE = process.env.BUSINESS_PHONE || '(559) 555-1234';
 
