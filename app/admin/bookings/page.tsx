@@ -2,6 +2,9 @@ import { prisma } from "@/lib/db";
 import Link from "next/link";
 import BookingsFilter from "@/components/admin/BookingsFilter";
 
+// Prevent static generation - render on demand only
+export const dynamic = "force-dynamic";
+
 interface SearchParams {
   status?: string;
   search?: string;

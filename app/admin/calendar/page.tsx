@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/db";
 import AdminCalendar from "@/components/admin/AdminCalendar";
 
+// Prevent static generation - render on demand only
+export const dynamic = "force-dynamic";
+
 async function getCalendarData() {
   const now = new Date();
   const startOfYear = new Date(now.getFullYear(), 0, 1);

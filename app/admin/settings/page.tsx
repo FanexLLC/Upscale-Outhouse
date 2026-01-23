@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/db";
 import SettingsForm from "@/components/admin/SettingsForm";
 
+// Prevent static generation - render on demand only
+export const dynamic = "force-dynamic";
+
 interface PricingSettings {
   baseRate: number;
   deliveryRatePerMile: number;

@@ -3,6 +3,9 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import BookingActions from "@/components/admin/BookingActions";
 
+// Prevent static generation - render on demand only
+export const dynamic = "force-dynamic";
+
 async function getBooking(id: string) {
   const booking = await prisma.booking.findUnique({
     where: { id },
