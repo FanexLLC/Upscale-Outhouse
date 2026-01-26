@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import QuoteForm from './QuoteForm';
 
 export const metadata: Metadata = {
-  title: 'Get a Quote | Upscale Outhouse',
-  description: 'Get an instant quote for luxury bathroom trailer rental for your event in Fresno and Central California.',
+  title: 'Get a Quote',
+  description: 'Get an instant quote for luxury bathroom trailer rental. $450/day with free delivery within 50 miles of Fresno. Book online in minutes.',
 };
 
 export default function QuotePage() {

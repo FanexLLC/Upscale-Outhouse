@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'About Us | Upscale Outhouse',
-  description: 'Learn about Upscale Outhouse - a veteran-owned luxury bathroom trailer rental company serving Fresno and Central California.',
+  title: 'About Us',
+  description: 'Learn about Upscale Outhouse — a veteran-owned luxury bathroom trailer rental company serving Fresno and Central California. Quality, reliability, and service.',
 };
 
 const faqs = [

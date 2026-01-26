@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { getCalendarEvents, isCalendarConfigured } from '@/lib/google-calendar';
 
 // Force dynamic rendering for this route
 export const dynamic = 'force-dynamic';
@@ -63,7 +64,22 @@ export async function GET(request: NextRequest) {
         },
       });
 
-      const isAvailable = conflictingBookings.length === 0 && blockedDates.length === 0;
+      // Also check Google Calendar for any manually blocked events
+      let calendarBlockedCount = 0;
+      if (isCalendarConfigured()) {
+        try {
+          const calendarEvents = await getCalendarEvents(start, end);
+          // Count events that are marked as "BLOCKED" or similar admin-created blocks
+          calendarBlockedCount = calendarEvents.filter(
+            (event) => event.summary?.toLowerCase().includes('blocked') ||
+                       event.summary?.toLowerCase().includes('unavailable')
+          ).length;
+        } catch (calError) {
+          console.error('Failed to check Google Calendar for blocked dates:', calError);
+        }
+      }
+
+      const isAvailable = conflictingBookings.length === 0 && blockedDates.length === 0 && calendarBlockedCount === 0;
 
       // If not available, find nearest available dates
       let suggestedDates: { startDate: Date; endDate: Date }[] = [];

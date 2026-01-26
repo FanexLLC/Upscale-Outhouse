@@ -162,7 +162,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET endpoint to retrieve a quote by ID
+// GET endpoint to retrieve a quote by ID (public — returns limited fields only)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -177,6 +177,31 @@ export async function GET(request: NextRequest) {
 
     const quote = await prisma.quote.findUnique({
       where: { id: quoteId },
+      select: {
+        id: true,
+        startDate: true,
+        endDate: true,
+        startTime: true,
+        endTime: true,
+        eventType: true,
+        guestCount: true,
+        eventAddress: true,
+        eventCity: true,
+        eventState: true,
+        customerName: true,
+        customerEmail: true,
+        customerPhone: true,
+        numberOfDays: true,
+        baseRental: true,
+        discountPercent: true,
+        discountAmount: true,
+        rentalAfterDiscount: true,
+        deliveryFee: true,
+        totalAmount: true,
+        depositAmount: true,
+        status: true,
+        convertedToBooking: true,
+      },
     });
 
     if (!quote) {

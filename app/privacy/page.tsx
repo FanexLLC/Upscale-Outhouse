@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Upscale Outhouse',
+  title: 'Privacy Policy',
   description: 'Privacy Policy for Upscale Outhouse luxury bathroom trailer rentals.',
 };
 
@@ -95,8 +95,8 @@ export default function PrivacyPage() {
             If you have any questions about this Privacy Policy, please contact us at:
           </p>
           <ul className="list-none space-y-1">
-            <li>Email: info@upscaleouthouse.com</li>
-            <li>Phone: (559) 123-4567</li>
+            <li>Email: upscaleouthouse@gmail.com</li>
+            <li>Phone: (559) 663-0356</li>
           </ul>
         </div>
       </div>

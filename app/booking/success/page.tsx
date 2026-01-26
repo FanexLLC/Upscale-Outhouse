@@ -252,9 +252,9 @@ function BookingSuccessContent() {
             <div className="bg-charcoal-dark rounded-lg p-4 text-center">
               <p className="text-cream/70 mb-2">Questions about your booking?</p>
               <p className="text-cream">
-                Call us at <a href="tel:+15595551234" className="text-gold hover:underline">(559) 555-1234</a>
+                Call us at <a href="tel:+15596630356" className="text-gold hover:underline">(559) 663-0356</a>
                 {' '}or email{' '}
-                <a href="mailto:info@upscaleouthouse.com" className="text-gold hover:underline">info@upscaleouthouse.com</a>
+                <a href="mailto:upscaleouthouse@gmail.com" className="text-gold hover:underline">upscaleouthouse@gmail.com</a>
               </p>
             </div>
           </div>

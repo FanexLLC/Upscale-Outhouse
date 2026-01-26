@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import {
+  markEventCompleted,
+  markEventCancelled,
+  isCalendarConfigured,
+} from "@/lib/google-calendar";
 
 export async function PATCH(
   request: NextRequest,
@@ -46,6 +51,22 @@ export async function PATCH(
       where: { id },
       data: updateData,
     });
+
+    // Sync with Google Calendar if status changed and calendar is configured
+    if (body.status && isCalendarConfigured() && existingBooking.googleEventId) {
+      try {
+        if (body.status === "COMPLETED") {
+          await markEventCompleted(existingBooking.googleEventId);
+          console.log(`Marked Google Calendar event as completed for booking ${id}`);
+        } else if (body.status === "CANCELLED") {
+          await markEventCancelled(existingBooking.googleEventId);
+          console.log(`Marked Google Calendar event as cancelled for booking ${id}`);
+        }
+      } catch (calendarError) {
+        // Log but don't fail the request
+        console.error("Failed to update Google Calendar event:", calendarError);
+      }
+    }
 
     return NextResponse.json(updatedBooking);
   } catch (error) {

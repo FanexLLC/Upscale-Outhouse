@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Contact Us | Upscale Outhouse',
-  description: 'Get in touch with Upscale Outhouse for luxury bathroom trailer rentals in Fresno and Central California.',
+  title: 'Contact Us',
+  description: 'Contact Upscale Outhouse for luxury bathroom trailer rentals in Fresno and Central California. Call (559) 663-0356 or get an instant online quote.',
 };
 
 export default function ContactPage() {
@@ -40,7 +40,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-gold mb-1">Phone</h3>
                     <a
-                      href="tel:+15591234567"
+                      href="tel:+15596630356"
                       className="text-cream/80 hover:text-gold transition-colors text-lg"
                     >
                       (559) 663-0356
@@ -61,7 +61,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-gold mb-1">Email</h3>
                     <a
-                      href="mailto:info@upscaleouthouse.com"
+                      href="mailto:upscaleouthouse@gmail.com"
                       className="text-cream/80 hover:text-gold transition-colors"
                     >
                       upscaleouthouse@gmail.com

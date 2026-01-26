@@ -173,15 +173,14 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Booking creation error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: `Failed to create booking: ${errorMessage}` },
+      { error: 'Failed to create booking' },
       { status: 500 }
     );
   }
 }
 
-// GET endpoint to retrieve a booking by ID
+// GET endpoint to retrieve a booking by ID (public — returns limited fields only)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -196,6 +195,26 @@ export async function GET(request: NextRequest) {
 
     const booking = await prisma.booking.findUnique({
       where: { id: bookingId },
+      select: {
+        id: true,
+        customerName: true,
+        customerEmail: true,
+        customerPhone: true,
+        eventAddress: true,
+        eventCity: true,
+        eventState: true,
+        startDate: true,
+        endDate: true,
+        startTime: true,
+        endTime: true,
+        eventType: true,
+        guestCount: true,
+        numberOfDays: true,
+        totalAmount: true,
+        depositAmount: true,
+        depositPaid: true,
+        status: true,
+      },
     });
 
     if (!booking) {

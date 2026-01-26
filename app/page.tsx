@@ -1,5 +1,33 @@
 import Link from 'next/link';
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'Upscale Outhouse',
+  description: 'Premium luxury bathroom trailer rentals for weddings, corporate events, and special occasions in Fresno and Central California.',
+  url: 'https://upscaleouthouse.com',
+  telephone: '+15596630356',
+  email: 'upscaleouthouse@gmail.com',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Fresno',
+    addressRegion: 'CA',
+    postalCode: '93704',
+    addressCountry: 'US',
+  },
+  areaServed: {
+    '@type': 'GeoCircle',
+    geoMidpoint: {
+      '@type': 'GeoCoordinates',
+      latitude: 36.7378,
+      longitude: -119.7871,
+    },
+    geoRadius: '241000', // 150 miles in meters
+  },
+  priceRange: '$450/day',
+  image: 'https://upscaleouthouse.com/images/gallery/hero-bg.jpg',
+};
+
 const features = [
   {
     title: 'Climate Controlled',
@@ -78,6 +106,10 @@ const testimonials = [
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center">
         {/* Background Image - positioned to show trailer centered */}

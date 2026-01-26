@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | Upscale Outhouse',
+  title: 'Terms of Service',
   description: 'Terms of Service for Upscale Outhouse luxury bathroom trailer rentals.',
 };
 
@@ -82,8 +82,8 @@ export default function TermsPage() {
             If you have any questions about these Terms of Service, please contact us at:
           </p>
           <ul className="list-none space-y-1">
-            <li>Email: info@upscaleouthouse.com</li>
-            <li>Phone: (559) 123-4567</li>
+            <li>Email: upscaleouthouse@gmail.com</li>
+            <li>Phone: (559) 663-0356</li>
           </ul>
         </div>
       </div>
