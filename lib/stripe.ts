@@ -19,7 +19,7 @@ export function getStripe(): Stripe {
 }
 
 // Deposit amount in cents for Stripe
-export const DEPOSIT_AMOUNT_CENTS = 10000; // $100.00
+export const DEPOSIT_AMOUNT_CENTS = 100; // $1.00 — TODO: change back to 10000 after test
 
 // Create a Stripe Checkout session for the deposit
 export async function createCheckoutSession({

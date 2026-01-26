@@ -1,7 +1,7 @@
 // Pricing configuration
 export const PRICING = {
   BASE_DAILY_RATE: 450,
-  DEPOSIT_AMOUNT: 100,
+  DEPOSIT_AMOUNT: 1, // TODO: change back to 100 after test
   FREE_DELIVERY_MILES: 50,
   DELIVERY_RATE_PER_MILE: 2,
   MAX_DELIVERY_MILES: 150,
