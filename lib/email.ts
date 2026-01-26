@@ -13,9 +13,16 @@ function getResend(): Resend {
   return resendInstance;
 }
 
-// Resend requires a verified domain or their test address
-// For production, verify upscaleouthouse.com in Resend and use: bookings@upscaleouthouse.com
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
+// Validated From address — must be a verified domain in Resend, never resend.dev
+const EMAIL_FROM_RAW = process.env.EMAIL_FROM || 'invoices@upscaleouthouse.com';
+if (!EMAIL_FROM_RAW.includes('@') || !EMAIL_FROM_RAW.includes('upscaleouthouse.com')) {
+  console.error(
+    `[EMAIL CONFIG ERROR] EMAIL_FROM is invalid: "${EMAIL_FROM_RAW}". ` +
+    'It must be an @upscaleouthouse.com address. Emails will fail.'
+  );
+}
+const FROM_EMAIL = `Upscale Outhouse <${EMAIL_FROM_RAW}>`;
+const REPLY_TO = 'upscaleouthouse@gmail.com';
 const OWNER_EMAIL = process.env.OWNER_EMAIL || process.env.BUSINESS_EMAIL || 'info@upscaleouthouse.com';
 const BUSINESS_PHONE = process.env.BUSINESS_PHONE || '(559) 555-1234';
 
@@ -183,7 +190,7 @@ export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
               <div style="background-color: #D4AF37; border-radius: 8px; padding: 20px; text-align: center;">
                 <p style="margin: 0 0 10px 0; color: #2D3748; font-size: 14px; font-weight: bold;">Questions? Contact us!</p>
                 <p style="margin: 0; color: #2D3748; font-size: 14px;">Phone: ${BUSINESS_PHONE}</p>
-                <p style="margin: 5px 0 0 0; color: #2D3748; font-size: 14px;">Email: ${FROM_EMAIL}</p>
+                <p style="margin: 5px 0 0 0; color: #2D3748; font-size: 14px;">Email: ${REPLY_TO}</p>
               </div>
             </td>
           </tr>
@@ -205,10 +212,14 @@ export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
 </html>
   `;
 
+  const subject = `Booking Confirmed - ${formatEventType(data.eventType)} on ${formatDate(data.startDate)}`;
+  console.log('[Email] Sending customer confirmation:', { from: FROM_EMAIL, to: data.customerEmail, subject });
+
   const { data: emailData, error } = await getResend().emails.send({
-    from: `Upscale Outhouse <${FROM_EMAIL}>`,
+    from: FROM_EMAIL,
     to: [data.customerEmail],
-    subject: `Booking Confirmed - ${formatEventType(data.eventType)} on ${formatDate(data.startDate)}`,
+    replyTo: REPLY_TO,
+    subject,
     html,
   });
 
@@ -363,10 +374,14 @@ export async function sendOwnerNotificationEmail(data: BookingEmailData) {
 </html>
   `;
 
+  const subject = `New Booking: ${data.customerName} - ${formatEventType(data.eventType)} on ${formatDate(data.startDate)}`;
+  console.log('[Email] Sending owner notification:', { from: FROM_EMAIL, to: OWNER_EMAIL, subject });
+
   const { data: emailData, error } = await getResend().emails.send({
-    from: `Upscale Outhouse System <${FROM_EMAIL}>`,
+    from: FROM_EMAIL,
     to: [OWNER_EMAIL],
-    subject: `New Booking: ${data.customerName} - ${formatEventType(data.eventType)} on ${formatDate(data.startDate)}`,
+    replyTo: REPLY_TO,
+    subject,
     html,
   });
 
