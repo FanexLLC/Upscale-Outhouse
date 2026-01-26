@@ -94,6 +94,17 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
 
   console.log(`Booking ${bookingId} marked as confirmed with deposit paid`);
 
+  // Update associated quote status to PAID
+  try {
+    await prisma.quote.updateMany({
+      where: { bookingId },
+      data: { status: 'PAID' },
+    });
+    console.log(`Quote(s) linked to booking ${bookingId} marked as PAID`);
+  } catch (quoteError) {
+    console.error('Failed to update quote status:', quoteError);
+  }
+
   // Send confirmation emails
   try {
     const emailData = {
@@ -194,8 +205,11 @@ async function handleCheckoutExpired(session: Stripe.Checkout.Session) {
   });
 
   if (booking && !booking.depositPaid) {
-    // Optionally mark the booking as cancelled or leave it as pending
-    // For now, we'll leave it as pending so the user can try again
-    console.log(`Booking ${bookingId} checkout expired but not cancelled - user can retry`);
+    // Mark associated quote as abandoned
+    await prisma.quote.updateMany({
+      where: { bookingId },
+      data: { status: 'ABANDONED' },
+    });
+    console.log(`Booking ${bookingId} checkout expired - quote marked as ABANDONED`);
   }
 }

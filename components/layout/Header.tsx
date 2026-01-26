@@ -22,10 +22,10 @@ export default function Header() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-3">
               <img
-                src="/images/gallery/Logo.jpg"
+                src="/images/gallery/Logo-black.jpg"
                 alt="Upscale Outhouse"
-                className="h-14 w-14 object-cover"
-                style={{ backgroundColor: '#2A2A2A' }}
+                className="h-14 w-14 object-contain"
+                style={{ mixBlendMode: 'screen' }}
               />
               <span className="text-xl font-bold text-gold hidden sm:block">
                 Upscale Outhouse

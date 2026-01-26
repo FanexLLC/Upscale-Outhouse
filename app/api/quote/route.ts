@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
       eventType,
       guestCount,
       hasWaterHookup,
+      hasPowerAvailable,
       eventLocation,
       additionalDetails,
       // Location coordinates (from Places autocomplete)
@@ -102,6 +103,7 @@ export async function POST(request: NextRequest) {
         eventType: prismaEventType,
         guestCount,
         hasWaterHookup: hasWaterHookup || false,
+        hasPowerAvailable: hasPowerAvailable || false,
         additionalDetails: additionalDetails || null,
 
         // Location

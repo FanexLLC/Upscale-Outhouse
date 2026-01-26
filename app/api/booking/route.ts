@@ -115,6 +115,7 @@ export async function POST(request: NextRequest) {
         eventType: quote.eventType,
         guestCount: quote.guestCount,
         hasWaterHookup: quote.hasWaterHookup,
+        hasPowerAvailable: quote.hasPowerAvailable,
         additionalDetails: quote.additionalDetails,
 
         // Location

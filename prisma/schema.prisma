@@ -14,7 +14,9 @@ datasource db {
 enum QuoteStatus {
   PENDING
   CONVERTED
+  PAID
   EXPIRED
+  ABANDONED
 }
 
 // Booking status enum
@@ -46,6 +48,7 @@ model Quote {
   eventType         EventType
   guestCount        String
   hasWaterHookup    Boolean     @default(false)
+  hasPowerAvailable Boolean     @default(false)
   additionalDetails String?
 
   // Location
@@ -102,6 +105,7 @@ model Booking {
   eventType         EventType
   guestCount        String
   hasWaterHookup    Boolean       @default(false)
+  hasPowerAvailable Boolean       @default(false)
   additionalDetails String?
 
   // Location

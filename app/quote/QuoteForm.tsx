@@ -10,6 +10,7 @@ import {
   isValidPhone,
   PRICING,
 } from '@/lib/pricing';
+import CalendarPicker from '@/components/ui/CalendarPicker';
 
 // Event type options
 const EVENT_TYPES = [
@@ -30,6 +31,17 @@ const GUEST_COUNTS = [
   { value: '200+', label: '200+ guests' },
 ];
 
+// Time options - hourly
+const TIME_OPTIONS: { value: string; label: string }[] = [
+  { value: '', label: 'Select time' },
+];
+for (let hour = 6; hour <= 23; hour++) {
+  const value = `${hour.toString().padStart(2, '0')}:00`;
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+  TIME_OPTIONS.push({ value, label: `${displayHour}:00 ${ampm}` });
+}
+
 // Form data interface
 interface FormData {
   // Step 1: Event Details
@@ -40,6 +52,7 @@ interface FormData {
   eventType: string;
   guestCount: string;
   hasWaterHookup: boolean;
+  hasPowerAvailable: boolean;
   eventLocation: string;
   additionalDetails: string;
   // Location details from Places API
@@ -86,6 +99,7 @@ const initialFormData: FormData = {
   eventType: '',
   guestCount: '',
   hasWaterHookup: false,
+  hasPowerAvailable: false,
   eventLocation: '',
   additionalDetails: '',
   eventLat: null,
@@ -292,6 +306,7 @@ export default function QuoteForm() {
           eventType: formData.eventType,
           guestCount: formData.guestCount,
           hasWaterHookup: formData.hasWaterHookup,
+          hasPowerAvailable: formData.hasPowerAvailable,
           eventLocation: formData.eventLocation,
           additionalDetails: formData.additionalDetails,
           eventLat: formData.eventLat,
@@ -429,149 +444,216 @@ export default function QuoteForm() {
         {/* Step 1: Event Details */}
         {currentStep === 1 && (
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gold mb-6">Event Details</h2>
+            <h2 className="text-xl font-semibold text-gold">Event Details</h2>
 
-            {/* Date Range */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className={labelClass}>Start Date *</label>
-                <input
-                  type="date"
-                  min={getMinDate()}
-                  value={formData.startDate}
-                  onChange={(e) => updateField('startDate', e.target.value)}
-                  className={inputClass('startDate')}
+            {/* Schedule Group */}
+            <div className="space-y-4">
+              <h3 className="text-sm uppercase tracking-wider text-cream/50 font-medium border-b border-charcoal-light/50 pb-2">
+                Schedule
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <CalendarPicker
+                  label="Start Date *"
+                  selectedDate={formData.startDate}
+                  onSelect={(date) => updateField('startDate', date)}
+                  minDate={getMinDate()}
+                  error={errors.startDate}
                 />
-                {errors.startDate && <p className={errorClass}>{errors.startDate}</p>}
-              </div>
-              <div>
-                <label className={labelClass}>End Date *</label>
-                <input
-                  type="date"
-                  min={formData.startDate || getMinDate()}
-                  value={formData.endDate}
-                  onChange={(e) => updateField('endDate', e.target.value)}
-                  className={inputClass('endDate')}
+                <CalendarPicker
+                  label="End Date *"
+                  selectedDate={formData.endDate}
+                  onSelect={(date) => updateField('endDate', date)}
+                  minDate={formData.startDate || getMinDate()}
+                  error={errors.endDate}
                 />
-                {errors.endDate && <p className={errorClass}>{errors.endDate}</p>}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass}>Start Time *</label>
+                  <select
+                    value={formData.startTime}
+                    onChange={(e) => updateField('startTime', e.target.value)}
+                    className={inputClass('startTime')}
+                  >
+                    {TIME_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.startTime && <p className={errorClass}>{errors.startTime}</p>}
+                </div>
+                <div>
+                  <label className={labelClass}>End Time *</label>
+                  <select
+                    value={formData.endTime}
+                    onChange={(e) => updateField('endTime', e.target.value)}
+                    className={inputClass('endTime')}
+                  >
+                    {TIME_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.endTime && <p className={errorClass}>{errors.endTime}</p>}
+                </div>
               </div>
             </div>
 
-            {/* Time Range */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Event Info Group */}
+            <div className="space-y-4">
+              <h3 className="text-sm uppercase tracking-wider text-cream/50 font-medium border-b border-charcoal-light/50 pb-2">
+                Event Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass}>Event Type *</label>
+                  <select
+                    value={formData.eventType}
+                    onChange={(e) => updateField('eventType', e.target.value)}
+                    className={inputClass('eventType')}
+                  >
+                    {EVENT_TYPES.map((type) => (
+                      <option key={type.value} value={type.value}>
+                        {type.label}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.eventType && <p className={errorClass}>{errors.eventType}</p>}
+                </div>
+                <div>
+                  <label className={labelClass}>Expected Guests *</label>
+                  <select
+                    value={formData.guestCount}
+                    onChange={(e) => updateField('guestCount', e.target.value)}
+                    className={inputClass('guestCount')}
+                  >
+                    {GUEST_COUNTS.map((count) => (
+                      <option key={count.value} value={count.value}>
+                        {count.label}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.guestCount && <p className={errorClass}>{errors.guestCount}</p>}
+                </div>
+              </div>
+            </div>
+
+            {/* Site Requirements Group */}
+            <div className="space-y-4">
+              <h3 className="text-sm uppercase tracking-wider text-cream/50 font-medium border-b border-charcoal-light/50 pb-2">
+                Site Requirements
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass}>
+                    Is water available within 100 feet?
+                  </label>
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => updateField('hasWaterHookup', true)}
+                      className={`flex-1 px-4 py-3 rounded-lg font-medium border transition-colors ${
+                        formData.hasWaterHookup
+                          ? 'bg-gold/20 border-gold text-gold'
+                          : 'bg-charcoal-dark border-charcoal-light text-cream/60 hover:border-gold/30'
+                      }`}
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => updateField('hasWaterHookup', false)}
+                      className={`flex-1 px-4 py-3 rounded-lg font-medium border transition-colors ${
+                        !formData.hasWaterHookup
+                          ? 'bg-gold/20 border-gold text-gold'
+                          : 'bg-charcoal-dark border-charcoal-light text-cream/60 hover:border-gold/30'
+                      }`}
+                    >
+                      No
+                    </button>
+                  </div>
+                  <p className="text-cream/40 text-xs mt-1">Required for restroom operation</p>
+                </div>
+                <div>
+                  <label className={labelClass}>
+                    Is power available within 100 feet?
+                  </label>
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => updateField('hasPowerAvailable', true)}
+                      className={`flex-1 px-4 py-3 rounded-lg font-medium border transition-colors ${
+                        formData.hasPowerAvailable
+                          ? 'bg-gold/20 border-gold text-gold'
+                          : 'bg-charcoal-dark border-charcoal-light text-cream/60 hover:border-gold/30'
+                      }`}
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => updateField('hasPowerAvailable', false)}
+                      className={`flex-1 px-4 py-3 rounded-lg font-medium border transition-colors ${
+                        !formData.hasPowerAvailable
+                          ? 'bg-gold/20 border-gold text-gold'
+                          : 'bg-charcoal-dark border-charcoal-light text-cream/60 hover:border-gold/30'
+                      }`}
+                    >
+                      No
+                    </button>
+                  </div>
+                  <p className="text-cream/40 text-xs mt-1">Required for climate control and lighting</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Location Group */}
+            <div className="space-y-4">
+              <h3 className="text-sm uppercase tracking-wider text-cream/50 font-medium border-b border-charcoal-light/50 pb-2">
+                Location
+              </h3>
               <div>
-                <label className={labelClass}>Start Time *</label>
+                <label className={labelClass}>Event Location *</label>
                 <input
-                  type="time"
-                  value={formData.startTime}
-                  onChange={(e) => updateField('startTime', e.target.value)}
-                  className={inputClass('startTime')}
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Start typing an address..."
+                  value={formData.eventLocation}
+                  onChange={(e) => {
+                    updateField('eventLocation', e.target.value);
+                    if (formData.eventLat) {
+                      updateField('eventLat', null);
+                      updateField('eventLng', null);
+                    }
+                  }}
+                  className={inputClass('eventLocation')}
                 />
-                {errors.startTime && <p className={errorClass}>{errors.startTime}</p>}
+                {errors.eventLocation && <p className={errorClass}>{errors.eventLocation}</p>}
+                {formData.eventLat && formData.eventLng ? (
+                  <p className="text-green-400 text-sm mt-1 flex items-center gap-1">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Address verified - delivery fee will be calculated
+                  </p>
+                ) : (
+                  <p className="text-cream/50 text-sm mt-1">
+                    Select an address from the dropdown to calculate delivery fee
+                  </p>
+                )}
               </div>
               <div>
-                <label className={labelClass}>End Time *</label>
-                <input
-                  type="time"
-                  value={formData.endTime}
-                  onChange={(e) => updateField('endTime', e.target.value)}
-                  className={inputClass('endTime')}
+                <label className={labelClass}>Additional Details</label>
+                <textarea
+                  placeholder="Any special requests or information we should know..."
+                  value={formData.additionalDetails}
+                  onChange={(e) => updateField('additionalDetails', e.target.value)}
+                  rows={3}
+                  className={inputClass('additionalDetails')}
                 />
-                {errors.endTime && <p className={errorClass}>{errors.endTime}</p>}
               </div>
-            </div>
-
-            {/* Event Type & Guest Count */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className={labelClass}>Event Type *</label>
-                <select
-                  value={formData.eventType}
-                  onChange={(e) => updateField('eventType', e.target.value)}
-                  className={inputClass('eventType')}
-                >
-                  {EVENT_TYPES.map((type) => (
-                    <option key={type.value} value={type.value}>
-                      {type.label}
-                    </option>
-                  ))}
-                </select>
-                {errors.eventType && <p className={errorClass}>{errors.eventType}</p>}
-              </div>
-              <div>
-                <label className={labelClass}>Expected Guests *</label>
-                <select
-                  value={formData.guestCount}
-                  onChange={(e) => updateField('guestCount', e.target.value)}
-                  className={inputClass('guestCount')}
-                >
-                  {GUEST_COUNTS.map((count) => (
-                    <option key={count.value} value={count.value}>
-                      {count.label}
-                    </option>
-                  ))}
-                </select>
-                {errors.guestCount && <p className={errorClass}>{errors.guestCount}</p>}
-              </div>
-            </div>
-
-            {/* Water Hookup */}
-            <div className="flex items-center gap-3">
-              <input
-                type="checkbox"
-                id="waterHookup"
-                checked={formData.hasWaterHookup}
-                onChange={(e) => updateField('hasWaterHookup', e.target.checked)}
-                className="w-5 h-5 rounded border-charcoal-light bg-charcoal-dark text-gold focus:ring-gold/50"
-              />
-              <label htmlFor="waterHookup" className="text-cream/90">
-                Water hookup available at venue
-              </label>
-            </div>
-
-            {/* Event Location with Google Places Autocomplete */}
-            <div>
-              <label className={labelClass}>Event Location *</label>
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder="Start typing an address..."
-                value={formData.eventLocation}
-                onChange={(e) => {
-                  updateField('eventLocation', e.target.value);
-                  // Clear coordinates if manually editing (not selecting from dropdown)
-                  if (formData.eventLat) {
-                    updateField('eventLat', null);
-                    updateField('eventLng', null);
-                  }
-                }}
-                className={inputClass('eventLocation')}
-              />
-              {errors.eventLocation && <p className={errorClass}>{errors.eventLocation}</p>}
-              {formData.eventLat && formData.eventLng ? (
-                <p className="text-green-400 text-sm mt-1 flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Address verified - delivery fee will be calculated
-                </p>
-              ) : (
-                <p className="text-cream/50 text-sm mt-1">
-                  Select an address from the dropdown to calculate delivery fee
-                </p>
-              )}
-            </div>
-
-            {/* Additional Details */}
-            <div>
-              <label className={labelClass}>Additional Details</label>
-              <textarea
-                placeholder="Any special requests or information we should know..."
-                value={formData.additionalDetails}
-                onChange={(e) => updateField('additionalDetails', e.target.value)}
-                rows={3}
-                className={inputClass('additionalDetails')}
-              />
             </div>
           </div>
         )}
@@ -668,16 +750,18 @@ export default function QuoteForm() {
                     </p>
                   )}
                 </div>
-                {formData.hasWaterHookup && (
-                  <div className="md:col-span-2">
-                    <span className="text-green-400 text-sm flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      Water hookup available
-                    </span>
-                  </div>
-                )}
+                <div>
+                  <span className="text-cream/60">Water within 100 ft:</span>
+                  <p className={formData.hasWaterHookup ? 'text-green-400' : 'text-red-400'}>
+                    {formData.hasWaterHookup ? 'Yes' : 'No'}
+                  </p>
+                </div>
+                <div>
+                  <span className="text-cream/60">Power within 100 ft:</span>
+                  <p className={formData.hasPowerAvailable ? 'text-green-400' : 'text-red-400'}>
+                    {formData.hasPowerAvailable ? 'Yes' : 'No'}
+                  </p>
+                </div>
                 {formData.additionalDetails && (
                   <div className="md:col-span-2">
                     <span className="text-cream/60">Additional Details:</span>

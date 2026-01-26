@@ -101,7 +101,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-gold mb-1">Instagram</h3>
                     <a
-                      href="https://instagram.com/upscaleouthouse"
+                      href="https://www.instagram.com/upscale_outhouse/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-cream/80 hover:text-gold transition-colors"
