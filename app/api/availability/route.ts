@@ -23,6 +23,7 @@ export async function GET(request: NextRequest) {
           status: {
             in: ['PENDING', 'CONFIRMED'],
           },
+          depositPaid: true,
           OR: [
             {
               // Booking starts during requested period
@@ -113,6 +114,7 @@ export async function GET(request: NextRequest) {
           status: {
             in: ['PENDING', 'CONFIRMED'],
           },
+          depositPaid: true,
           OR: [
             {
               startDate: {
@@ -222,6 +224,7 @@ async function findAvailableDates(
         status: {
           in: ['PENDING', 'CONFIRMED'],
         },
+        depositPaid: true,
         OR: [
           {
             startDate: {
