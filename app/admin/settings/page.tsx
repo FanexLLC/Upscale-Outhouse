@@ -5,7 +5,8 @@ import SettingsForm from "@/components/admin/SettingsForm";
 export const dynamic = "force-dynamic";
 
 interface PricingSettings {
-  baseRate: number;
+  weekdayPrice: number;
+  weekendPrice: number;
   deliveryRatePerMile: number;
   freeDeliveryRadius: number;
   maxDeliveryRadius: number;
@@ -27,7 +28,8 @@ async function getSettings() {
   const settings = await prisma.setting.findMany();
 
   const defaultPricing: PricingSettings = {
-    baseRate: 450,
+    weekdayPrice: 450,
+    weekendPrice: 450,
     deliveryRatePerMile: 2,
     freeDeliveryRadius: 50,
     maxDeliveryRadius: 150,
@@ -45,13 +47,26 @@ async function getSettings() {
     businessAddress: "Fresno, CA 93704",
   };
 
-  const pricing =
-    settings.find((s) => s.key === "pricing")?.value || defaultPricing;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rawPricing = settings.find((s) => s.key === "pricing")?.value as any;
   const business =
     settings.find((s) => s.key === "business")?.value || defaultBusiness;
 
+  // Handle backward compatibility: migrate old baseRate to weekday/weekend prices
+  let pricing: PricingSettings;
+  if (rawPricing) {
+    pricing = {
+      ...defaultPricing,
+      ...rawPricing,
+      weekdayPrice: rawPricing.weekdayPrice ?? rawPricing.baseRate ?? 450,
+      weekendPrice: rawPricing.weekendPrice ?? rawPricing.baseRate ?? 450,
+    };
+  } else {
+    pricing = defaultPricing;
+  }
+
   return {
-    pricing: pricing as PricingSettings,
+    pricing,
     business: business as BusinessSettings,
   };
 }

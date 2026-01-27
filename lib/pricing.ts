@@ -1,6 +1,8 @@
 // Pricing configuration
 export const PRICING = {
   BASE_DAILY_RATE: 450,
+  WEEKDAY_RATE: 450,
+  WEEKEND_RATE: 450,
   DEPOSIT_AMOUNT: 100,
   FREE_DELIVERY_MILES: 50,
   DELIVERY_RATE_PER_MILE: 2,
@@ -16,6 +18,10 @@ export const DISCOUNTS = {
 
 export interface QuoteCalculation {
   numberOfDays: number;
+  weekdayCount: number;
+  weekendCount: number;
+  weekdayRate: number;
+  weekendRate: number;
   baseRental: number;
   discountPercent: number;
   discountAmount: number;
@@ -25,6 +31,48 @@ export interface QuoteCalculation {
   subtotal: number;
   depositDue: number;
   balanceDue: number;
+}
+
+/**
+ * Check if a date falls on a weekend (Friday, Saturday, or Sunday)
+ */
+export function isWeekendDay(date: Date): boolean {
+  const day = date.getDay(); // 0=Sun, 1=Mon, ..., 5=Fri, 6=Sat
+  return day === 0 || day === 5 || day === 6;
+}
+
+/**
+ * Count weekday and weekend days in a date range (inclusive)
+ */
+export function countDayTypes(startDate: Date, endDate: Date): { weekdays: number; weekends: number } {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  start.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
+
+  let weekdays = 0;
+  let weekends = 0;
+  const current = new Date(start);
+
+  while (current <= end) {
+    if (isWeekendDay(current)) {
+      weekends++;
+    } else {
+      weekdays++;
+    }
+    current.setDate(current.getDate() + 1);
+  }
+
+  // Ensure at least 1 total day
+  if (weekdays + weekends === 0) {
+    if (isWeekendDay(start)) {
+      weekends = 1;
+    } else {
+      weekdays = 1;
+    }
+  }
+
+  return { weekdays, weekends };
 }
 
 /**
@@ -64,21 +112,28 @@ export function getDiscountLabel(days: number): string {
 
 /**
  * Calculate the full quote based on event details
- * Note: Distance calculation is a placeholder until Phase 5 (Google Maps integration)
+ * Supports separate weekday/weekend pricing
  */
 export function calculateQuote(
   startDate: Date,
   endDate: Date,
-  distanceMiles?: number
+  distanceMiles?: number,
+  weekdayPrice?: number,
+  weekendPrice?: number
 ): QuoteCalculation {
   const numberOfDays = calculateDays(startDate, endDate);
-  const baseRental = PRICING.BASE_DAILY_RATE * numberOfDays;
+  const { weekdays, weekends } = countDayTypes(startDate, endDate);
+
+  const effectiveWeekdayRate = weekdayPrice ?? PRICING.WEEKDAY_RATE;
+  const effectiveWeekendRate = weekendPrice ?? PRICING.WEEKEND_RATE;
+
+  const baseRental = (weekdays * effectiveWeekdayRate) + (weekends * effectiveWeekendRate);
 
   const discountPercent = getDiscountPercent(numberOfDays);
   const discountAmount = baseRental * discountPercent;
   const rentalAfterDiscount = baseRental - discountAmount;
 
-  // Delivery fee calculation (placeholder for Phase 5)
+  // Delivery fee calculation
   let deliveryFee = 0;
   let deliveryFeeNote = 'Calculated at checkout';
 
@@ -101,6 +156,10 @@ export function calculateQuote(
 
   return {
     numberOfDays,
+    weekdayCount: weekdays,
+    weekendCount: weekends,
+    weekdayRate: effectiveWeekdayRate,
+    weekendRate: effectiveWeekendRate,
     baseRental,
     discountPercent,
     discountAmount,

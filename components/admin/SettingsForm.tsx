@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface PricingSettings {
-  baseRate: number;
+  weekdayPrice: number;
+  weekendPrice: number;
   deliveryRatePerMile: number;
   freeDeliveryRadius: number;
   maxDeliveryRadius: number;
@@ -110,18 +111,35 @@ export default function SettingsForm({ settings }: SettingsFormProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Base Daily Rate ($)
+              Weekday Rate ($)
             </label>
             <input
               type="number"
-              value={pricing.baseRate}
+              value={pricing.weekdayPrice}
               onChange={(e) =>
-                handlePricingChange("baseRate", Number(e.target.value))
+                handlePricingChange("weekdayPrice", Number(e.target.value))
               }
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold outline-none"
             />
             <p className="text-xs text-gray-500 mt-1">
-              Price per day for rental
+              Price per day for Monday through Thursday
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Weekend Rate ($)
+            </label>
+            <input
+              type="number"
+              value={pricing.weekendPrice}
+              onChange={(e) =>
+                handlePricingChange("weekendPrice", Number(e.target.value))
+              }
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold outline-none"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Price per day for Friday, Saturday, and Sunday
             </p>
           </div>
 

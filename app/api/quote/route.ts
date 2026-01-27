@@ -78,11 +78,22 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Calculate pricing
+    // Fetch pricing settings from database
+    const pricingSetting = await prisma.setting.findUnique({
+      where: { key: 'pricing' },
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pricingConfig = pricingSetting?.value as any;
+    const weekdayPrice = pricingConfig?.weekdayPrice ?? pricingConfig?.baseRate ?? PRICING.WEEKDAY_RATE;
+    const weekendPrice = pricingConfig?.weekendPrice ?? pricingConfig?.baseRate ?? PRICING.WEEKEND_RATE;
+
+    // Calculate pricing with weekday/weekend rates
     const quoteCalc = calculateQuote(
       new Date(startDate),
       new Date(endDate),
-      distanceResult?.distanceMiles
+      distanceResult?.distanceMiles,
+      weekdayPrice,
+      weekendPrice
     );
 
     // Map event type to enum
@@ -143,6 +154,10 @@ export async function POST(request: NextRequest) {
       quote: {
         id: quote.id,
         numberOfDays: quoteCalc.numberOfDays,
+        weekdayCount: quoteCalc.weekdayCount,
+        weekendCount: quoteCalc.weekendCount,
+        weekdayRate: quoteCalc.weekdayRate,
+        weekendRate: quoteCalc.weekendRate,
         baseRental: quoteCalc.baseRental,
         discountPercent: quoteCalc.discountPercent,
         discountAmount: quoteCalc.discountAmount,
