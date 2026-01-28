@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
+import Accordion from '@/components/ui/Accordion';
 import PageHeader from '@/components/ui/PageHeader';
 
 export const metadata: Metadata = {
@@ -48,6 +50,8 @@ export default function AboutPage() {
       <PageHeader
         title="About Upscale Outhouse"
         subtitle="Veteran-owned and operated, bringing luxury and dignity to outdoor events throughout Central California."
+        primaryCta={{ label: 'Get an Instant Quote', href: '/quote' }}
+        secondaryCta={{ label: 'Call (559) 663-0356', href: 'tel:+15596630356' }}
       />
 
       {/* Story Section */}
@@ -55,7 +59,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gold mb-6">Our Story</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gold mb-4">Our Story</h2>
               <div className="space-y-4 text-cream/80">
                 <p>
                   Upscale Outhouse was founded with a simple mission: to provide event guests
@@ -63,9 +67,10 @@ export default function AboutPage() {
                   they attend.
                 </p>
                 <p>
-                  As a veteran-owned business, we bring military precision, reliability, and
-                  attention to detail to every rental. We understand that your event is
-                  important, and we treat it that way.
+                  Started by three friends who grew up right here in the Central Valley,
+                  we saw firsthand that outdoor events deserved a better bathroom option.
+                  As a veteran-owned business, we bring that same discipline and attention
+                  to detail to every rental.
                 </p>
                 <p>
                   Based in Fresno, we proudly serve the entire Central Valley region,
@@ -74,10 +79,14 @@ export default function AboutPage() {
                 </p>
               </div>
             </div>
-            <div className="bg-charcoal rounded-2xl aspect-square flex items-center justify-center border border-gold/20 shadow-md">
-              <p className="text-cream/50 text-center px-8">
-                [Owner/Team Photo Placeholder]
-              </p>
+            <div className="relative rounded-2xl border border-charcoal/10 shadow-lg overflow-hidden aspect-[4/3]">
+              <Image
+                src="/images/about-us.jpg"
+                alt="The Upscale Outhouse team"
+                fill
+                className="object-cover object-[center_25%]"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
             </div>
           </div>
         </div>
@@ -86,22 +95,22 @@ export default function AboutPage() {
       {/* Values Section */}
       <section className="py-28 bg-charcoal">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-16 text-center">
-            What We Believe
+          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-12 text-center">
+            Why Choose Us
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="rounded-2xl p-8 border border-gold/20 shadow-md hover:shadow-lg transition text-center">
+            <div className="rounded-2xl p-8 border border-charcoal/10 shadow-md hover:shadow-lg transition text-center">
               <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="h-8 w-8 text-gold" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gold mb-2">Cleanliness</h3>
+              <h3 className="text-xl font-semibold text-gold mb-2">Quality</h3>
               <p className="text-cream/70">
                 Immaculate trailers maintained to the highest standards for every event.
               </p>
             </div>
-            <div className="rounded-2xl p-8 border border-gold/20 shadow-md hover:shadow-lg transition text-center">
+            <div className="rounded-2xl p-8 border border-charcoal/10 shadow-md hover:shadow-lg transition text-center">
               <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="h-8 w-8 text-gold" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -109,18 +118,18 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-semibold text-gold mb-2">Reliability</h3>
               <p className="text-cream/70">
-                On-time delivery and pickup, every time. Your event runs on schedule.
+                On-time delivery and pickup so your event stays on schedule.
               </p>
             </div>
-            <div className="rounded-2xl p-8 border border-gold/20 shadow-md hover:shadow-lg transition text-center">
+            <div className="rounded-2xl p-8 border border-charcoal/10 shadow-md hover:shadow-lg transition text-center">
               <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="h-8 w-8 text-gold" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gold mb-2">Guest Experience</h3>
+              <h3 className="text-xl font-semibold text-gold mb-2">Service</h3>
               <p className="text-cream/70">
-                Friendly, professional service from booking to pickup — your guests deserve the best.
+                Friendly, professional service from booking to pickup.
               </p>
             </div>
           </div>
@@ -130,45 +139,35 @@ export default function AboutPage() {
       {/* Service Area */}
       <section className="py-24 bg-charcoal-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-6">Service Area</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-4">Service Area</h2>
           <p className="text-cream/80 text-lg mb-8">
             Based in Fresno, California, we serve events within a 150-mile radius,
             covering the entire Central Valley and beyond.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-cream/70">
-            <div>Fresno</div>
-            <div>Clovis</div>
-            <div>Visalia</div>
-            <div>Bakersfield</div>
-            <div>Merced</div>
-            <div>Modesto</div>
-            <div>Madera</div>
-            <div>Hanford</div>
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            {['Fresno', 'Clovis', 'Visalia', 'Bakersfield', 'Merced', 'Modesto', 'Madera', 'Hanford'].map((city) => (
+              <span
+                key={city}
+                className="px-4 py-2 rounded-full border border-gold/20 text-cream/80 text-sm"
+              >
+                {city}
+              </span>
+            ))}
           </div>
-          <p className="mt-8 text-gold-light">
-            Free delivery within 50 miles
-          </p>
+          <span className="inline-block bg-gold/10 text-gold border border-gold/30 px-5 py-2 rounded-full text-sm font-semibold">
+            Free delivery within 50 miles of Fresno
+          </span>
         </div>
       </section>
 
       {/* FAQ Section */}
       <section className="py-28 bg-charcoal">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-16 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-12 text-center">
             Frequently Asked Questions
           </h2>
-          <div className="space-y-6">
-            {faqs.map((faq, index) => (
-              <div
-                key={index}
-                className="bg-charcoal-dark p-8 rounded-2xl border border-gold/20 shadow-md"
-              >
-                <h3 className="text-lg font-semibold text-gold mb-2">
-                  {faq.question}
-                </h3>
-                <p className="text-cream/70">{faq.answer}</p>
-              </div>
-            ))}
+          <div className="max-w-3xl mx-auto">
+            <Accordion items={faqs} />
           </div>
         </div>
       </section>
@@ -176,24 +175,24 @@ export default function AboutPage() {
       {/* CTA Section */}
       <section className="py-24 bg-charcoal-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-4">
             Ready to Book?
           </h2>
-          <p className="text-base md:text-lg leading-relaxed text-cream/80 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-cream/80 mb-8 max-w-2xl mx-auto">
             Get an instant quote for your upcoming event.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/quote"
-              className="inline-block bg-gold text-charcoal-dark px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gold-light shadow-lg hover:shadow-xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+              className="bg-gold text-charcoal-dark px-10 py-4 rounded-lg text-lg font-semibold hover:bg-gold-light shadow-lg hover:shadow-xl transition-all text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
             >
               Get Your Free Quote
             </Link>
             <a
               href="tel:+15596630356"
-              className="inline-block border-2 border-cream/80 text-cream px-8 py-4 rounded-lg text-lg font-semibold hover:bg-cream hover:text-charcoal-dark transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+              className="border-2 border-cream/80 text-cream px-10 py-4 rounded-lg text-lg font-semibold hover:bg-cream hover:text-charcoal-dark transition-all text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
             >
-              Call Us
+              Call (559) 663-0356
             </a>
           </div>
         </div>
