@@ -396,7 +396,7 @@ export default function QuoteForm() {
 
   // Input classes
   const inputClass = (field: string) =>
-    `w-full px-4 py-3 bg-charcoal-dark border rounded-lg text-cream placeholder-cream/50 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-colors ${
+    `w-full px-4 py-3 bg-charcoal-dark border rounded-lg text-cream placeholder-cream/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold transition-colors ${
       errors[field] ? 'border-red-500' : 'border-charcoal-light'
     }`;
 
@@ -898,7 +898,7 @@ export default function QuoteForm() {
               type="button"
               onClick={handleBack}
               disabled={isSubmitting}
-              className="px-6 py-3 border border-gold/50 text-gold rounded-lg font-medium hover:bg-gold/10 transition-colors disabled:opacity-50"
+              className="px-6 py-3 border border-gold/50 text-gold rounded-lg font-medium hover:bg-gold/10 transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal"
             >
               Back
             </button>
@@ -911,7 +911,7 @@ export default function QuoteForm() {
               type="button"
               onClick={handleNext}
               disabled={isSubmitting}
-              className="px-8 py-3 bg-gold text-charcoal-dark rounded-lg font-semibold hover:bg-gold-light transition-colors disabled:opacity-50 flex items-center gap-2"
+              className="px-8 py-3 bg-gold text-charcoal-dark rounded-lg font-semibold hover:bg-gold-light shadow-lg hover:shadow-xl transition-all disabled:opacity-50 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal"
             >
               {isSubmitting ? (
                 <>
@@ -930,7 +930,7 @@ export default function QuoteForm() {
               type="button"
               onClick={handlePayment}
               disabled={isProcessingPayment}
-              className="px-8 py-3 bg-gold text-charcoal-dark rounded-lg font-semibold hover:bg-gold-light transition-colors disabled:opacity-50 flex items-center gap-2"
+              className="px-8 py-3 bg-gold text-charcoal-dark rounded-lg font-semibold hover:bg-gold-light shadow-lg hover:shadow-xl transition-all disabled:opacity-50 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal"
             >
               {isProcessingPayment ? (
                 <>

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import PageHeader from '@/components/ui/PageHeader';
 
 export const metadata: Metadata = {
   title: 'About Us',
@@ -44,18 +45,10 @@ const faqs = [
 export default function AboutPage() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-b from-charcoal-dark to-charcoal">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gold mb-6">
-            About Upscale Outhouse
-          </h1>
-          <p className="text-xl text-cream/80">
-            Veteran-owned and operated, bringing luxury and dignity to outdoor events
-            throughout Central California.
-          </p>
-        </div>
-      </section>
+      <PageHeader
+        title="About Upscale Outhouse"
+        subtitle="Veteran-owned and operated, bringing luxury and dignity to outdoor events throughout Central California."
+      />
 
       {/* Story Section */}
       <section className="py-16 bg-charcoal-dark">

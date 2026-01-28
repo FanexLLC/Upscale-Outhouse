@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import PageHeader from '@/components/ui/PageHeader';
 
 export const metadata: Metadata = {
   title: 'Contact Us',
@@ -9,17 +10,10 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-b from-charcoal-dark to-charcoal">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gold mb-6">
-            Contact Us
-          </h1>
-          <p className="text-xl text-cream/80">
-            Have questions? We&apos;re here to help. Reach out anytime.
-          </p>
-        </div>
-      </section>
+      <PageHeader
+        title="Contact Us"
+        subtitle="Have questions? We're here to help. Reach out anytime."
+      />
 
       {/* Contact Info Section */}
       <section className="py-16 bg-charcoal-dark">
