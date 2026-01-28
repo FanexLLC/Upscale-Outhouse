@@ -173,6 +173,7 @@ export default function Home() {
                 src="/images/gallery/exterior-1.jpg"
                 alt="Upscale Outhouse luxury bathroom trailer"
                 fill
+                loading="lazy"
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
