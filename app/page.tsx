@@ -75,13 +75,13 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/quote"
-                  className="bg-gold text-charcoal-dark px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gold-light transition-all shadow-lg hover:shadow-xl text-center"
+                  className="bg-gold text-charcoal-dark px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gold-light transition-all shadow-lg hover:shadow-xl text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-dark"
                 >
                   Get an Instant Quote
                 </Link>
                 <Link
                   href="/gallery"
-                  className="border-2 border-cream/80 text-cream px-8 py-4 rounded-lg text-lg font-semibold hover:bg-cream hover:text-charcoal-dark transition-all text-center"
+                  className="border-2 border-cream/80 text-cream px-8 py-4 rounded-lg text-lg font-semibold hover:bg-cream hover:text-charcoal-dark transition-all text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-dark"
                 >
                   View Gallery
                 </Link>
@@ -196,17 +196,38 @@ export default function Home() {
 
       {/* Service Area Section */}
       <section className="py-28 bg-charcoal-dark">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-4">
-            Serving Central California
-          </h2>
-          <p className="text-cream text-lg max-w-2xl mx-auto mb-8">
-            Based in Fresno, we proudly serve events within 150 miles, including
-            Bakersfield, Visalia, Merced, Modesto, and the entire Central Valley.
-          </p>
-          <p className="text-gold-light font-medium mt-4">
-            Free delivery within 50 miles of Fresno
-          </p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gold mb-4">
+              Serving Central California
+            </h2>
+            <p className="text-cream text-lg max-w-2xl mx-auto">
+              Based in Fresno, we proudly serve events within 150 miles
+              throughout the Central Valley and beyond.
+            </p>
+          </div>
+          <div className="max-w-3xl mx-auto">
+            <h3 className="text-cream/60 text-sm uppercase tracking-widest text-center mb-6">
+              Cities We Serve
+            </h3>
+            <ul className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-3 text-cream text-center">
+              <li>Fresno</li>
+              <li>Clovis</li>
+              <li>Visalia</li>
+              <li>Bakersfield</li>
+              <li>Merced</li>
+              <li>Modesto</li>
+              <li>Madera</li>
+              <li>Hanford</li>
+              <li>Tulare</li>
+            </ul>
+            <p className="text-cream/50 text-sm text-center mt-6">
+              Don&apos;t see your city? We likely serve your area too &mdash;{' '}
+              <Link href="/contact" className="text-gold hover:text-gold-light transition-colors underline underline-offset-2">
+                get in touch
+              </Link>
+            </p>
+          </div>
         </div>
       </section>
 
@@ -219,17 +240,22 @@ export default function Home() {
           <p className="text-charcoal/70 text-lg mb-8">
             Get an instant quote in seconds. No obligation, no hassle.
           </p>
-          <Link
-            href="/quote"
-            className="inline-block bg-gold text-charcoal-dark px-10 py-4 rounded-lg text-lg font-semibold hover:bg-gold-light transition-all shadow-lg hover:shadow-xl"
-          >
-            Get Your Free Quote
-          </Link>
-          <p className="mt-6 text-charcoal/60">
-            Or call us at{' '}
-            <a href="tel:+15596630356" className="text-gold hover:text-gold-olive font-medium">
-              (559) 663-0356
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/quote"
+              className="inline-block bg-gold text-charcoal-dark px-10 py-4 rounded-lg text-lg font-semibold hover:bg-gold-light transition-all shadow-lg hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+            >
+              Get Your Free Quote
+            </Link>
+            <a
+              href="tel:+15596630356"
+              className="inline-block border-2 border-charcoal-dark text-charcoal-dark px-10 py-4 rounded-lg text-lg font-semibold hover:bg-charcoal-dark hover:text-cream transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-charcoal-dark focus-visible:ring-offset-2"
+            >
+              Call (559) 663-0356
             </a>
+          </div>
+          <p className="mt-6 text-charcoal/50 text-sm">
+            No obligation &bull; Fast response
           </p>
         </div>
       </section>
