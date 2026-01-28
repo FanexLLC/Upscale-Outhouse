@@ -5,24 +5,30 @@ export default function Footer() {
 
   return (
     <footer className="bg-charcoal-dark border-t border-gold/20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Brand */}
-          <div>
-            <h3 className="text-xl font-bold text-gold mb-4">Upscale Outhouse</h3>
-            <p className="text-cream/80 text-sm">
-              Luxury bathroom trailer rentals for weddings, corporate events,
-              and special occasions in Fresno and Central California.
-            </p>
-            <p className="text-gold-light text-sm mt-4">
-              Veteran-Owned Business
-            </p>
-          </div>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+        {/* Brand */}
+        <div className="mb-12">
+          <h3 className="text-xl font-bold text-gold mb-3">Upscale Outhouse</h3>
+          <p className="text-cream/80 text-sm max-w-md leading-relaxed">
+            Luxury bathroom trailer rentals for weddings, corporate events,
+            and special occasions in Fresno and Central California.
+          </p>
+          <p className="text-gold-light text-sm mt-3">
+            Veteran-Owned Business
+          </p>
+        </div>
 
+        {/* 3 Column Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {/* Quick Links */}
           <div>
             <h4 className="text-gold font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
+              <li>
+                <Link href="/" className="text-cream/80 hover:text-gold text-sm transition-colors">
+                  Home
+                </Link>
+              </li>
               <li>
                 <Link href="/about" className="text-cream/80 hover:text-gold text-sm transition-colors">
                   About Us
@@ -46,12 +52,28 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact Info */}
+          {/* Service Area */}
           <div>
-            <h4 className="text-gold font-semibold mb-4">Contact Us</h4>
+            <h4 className="text-gold font-semibold mb-4">Service Area</h4>
+            <ul className="space-y-2 text-sm text-cream/80">
+              <li>Fresno</li>
+              <li>Bakersfield</li>
+              <li>Visalia</li>
+              <li>Merced</li>
+              <li>Modesto</li>
+              <li className="text-cream/60 pt-1">+ all of Central California</li>
+            </ul>
+            <p className="text-gold-light/80 text-xs mt-3">
+              Free delivery within 50 miles
+            </p>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="text-gold font-semibold mb-4">Contact</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="tel:+15591234567" className="text-cream/80 hover:text-gold transition-colors">
+                <a href="tel:+15596630356" className="text-cream/80 hover:text-gold transition-colors">
                   (559) 663-0356
                 </a>
               </li>
@@ -81,7 +103,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-8 pt-8 border-t border-gold/20 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="mt-12 pt-8 border-t border-gold/20 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-cream/60 text-sm">
             &copy; {currentYear} Upscale Outhouse. All rights reserved.
           </p>
