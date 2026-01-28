@@ -51,11 +51,11 @@ export default function AboutPage() {
       />
 
       {/* Story Section */}
-      <section className="py-16 bg-charcoal-dark">
-        <div className="max-w-4xl mx-auto px-4">
+      <section className="py-24 bg-charcoal-dark">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-gold mb-6">Our Story</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gold mb-6">Our Story</h2>
               <div className="space-y-4 text-cream/80">
                 <p>
                   Upscale Outhouse was founded with a simple mission: to provide event guests
@@ -74,7 +74,7 @@ export default function AboutPage() {
                 </p>
               </div>
             </div>
-            <div className="bg-charcoal rounded-lg aspect-square flex items-center justify-center border border-gold/20">
+            <div className="bg-charcoal rounded-2xl aspect-square flex items-center justify-center border border-gold/20 shadow-md">
               <p className="text-cream/50 text-center px-8">
                 [Owner/Team Photo Placeholder]
               </p>
@@ -84,24 +84,24 @@ export default function AboutPage() {
       </section>
 
       {/* Values Section */}
-      <section className="py-16 bg-charcoal">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gold mb-12 text-center">
-            Why Choose Us
+      <section className="py-28 bg-charcoal">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-16 text-center">
+            What We Believe
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
+            <div className="rounded-2xl p-8 border border-gold/20 shadow-md hover:shadow-lg transition text-center">
               <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="h-8 w-8 text-gold" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gold mb-2">Quality</h3>
+              <h3 className="text-xl font-semibold text-gold mb-2">Cleanliness</h3>
               <p className="text-cream/70">
                 Immaculate trailers maintained to the highest standards for every event.
               </p>
             </div>
-            <div className="text-center">
+            <div className="rounded-2xl p-8 border border-gold/20 shadow-md hover:shadow-lg transition text-center">
               <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="h-8 w-8 text-gold" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -112,15 +112,15 @@ export default function AboutPage() {
                 On-time delivery and pickup, every time. Your event runs on schedule.
               </p>
             </div>
-            <div className="text-center">
+            <div className="rounded-2xl p-8 border border-gold/20 shadow-md hover:shadow-lg transition text-center">
               <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="h-8 w-8 text-gold" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gold mb-2">Service</h3>
+              <h3 className="text-xl font-semibold text-gold mb-2">Guest Experience</h3>
               <p className="text-cream/70">
-                Friendly, professional service from booking to pickup.
+                Friendly, professional service from booking to pickup — your guests deserve the best.
               </p>
             </div>
           </div>
@@ -128,9 +128,9 @@ export default function AboutPage() {
       </section>
 
       {/* Service Area */}
-      <section className="py-16 bg-charcoal-dark">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-gold mb-6">Service Area</h2>
+      <section className="py-24 bg-charcoal-dark">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-6">Service Area</h2>
           <p className="text-cream/80 text-lg mb-8">
             Based in Fresno, California, we serve events within a 150-mile radius,
             covering the entire Central Valley and beyond.
@@ -152,16 +152,16 @@ export default function AboutPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-charcoal">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gold mb-12 text-center">
+      <section className="py-28 bg-charcoal">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-16 text-center">
             Frequently Asked Questions
           </h2>
           <div className="space-y-6">
             {faqs.map((faq, index) => (
               <div
                 key={index}
-                className="bg-charcoal-dark p-6 rounded-lg border border-gold/20"
+                className="bg-charcoal-dark p-8 rounded-2xl border border-gold/20 shadow-md"
               >
                 <h3 className="text-lg font-semibold text-gold mb-2">
                   {faq.question}
@@ -174,20 +174,28 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-charcoal-dark">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-gold mb-6">
+      <section className="py-24 bg-charcoal-dark">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-6">
             Ready to Book?
           </h2>
-          <p className="text-cream/80 text-lg mb-8">
+          <p className="text-base md:text-lg leading-relaxed text-cream/80 mb-8 max-w-2xl mx-auto">
             Get an instant quote for your upcoming event.
           </p>
-          <Link
-            href="/quote"
-            className="inline-block bg-gold text-charcoal-dark px-8 py-4 rounded text-lg font-semibold hover:bg-gold-light transition-colors"
-          >
-            Get Your Free Quote
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/quote"
+              className="inline-block bg-gold text-charcoal-dark px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gold-light shadow-lg hover:shadow-xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+            >
+              Get Your Free Quote
+            </Link>
+            <a
+              href="tel:+15596630356"
+              className="inline-block border-2 border-cream/80 text-cream px-8 py-4 rounded-lg text-lg font-semibold hover:bg-cream hover:text-charcoal-dark transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+            >
+              Call Us
+            </a>
+          </div>
         </div>
       </section>
     </>
