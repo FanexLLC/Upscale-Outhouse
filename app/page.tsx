@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import FeaturesGrid from '@/components/ui/FeaturesGrid';
 import TestimonialsCarousel from '@/components/ui/TestimonialsCarousel';
 
@@ -90,11 +91,14 @@ export default function Home() {
 
             {/* Right: Hero Image */}
             <div className="relative">
-              <div className="aspect-[3/2] rounded-2xl overflow-hidden border border-gold/20 shadow-2xl">
-                <img
+              <div className="relative aspect-[3/2] rounded-2xl overflow-hidden border border-gold/20 shadow-2xl">
+                <Image
                   src="/images/gallery/hero-bg.jpg"
                   alt="Luxury bathroom trailer at an event venue"
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
                 />
               </div>
             </div>
@@ -165,10 +169,12 @@ export default function Home() {
               </Link>
             </div>
             <div className="relative rounded-lg aspect-video overflow-hidden border border-gold/20">
-              <img
+              <Image
                 src="/images/gallery/exterior-1.jpg"
                 alt="Upscale Outhouse luxury bathroom trailer"
-                className="absolute inset-0 w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
           </div>
