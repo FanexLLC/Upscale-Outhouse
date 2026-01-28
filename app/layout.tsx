@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
 
 const siteUrl = "https://upscaleouthouse.com";
 
@@ -41,6 +44,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteUrl,
   },
+  
 };
 
 export default function RootLayout({
@@ -50,7 +54,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased bg-cream min-h-screen flex flex-col">
+      <body className={`${inter.className} antialiased bg-cream min-h-screen flex flex-col`}>
         <Header />
         <main className="flex-grow">
           {children}

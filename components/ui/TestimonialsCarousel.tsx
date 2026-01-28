@@ -128,29 +128,24 @@ export default function TestimonialsCarousel() {
               aria-roledescription="slide"
               aria-label={`Testimonial ${index + 1} of ${testimonials.length}`}
             >
-              <div className="bg-white p-8 md:p-10 rounded-xl shadow-md border border-gold/10 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <div className="bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-gold/10 hover:shadow-lg transition-shadow duration-300">
                 <div className="flex items-center justify-between mb-5">
                   <StarRating rating={testimonial.rating} />
-                  <span className="text-gold text-4xl leading-none select-none">&ldquo;</span>
+                  <span className="text-gold/30 text-5xl leading-none select-none font-serif">&ldquo;</span>
                 </div>
                 <p className="text-charcoal/80 text-lg leading-relaxed mb-6 italic">
                   {testimonial.quote}
                 </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold font-bold text-sm">
-                    {testimonial.author.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="text-charcoal-dark font-semibold">
-                      {testimonial.author}
-                    </p>
-                    <p className="text-charcoal/60 text-sm">
-                      {testimonial.event}
-                      {testimonial.location && (
-                        <span className="text-charcoal/40"> &bull; {testimonial.location}</span>
-                      )}
-                    </p>
-                  </div>
+                <div className="border-t border-charcoal/10 pt-5">
+                  <p className="text-charcoal-dark font-semibold">
+                    {testimonial.author}
+                  </p>
+                  <p className="text-charcoal/60 text-sm">
+                    {testimonial.event}
+                    {testimonial.location && (
+                      <span className="text-charcoal/40"> &bull; {testimonial.location}</span>
+                    )}
+                  </p>
                 </div>
               </div>
             </div>

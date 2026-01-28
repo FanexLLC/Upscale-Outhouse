@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import FeaturesCarousel from '@/components/ui/FeaturesCarousel';
+import FeaturesGrid from '@/components/ui/FeaturesGrid';
 import TestimonialsCarousel from '@/components/ui/TestimonialsCarousel';
 
 const jsonLd = {
@@ -54,10 +54,24 @@ export default function Home() {
                 <br />
                 <span className="text-cream">Events</span>
               </h1>
-              <p className="text-lg md:text-xl text-cream/80 mb-10 max-w-lg leading-relaxed">
+              <p className="text-lg md:text-xl text-cream/80 mb-6 max-w-lg leading-relaxed">
                 Premium bathroom trailer rentals for weddings, corporate events,
                 and special occasions throughout Central California.
               </p>
+              <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-cream/60 mb-8">
+                <li className="flex items-center gap-1.5">
+                  <span className="text-gold">&#10003;</span> Veteran-Owned
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <span className="text-gold">&#10003;</span> Free Delivery Within 50 Miles
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <span className="text-gold">&#10003;</span> Climate Controlled
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <span className="text-gold">&#10003;</span> Hot &amp; Cold Running Water
+                </li>
+              </ul>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/quote"
@@ -89,7 +103,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-cream">
+      <section className="py-24 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal-dark mb-4">
@@ -101,45 +115,45 @@ export default function Home() {
             </p>
           </div>
 
-          <FeaturesCarousel />
+          <FeaturesGrid />
         </div>
       </section>
 
       {/* Trailer Overview Section */}
-      <section className="py-20 bg-charcoal-dark">
+      <section className="py-28 bg-charcoal-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gold mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gold mb-4">
                 Experience True Luxury
               </h2>
               <p className="text-cream text-lg mb-6">
                 Our premium bathroom trailer features everything your guests need for a
                 comfortable, upscale experience:
               </p>
-              <ul className="space-y-3 text-cream">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-cream">
                 <li className="flex items-center gap-3">
-                  <span className="text-gold">&#10003;</span>
+                  <span className="flex-none w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-sm">&#10003;</span>
                   Multiple private restroom stalls
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="text-gold">&#10003;</span>
+                  <span className="flex-none w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-sm">&#10003;</span>
                   Flushing porcelain toilets
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="text-gold">&#10003;</span>
+                  <span className="flex-none w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-sm">&#10003;</span>
                   Hot and cold running water
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="text-gold">&#10003;</span>
+                  <span className="flex-none w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-sm">&#10003;</span>
                   Vanity with mirrors and lighting
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="text-gold">&#10003;</span>
+                  <span className="flex-none w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-sm">&#10003;</span>
                   Climate control (A/C and heat)
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="text-gold">&#10003;</span>
+                  <span className="flex-none w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-sm">&#10003;</span>
                   Bluetooth sound system
                 </li>
               </ul>
@@ -162,14 +176,17 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-cream-dark">
+      <section className="py-24 bg-cream-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal-dark mb-4">
               What Our Clients Say
             </h2>
-            <p className="text-charcoal/70 text-lg">
+            <p className="text-charcoal/70 text-lg mb-2">
               Don&apos;t just take our word for it. Hear from our satisfied customers.
+            </p>
+            <p className="text-gold font-semibold text-sm tracking-wide">
+              &#9733;&#9733;&#9733;&#9733;&#9733; Rated 5/5 by every client
             </p>
           </div>
 
@@ -178,7 +195,7 @@ export default function Home() {
       </section>
 
       {/* Service Area Section */}
-      <section className="py-20 bg-charcoal-dark">
+      <section className="py-28 bg-charcoal-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gold mb-4">
             Serving Central California
@@ -187,7 +204,7 @@ export default function Home() {
             Based in Fresno, we proudly serve events within 150 miles, including
             Bakersfield, Visalia, Merced, Modesto, and the entire Central Valley.
           </p>
-          <p className="text-gold-light font-medium">
+          <p className="text-gold-light font-medium mt-4">
             Free delivery within 50 miles of Fresno
           </p>
         </div>
@@ -195,8 +212,8 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="py-24 bg-cream">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-charcoal-dark mb-6">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-charcoal-dark mb-4">
             Ready to Elevate Your Event?
           </h2>
           <p className="text-charcoal/70 text-lg mb-8">
