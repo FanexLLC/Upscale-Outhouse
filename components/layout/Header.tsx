@@ -23,7 +23,7 @@ export default function Header() {
             <Link href="/" className="flex items-center gap-3">
               <img
                 src="/images/gallery/Logo-black.jpg"
-                alt="Upscale Outhouse"
+                alt="Upscale Outhouse logo"
                 className="h-14 w-14 object-contain"
                 style={{ mixBlendMode: 'screen' }}
               />
@@ -65,7 +65,7 @@ export default function Header() {
           <div className="md:hidden">
             <button
               type="button"
-              className="text-cream hover:text-gold p-2"
+              className="text-cream hover:text-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
               aria-label="Toggle menu"

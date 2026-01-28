@@ -43,7 +43,7 @@ export default function Lightbox({
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 text-white/70 hover:text-white p-2 z-10"
+        className="absolute top-4 right-4 text-white/70 hover:text-white p-3 z-10"
         aria-label="Close lightbox"
       >
         <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
@@ -54,7 +54,7 @@ export default function Lightbox({
       {/* Previous button */}
       <button
         onClick={onPrevious}
-        className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-2"
+        className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-3"
         aria-label="Previous image"
       >
         <svg className="h-10 w-10" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
@@ -65,7 +65,7 @@ export default function Lightbox({
       {/* Next button */}
       <button
         onClick={onNext}
-        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-2"
+        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-3"
         aria-label="Next image"
       >
         <svg className="h-10 w-10" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
