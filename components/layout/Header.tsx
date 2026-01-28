@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 
 const navigation = [
@@ -21,9 +22,11 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-3">
-              <img
+              <Image
                 src="/images/gallery/Logo-black.jpg"
                 alt="Upscale Outhouse logo"
+                width={56}
+                height={56}
                 className="h-14 w-14 object-contain"
                 style={{ mixBlendMode: 'screen' }}
               />
