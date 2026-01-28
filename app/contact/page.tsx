@@ -16,12 +16,12 @@ export default function ContactPage() {
       />
 
       {/* Contact Info Section */}
-      <section className="py-16 bg-charcoal-dark">
-        <div className="max-w-4xl mx-auto px-4">
+      <section className="py-24 bg-charcoal-dark">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12">
             {/* Contact Details */}
             <div>
-              <h2 className="text-2xl font-bold text-gold mb-8">Get In Touch</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gold mb-8">Get In Touch</h2>
 
               <div className="space-y-6">
                 {/* Phone */}
@@ -35,7 +35,7 @@ export default function ContactPage() {
                     <h3 className="text-lg font-semibold text-gold mb-1">Phone</h3>
                     <a
                       href="tel:+15596630356"
-                      className="text-cream/80 hover:text-gold transition-colors text-lg"
+                      className="text-cream/80 hover:text-gold transition-colors text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 rounded"
                     >
                       (559) 663-0356
                     </a>
@@ -56,7 +56,7 @@ export default function ContactPage() {
                     <h3 className="text-lg font-semibold text-gold mb-1">Email</h3>
                     <a
                       href="mailto:upscaleouthouse@gmail.com"
-                      className="text-cream/80 hover:text-gold transition-colors"
+                      className="text-cream/80 hover:text-gold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 rounded"
                     >
                       upscaleouthouse@gmail.com
                     </a>
@@ -98,7 +98,7 @@ export default function ContactPage() {
                       href="https://www.instagram.com/upscale_outhouse/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-cream/80 hover:text-gold transition-colors"
+                      className="text-cream/80 hover:text-gold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 rounded"
                     >
                       @upscale_outhouse
                     </a>
@@ -112,7 +112,7 @@ export default function ContactPage() {
 
             {/* Quick Quote CTA */}
             <div>
-              <div className="bg-charcoal p-8 rounded-lg border border-gold/20">
+              <div className="bg-charcoal p-8 rounded-2xl border border-gold/20 shadow-md">
                 <h2 className="text-2xl font-bold text-gold mb-4">
                   Ready to Book?
                 </h2>
@@ -122,7 +122,7 @@ export default function ContactPage() {
                 </p>
                 <Link
                   href="/quote"
-                  className="inline-block w-full bg-gold text-charcoal-dark px-6 py-4 rounded text-lg font-semibold hover:bg-gold-light transition-colors text-center"
+                  className="inline-block w-full bg-gold text-charcoal-dark px-6 py-4 rounded-lg text-lg font-semibold hover:bg-gold-light shadow-lg hover:shadow-xl transition-all text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
                 >
                   Get an Instant Quote
                 </Link>
@@ -132,7 +132,7 @@ export default function ContactPage() {
               </div>
 
               {/* Business Hours */}
-              <div className="mt-8 bg-charcoal p-8 rounded-lg border border-gold/20">
+              <div className="mt-8 bg-charcoal p-8 rounded-2xl border border-gold/20 shadow-md">
                 <h3 className="text-xl font-bold text-gold mb-4">
                   Business Hours
                 </h3>
@@ -160,10 +160,10 @@ export default function ContactPage() {
       </section>
 
       {/* Map Placeholder */}
-      <section className="py-16 bg-charcoal">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold text-gold mb-6">Service Area</h2>
-          <div className="aspect-video bg-charcoal-dark rounded-lg border border-gold/20 flex items-center justify-center">
+      <section className="py-28 bg-charcoal">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-6">Service Area</h2>
+          <div className="aspect-video bg-charcoal-dark rounded-2xl border border-gold/20 shadow-md flex items-center justify-center">
             <div className="text-cream/50 text-center p-8">
               <svg className="h-12 w-12 mx-auto mb-4 opacity-50" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
