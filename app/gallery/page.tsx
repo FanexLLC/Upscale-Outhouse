@@ -10,7 +10,7 @@ const categories = ['All', 'Exterior', 'Interior', 'Floorplan'] as const;
 type Category = (typeof categories)[number];
 
 export default function GalleryPage() {
-  const [activeCategory, setActiveCategory] = useState<Category>('All');
+  const [activeCategory, setActiveCategory] = useState<Category>('Exterior');
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -42,37 +42,33 @@ export default function GalleryPage() {
         primaryCta={{ label: 'Get an Instant Quote', href: '/quote' }}
       />
 
-      {/* Filter Pills + Helper */}
-      <section className="pt-8 pb-2 bg-gradient-to-b from-charcoal to-charcoal-dark">
+      {/* Filter Pills + Grid */}
+      <section className="py-24 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Filter Pills */}
           <div className="flex flex-wrap gap-3 justify-center">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-6 py-2 rounded-full text-sm font-semibold tracking-wide border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-dark ${
+                className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 ${
                   activeCategory === cat
-                    ? 'bg-gold text-charcoal-dark border-gold shadow-md shadow-gold/20'
-                    : 'bg-transparent text-cream/70 border-cream/15 hover:border-gold/50 hover:text-cream hover:bg-cream/5'
+                    ? 'bg-charcoal-dark text-cream'
+                    : 'bg-white border border-charcoal/20 text-charcoal hover:bg-charcoal/5'
                 }`}
               >
                 {cat}
               </button>
             ))}
           </div>
-          <p className="text-center text-cream/40 text-xs mt-4">
-            Tap an image to enlarge
-          </p>
-        </div>
-      </section>
 
-      {/* Image Grid */}
-      <section className="py-12 md:py-16 bg-charcoal-dark">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <GalleryGrid
-            images={filteredImages}
-            onImageClick={openLightbox}
-          />
+          {/* White Panel */}
+          <div className="mt-8 bg-white rounded-2xl border border-charcoal/10 shadow-md p-4 sm:p-6 lg:p-8">
+            <GalleryGrid
+              images={filteredImages}
+              onImageClick={openLightbox}
+            />
+          </div>
         </div>
       </section>
 

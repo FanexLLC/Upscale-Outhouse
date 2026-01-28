@@ -47,7 +47,7 @@ export default function Lightbox({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -56,7 +56,7 @@ export default function Lightbox({
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-10 text-white/80 hover:text-white p-2 rounded-full bg-black/40 hover:bg-black/60 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+        className="absolute top-4 right-4 z-10 w-11 h-11 flex items-center justify-center text-white/80 hover:text-white rounded-full bg-black/40 hover:bg-black/60 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
         aria-label="Close lightbox"
       >
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
@@ -67,7 +67,7 @@ export default function Lightbox({
       {/* Previous button */}
       <button
         onClick={(e) => { e.stopPropagation(); onPrevious(); }}
-        className="absolute left-3 sm:left-6 z-10 text-white/80 hover:text-white p-2 rounded-full bg-black/40 hover:bg-black/60 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+        className="absolute left-3 sm:left-6 z-10 w-11 h-11 flex items-center justify-center text-white/80 hover:text-white rounded-full bg-black/40 hover:bg-black/60 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
         aria-label="Previous image"
       >
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
@@ -78,7 +78,7 @@ export default function Lightbox({
       {/* Next button */}
       <button
         onClick={(e) => { e.stopPropagation(); onNext(); }}
-        className="absolute right-3 sm:right-6 z-10 text-white/80 hover:text-white p-2 rounded-full bg-black/40 hover:bg-black/60 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+        className="absolute right-3 sm:right-6 z-10 w-11 h-11 flex items-center justify-center text-white/80 hover:text-white rounded-full bg-black/40 hover:bg-black/60 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
         aria-label="Next image"
       >
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">

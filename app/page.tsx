@@ -217,7 +217,7 @@ export default function Home() {
             <h3 className="text-cream/60 text-sm uppercase tracking-widest text-center mb-6">
               Cities We Serve
             </h3>
-            <ul className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-3 text-cream text-center">
+            <ul className="grid grid-cols-3 gap-x-8 gap-y-3 text-cream text-center">
               <li>Fresno</li>
               <li>Clovis</li>
               <li>Visalia</li>
@@ -229,9 +229,11 @@ export default function Home() {
               <li>Tulare</li>
             </ul>
             <p className="text-cream/50 text-sm text-center mt-6">
-              Don&apos;t see your city? We likely serve your area too &mdash;{' '}
-              <Link href="/contact" className="text-gold hover:text-gold-light transition-colors underline underline-offset-2">
-                get in touch
+              Don&apos;t see your city? We likely serve your area too.
+            </p>
+            <p className="text-center mt-3">
+              <Link href="/contact" className="text-gold hover:text-gold-light transition-colors underline underline-offset-2 text-sm font-medium">
+                Get in Touch
               </Link>
             </p>
           </div>
