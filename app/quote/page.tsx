@@ -14,6 +14,24 @@ export default function QuotePage() {
         title="Get Your Instant Quote"
         subtitle="Fill out the details below to receive your personalized quote"
       />
+      {/* Trust Strip */}
+      <div className="bg-charcoal border-y border-gold/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-xs sm:text-sm text-cream/70">
+            <span className="flex items-center gap-1.5">
+              <svg className="h-4 w-4 text-gold" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" /></svg>
+              Veteran-owned
+            </span>
+            <span className="text-gold/30 hidden sm:inline" aria-hidden="true">&bull;</span>
+            <span>Free delivery within 50 miles</span>
+            <span className="text-gold/30 hidden sm:inline" aria-hidden="true">&bull;</span>
+            <span>Climate controlled</span>
+            <span className="text-gold/30 hidden sm:inline" aria-hidden="true">&bull;</span>
+            <span>Hot &amp; cold water</span>
+          </div>
+        </div>
+      </div>
+
       <section className="py-12 md:py-20 bg-charcoal-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-[1fr_360px] gap-8 lg:gap-12">
@@ -78,10 +96,10 @@ export default function QuotePage() {
 
                 {/* Quick contact */}
                 <div className="rounded-2xl p-6 border border-gold/20 bg-charcoal shadow-md text-center">
-                  <p className="text-cream/70 text-sm mb-2">Prefer to talk to someone?</p>
+                  <p className="text-cream/70 text-sm mb-3">Prefer to talk to someone?</p>
                   <a
                     href="tel:+15596630356"
-                    className="inline-flex items-center justify-center gap-2 text-gold font-semibold text-lg hover:text-gold-light transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal"
+                    className="inline-flex items-center justify-center gap-2.5 text-gold font-semibold text-lg px-5 py-3 rounded-xl border border-gold/30 hover:bg-gold/10 hover:text-gold-light transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal"
                   >
                     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />

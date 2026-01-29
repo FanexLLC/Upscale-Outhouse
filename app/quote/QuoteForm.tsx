@@ -10,6 +10,23 @@ import {
   isValidPhone,
 } from '@/lib/pricing';
 import CalendarPicker from '@/components/ui/CalendarPicker';
+import TimePicker from '@/components/quote/TimePicker';
+
+// Start time values (6 AM – 11 PM)
+const START_TIME_VALUES: string[] = [];
+for (let hour = 6; hour <= 23; hour++) {
+  START_TIME_VALUES.push(`${hour.toString().padStart(2, '0')}:00`);
+}
+
+// End time values (6 AM – 3 AM next day)
+const END_TIME_VALUES: string[] = [];
+for (let hour = 6; hour <= 23; hour++) {
+  END_TIME_VALUES.push(`${hour.toString().padStart(2, '0')}:00`);
+}
+// Add midnight through 3 AM (next day)
+for (let hour = 0; hour <= 3; hour++) {
+  END_TIME_VALUES.push(`${hour.toString().padStart(2, '0')}:00`);
+}
 
 // Event type options
 const EVENT_TYPES = [
@@ -29,17 +46,6 @@ const GUEST_COUNTS = [
   { value: '101-200', label: '101-200 guests' },
   { value: '200+', label: '200+ guests' },
 ];
-
-// Time options - hourly
-const TIME_OPTIONS: { value: string; label: string }[] = [
-  { value: '', label: 'Select time' },
-];
-for (let hour = 6; hour <= 23; hour++) {
-  const value = `${hour.toString().padStart(2, '0')}:00`;
-  const ampm = hour >= 12 ? 'PM' : 'AM';
-  const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-  TIME_OPTIONS.push({ value, label: `${displayHour}:00 ${ampm}` });
-}
 
 // Form data interface
 interface FormData {
@@ -228,6 +234,23 @@ export default function QuoteForm() {
     });
   }, []);
 
+  // Handle start time change — auto-correct end time if invalid
+  const handleStartTimeChange = useCallback((newStart: string) => {
+    updateField('startTime', newStart);
+    setFormData((prev) => {
+      if (prev.endTime && prev.endTime <= newStart) {
+        const startHour = parseInt(newStart.split(':')[0], 10);
+        const nextHour = startHour + 1;
+        if (nextHour <= 23) {
+          const corrected = `${nextHour.toString().padStart(2, '0')}:00`;
+          return { ...prev, startTime: newStart, endTime: corrected };
+        }
+        return { ...prev, startTime: newStart, endTime: '' };
+      }
+      return { ...prev, startTime: newStart };
+    });
+  }, [updateField]);
+
   // Get minimum date (48 hours from now)
   const getMinDate = () => {
     const today = new Date();
@@ -396,24 +419,26 @@ export default function QuoteForm() {
 
   // Input classes
   const inputClass = (field: string) =>
-    `w-full px-4 py-3 bg-charcoal-dark border rounded-lg text-cream placeholder-cream/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold transition-colors ${
-      errors[field] ? 'border-red-500' : 'border-charcoal-light'
+    `w-full px-4 py-3 bg-charcoal-dark border rounded-lg text-cream placeholder-cream/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal shadow-sm transition-all ${
+      errors[field] ? 'border-red-500 ring-1 ring-red-500/30' : 'border-charcoal-light hover:border-gold/30'
     }`;
 
-  const labelClass = 'block text-cream/90 font-medium mb-2';
-  const errorClass = 'text-red-400 text-sm mt-1';
+  const labelClass = 'block text-sm font-medium text-cream/90 mb-2';
+  const errorClass = 'text-red-400 text-sm mt-1.5';
+  const sectionCardClass = 'rounded-xl border border-charcoal-light/20 bg-charcoal-dark/40 p-5 md:p-6 space-y-4';
+  const sectionHeadingClass = 'text-xs uppercase tracking-widest text-gold/70 font-semibold pb-2 border-b border-gold/10';
 
   return (
-    <div className="bg-charcoal rounded-xl border border-gold/20 overflow-hidden">
+    <div className="bg-charcoal rounded-2xl border border-gold/20 shadow-lg overflow-hidden">
       {/* Step Indicator */}
-      <div className="bg-charcoal-dark px-6 py-4 border-b border-gold/20">
+      <div className="bg-charcoal-dark px-6 py-5 border-b border-gold/20">
         <div className="flex items-center justify-between max-w-md mx-auto">
           {[1, 2, 3].map((step) => (
             <div key={step} className="flex items-center">
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
+                className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold shadow-sm transition-all ${
                   currentStep >= step
-                    ? 'bg-gold text-charcoal-dark'
+                    ? 'bg-gold text-charcoal-dark shadow-gold/20'
                     : 'bg-charcoal-light text-cream/50'
                 }`}
               >
@@ -427,7 +452,7 @@ export default function QuoteForm() {
               </div>
               {step < 3 && (
                 <div
-                  className={`w-16 md:w-24 h-1 mx-2 rounded ${
+                  className={`w-16 md:w-24 h-1 mx-2 rounded-full transition-colors ${
                     currentStep > step ? 'bg-gold' : 'bg-charcoal-light'
                   }`}
                 />
@@ -435,10 +460,10 @@ export default function QuoteForm() {
             </div>
           ))}
         </div>
-        <div className="flex justify-between max-w-md mx-auto mt-2 text-sm">
-          <span className={currentStep >= 1 ? 'text-gold' : 'text-cream/50'}>Event Details</span>
-          <span className={currentStep >= 2 ? 'text-gold' : 'text-cream/50'}>Contact Info</span>
-          <span className={currentStep >= 3 ? 'text-gold' : 'text-cream/50'}>Review Quote</span>
+        <div className="flex justify-between max-w-md mx-auto mt-2.5 text-sm">
+          <span className={`transition-colors ${currentStep >= 1 ? 'text-gold font-medium' : 'text-cream/50'}`}>Event Details</span>
+          <span className={`transition-colors ${currentStep >= 2 ? 'text-gold font-medium' : 'text-cream/50'}`}>Contact Info</span>
+          <span className={`transition-colors ${currentStep >= 3 ? 'text-gold font-medium' : 'text-cream/50'}`}>Review Quote</span>
         </div>
       </div>
 
@@ -450,105 +475,176 @@ export default function QuoteForm() {
             <h2 className="text-xl font-semibold text-gold">Event Details</h2>
 
             {/* Schedule Group */}
-            <div className="space-y-4">
-              <h3 className="text-sm uppercase tracking-wider text-cream/50 font-medium border-b border-charcoal-light/50 pb-2">
+            <div className={sectionCardClass}>
+              <h3 className={sectionHeadingClass}>
                 Schedule
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              {/* Desktop: Start Time | Calendar | End Time side by side */}
+              <div className="hidden md:flex gap-3 items-start">
+                {/* Start Time column */}
+                <div className="w-28 flex-shrink-0 mt-[72px]">
+                  <label className="block text-sm font-medium text-cream/90 mb-2 text-center">Start Time</label>
+                  <div className="h-[340px] overflow-y-auto rounded-xl border border-charcoal-light bg-charcoal-dark scrollbar-thin">
+                    {START_TIME_VALUES.map((t) => {
+                      const hour = parseInt(t.split(':')[0], 10);
+                      const ampm = hour >= 12 ? 'PM' : 'AM';
+                      const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+                      const isSelected = formData.startTime === t;
+                      return (
+                        <button
+                          key={t}
+                          type="button"
+                          onClick={() => handleStartTimeChange(t)}
+                          className={`w-full px-2 py-2.5 text-sm font-medium transition-all ${
+                            isSelected
+                              ? 'bg-gold/20 text-gold border-l-2 border-gold'
+                              : 'text-cream/70 hover:bg-gold/10 hover:text-gold border-l-2 border-transparent'
+                          }`}
+                        >
+                          {displayHour}:00 {ampm}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {errors.startTime && <p className="text-red-400 text-xs mt-1 text-center">{errors.startTime}</p>}
+                </div>
+
+                {/* Calendar center */}
+                <div className="flex-1 min-w-0">
+                  <CalendarPicker
+                    label="Event Dates"
+                    startDate={formData.startDate}
+                    endDate={formData.endDate}
+                    onRangeSelect={(start, end) => {
+                      updateField('startDate', start);
+                      updateField('endDate', end);
+                    }}
+                    minDate={getMinDate()}
+                    error={errors.startDate}
+                    endError={errors.endDate}
+                  />
+                </div>
+
+                {/* End Time column */}
+                <div className="w-28 flex-shrink-0 mt-[72px]">
+                  <label className="block text-sm font-medium text-cream/90 mb-2 text-center">End Time</label>
+                  <div className="h-[340px] overflow-y-auto rounded-xl border border-charcoal-light bg-charcoal-dark scrollbar-thin">
+                    {END_TIME_VALUES.map((t) => {
+                      const hour = parseInt(t.split(':')[0], 10);
+                      const ampm = hour >= 12 ? 'PM' : 'AM';
+                      const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+                      const isSelected = formData.endTime === t;
+                      return (
+                        <button
+                          key={t}
+                          type="button"
+                          onClick={() => updateField('endTime', t)}
+                          className={`w-full px-2 py-2.5 text-sm font-medium transition-all ${
+                            isSelected
+                              ? 'bg-gold/20 text-gold border-r-2 border-gold'
+                              : 'text-cream/70 hover:bg-gold/10 hover:text-gold border-r-2 border-transparent'
+                          }`}
+                        >
+                          {displayHour}:00 {ampm}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {errors.endTime && <p className="text-red-400 text-xs mt-1 text-center">{errors.endTime}</p>}
+                  {formData.startTime && !errors.endTime && (
+                    <p className="text-cream/40 text-xs mt-1 text-center">Must be after start</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Mobile: Calendar then time pickers stacked */}
+              <div className="md:hidden space-y-4">
                 <CalendarPicker
-                  label="Start Date *"
-                  selectedDate={formData.startDate}
-                  onSelect={(date) => updateField('startDate', date)}
+                  label="Event Dates"
+                  startDate={formData.startDate}
+                  endDate={formData.endDate}
+                  onRangeSelect={(start, end) => {
+                    updateField('startDate', start);
+                    updateField('endDate', end);
+                  }}
                   minDate={getMinDate()}
                   error={errors.startDate}
+                  endError={errors.endDate}
                 />
-                <CalendarPicker
-                  label="End Date *"
-                  selectedDate={formData.endDate}
-                  onSelect={(date) => updateField('endDate', date)}
-                  minDate={formData.startDate || getMinDate()}
-                  error={errors.endDate}
-                />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className={labelClass}>Start Time *</label>
-                  <select
-                    value={formData.startTime}
-                    onChange={(e) => updateField('startTime', e.target.value)}
-                    className={inputClass('startTime')}
-                  >
-                    {TIME_OPTIONS.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.startTime && <p className={errorClass}>{errors.startTime}</p>}
-                </div>
-                <div>
-                  <label className={labelClass}>End Time *</label>
-                  <select
-                    value={formData.endTime}
-                    onChange={(e) => updateField('endTime', e.target.value)}
-                    className={inputClass('endTime')}
-                  >
-                    {TIME_OPTIONS.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.endTime && <p className={errorClass}>{errors.endTime}</p>}
+                <div className="grid grid-cols-2 gap-4">
+                  <TimePicker
+                    label="Start Time"
+                    value={formData.startTime || null}
+                    onChange={handleStartTimeChange}
+                    times={START_TIME_VALUES}
+                    error={errors.startTime}
+                  />
+                  <TimePicker
+                    label="End Time"
+                    value={formData.endTime || null}
+                    onChange={(v) => updateField('endTime', v)}
+                    times={END_TIME_VALUES}
+                    error={errors.endTime}
+                    helperText={formData.startTime ? 'Must be after start time' : undefined}
+                  />
                 </div>
               </div>
             </div>
 
             {/* Event Info Group */}
-            <div className="space-y-4">
-              <h3 className="text-sm uppercase tracking-wider text-cream/50 font-medium border-b border-charcoal-light/50 pb-2">
+            <div className={sectionCardClass}>
+              <h3 className={sectionHeadingClass}>
                 Event Information
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className={labelClass}>Event Type *</label>
-                  <select
-                    value={formData.eventType}
-                    onChange={(e) => updateField('eventType', e.target.value)}
-                    className={inputClass('eventType')}
-                  >
-                    {EVENT_TYPES.map((type) => (
-                      <option key={type.value} value={type.value}>
-                        {type.label}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.eventType && <p className={errorClass}>{errors.eventType}</p>}
+              <div>
+                <label className={labelClass}>Event Type *</label>
+                <div className="flex flex-wrap gap-2">
+                  {EVENT_TYPES.filter((t) => t.value).map((type) => (
+                    <button
+                      key={type.value}
+                      type="button"
+                      onClick={() => updateField('eventType', type.value)}
+                      className={`px-4 py-2 rounded-full text-sm font-medium border shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal ${
+                        formData.eventType === type.value
+                          ? 'bg-gold/20 border-gold text-gold'
+                          : 'bg-charcoal-dark border-charcoal-light text-cream/60 hover:border-gold/30 hover:text-cream'
+                      }`}
+                    >
+                      {type.label}
+                    </button>
+                  ))}
                 </div>
-                <div>
-                  <label className={labelClass}>Expected Guests *</label>
-                  <select
-                    value={formData.guestCount}
-                    onChange={(e) => updateField('guestCount', e.target.value)}
-                    className={inputClass('guestCount')}
-                  >
-                    {GUEST_COUNTS.map((count) => (
-                      <option key={count.value} value={count.value}>
-                        {count.label}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.guestCount && <p className={errorClass}>{errors.guestCount}</p>}
+                {errors.eventType && <p className={errorClass}>{errors.eventType}</p>}
+              </div>
+              <div>
+                <label className={labelClass}>Expected Guests *</label>
+                <div className="flex flex-wrap gap-2">
+                  {GUEST_COUNTS.filter((g) => g.value).map((count) => (
+                    <button
+                      key={count.value}
+                      type="button"
+                      onClick={() => updateField('guestCount', count.value)}
+                      className={`px-4 py-2 rounded-full text-sm font-medium border shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal ${
+                        formData.guestCount === count.value
+                          ? 'bg-gold/20 border-gold text-gold'
+                          : 'bg-charcoal-dark border-charcoal-light text-cream/60 hover:border-gold/30 hover:text-cream'
+                      }`}
+                    >
+                      {count.label}
+                    </button>
+                  ))}
                 </div>
+                {errors.guestCount && <p className={errorClass}>{errors.guestCount}</p>}
               </div>
             </div>
 
             {/* Site Requirements Group */}
-            <div className="space-y-4">
-              <h3 className="text-sm uppercase tracking-wider text-cream/50 font-medium border-b border-charcoal-light/50 pb-2">
+            <div className={sectionCardClass}>
+              <h3 className={sectionHeadingClass}>
                 Site Requirements
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div>
                   <label className={labelClass}>
                     Is water available within 100 feet?
@@ -557,7 +653,7 @@ export default function QuoteForm() {
                     <button
                       type="button"
                       onClick={() => updateField('hasWaterHookup', true)}
-                      className={`flex-1 px-4 py-3 rounded-lg font-medium border transition-colors ${
+                      className={`flex-1 px-4 py-3 rounded-lg font-medium border shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal ${
                         formData.hasWaterHookup
                           ? 'bg-gold/20 border-gold text-gold'
                           : 'bg-charcoal-dark border-charcoal-light text-cream/60 hover:border-gold/30'
@@ -568,7 +664,7 @@ export default function QuoteForm() {
                     <button
                       type="button"
                       onClick={() => updateField('hasWaterHookup', false)}
-                      className={`flex-1 px-4 py-3 rounded-lg font-medium border transition-colors ${
+                      className={`flex-1 px-4 py-3 rounded-lg font-medium border shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal ${
                         !formData.hasWaterHookup
                           ? 'bg-gold/20 border-gold text-gold'
                           : 'bg-charcoal-dark border-charcoal-light text-cream/60 hover:border-gold/30'
@@ -577,7 +673,7 @@ export default function QuoteForm() {
                       No
                     </button>
                   </div>
-                  <p className="text-cream/40 text-xs mt-1">Required for restroom operation</p>
+                  <p className="text-cream/40 text-xs mt-1.5">Required for restroom operation</p>
                 </div>
                 <div>
                   <label className={labelClass}>
@@ -587,7 +683,7 @@ export default function QuoteForm() {
                     <button
                       type="button"
                       onClick={() => updateField('hasPowerAvailable', true)}
-                      className={`flex-1 px-4 py-3 rounded-lg font-medium border transition-colors ${
+                      className={`flex-1 px-4 py-3 rounded-lg font-medium border shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal ${
                         formData.hasPowerAvailable
                           ? 'bg-gold/20 border-gold text-gold'
                           : 'bg-charcoal-dark border-charcoal-light text-cream/60 hover:border-gold/30'
@@ -598,7 +694,7 @@ export default function QuoteForm() {
                     <button
                       type="button"
                       onClick={() => updateField('hasPowerAvailable', false)}
-                      className={`flex-1 px-4 py-3 rounded-lg font-medium border transition-colors ${
+                      className={`flex-1 px-4 py-3 rounded-lg font-medium border shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal ${
                         !formData.hasPowerAvailable
                           ? 'bg-gold/20 border-gold text-gold'
                           : 'bg-charcoal-dark border-charcoal-light text-cream/60 hover:border-gold/30'
@@ -607,14 +703,14 @@ export default function QuoteForm() {
                       No
                     </button>
                   </div>
-                  <p className="text-cream/40 text-xs mt-1">Required for climate control and lighting</p>
+                  <p className="text-cream/40 text-xs mt-1.5">Required for climate control and lighting</p>
                 </div>
               </div>
             </div>
 
             {/* Location Group */}
-            <div className="space-y-4">
-              <h3 className="text-sm uppercase tracking-wider text-cream/50 font-medium border-b border-charcoal-light/50 pb-2">
+            <div className={sectionCardClass}>
+              <h3 className={sectionHeadingClass}>
                 Location
               </h3>
               <div>
@@ -664,8 +760,9 @@ export default function QuoteForm() {
         {/* Step 2: Contact Information */}
         {currentStep === 2 && (
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gold mb-6">Contact Information</h2>
+            <h2 className="text-xl font-semibold text-gold">Contact Information</h2>
 
+            <div className={sectionCardClass}>
             <div>
               <label className={labelClass}>Full Name *</label>
               <input
@@ -701,6 +798,7 @@ export default function QuoteForm() {
               />
               {errors.phone && <p className={errorClass}>{errors.phone}</p>}
             </div>
+            </div>
 
             <p className="text-cream/50 text-sm">
               Your information is secure and will only be used to contact you about your booking.
@@ -720,8 +818,8 @@ export default function QuoteForm() {
             <h2 className="text-xl font-semibold text-gold mb-6">Review Your Quote</h2>
 
             {/* Event Summary */}
-            <div className="bg-charcoal-dark rounded-lg p-6 space-y-4">
-              <h3 className="font-semibold text-gold border-b border-gold/20 pb-2">Event Details</h3>
+            <div className="bg-charcoal-dark rounded-xl border border-charcoal-light/20 p-6 space-y-4">
+              <h3 className="font-semibold text-gold border-b border-gold/10 pb-2">Event Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="text-cream/60">Dates:</span>
@@ -775,8 +873,8 @@ export default function QuoteForm() {
             </div>
 
             {/* Contact Summary */}
-            <div className="bg-charcoal-dark rounded-lg p-6 space-y-4">
-              <h3 className="font-semibold text-gold border-b border-gold/20 pb-2">Contact Information</h3>
+            <div className="bg-charcoal-dark rounded-xl border border-charcoal-light/20 p-6 space-y-4">
+              <h3 className="font-semibold text-gold border-b border-gold/10 pb-2">Contact Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="text-cream/60">Name:</span>
@@ -794,8 +892,8 @@ export default function QuoteForm() {
             </div>
 
             {/* Pricing Breakdown */}
-            <div className="bg-charcoal-dark rounded-lg p-6">
-              <h3 className="font-semibold text-gold border-b border-gold/20 pb-2 mb-4">
+            <div className="bg-charcoal-dark rounded-xl border border-charcoal-light/20 p-6">
+              <h3 className="font-semibold text-gold border-b border-gold/10 pb-2 mb-4">
                 Price Breakdown
               </h3>
               <div className="space-y-3 text-sm">
@@ -891,8 +989,8 @@ export default function QuoteForm() {
           </div>
         )}
 
-        {/* Navigation Buttons */}
-        <div className="flex justify-between mt-8 pt-6 border-t border-gold/20">
+        {/* Navigation Buttons — desktop (inline) */}
+        <div className="hidden md:flex justify-between mt-8 pt-6 border-t border-gold/20">
           {currentStep > 1 ? (
             <button
               type="button"
@@ -952,15 +1050,86 @@ export default function QuoteForm() {
           )}
         </div>
 
-        {/* Secure payment note */}
+        {/* Secure payment note — desktop */}
         {currentStep === 3 && (
-          <p className="text-center text-cream/40 text-sm mt-4 flex items-center justify-center gap-2">
+          <p className="hidden md:flex text-center text-cream/40 text-sm mt-4 items-center justify-center gap-2">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
             Secure payment powered by Stripe
           </p>
         )}
+
+        {/* Bottom spacer for mobile sticky bar */}
+        <div className="h-24 md:hidden" />
+      </div>
+
+      {/* Sticky mobile bottom bar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-charcoal border-t border-gold/20 px-4 py-3 shadow-[0_-4px_12px_rgba(0,0,0,0.3)]">
+        <div className="flex items-center gap-3">
+          {/* Mobile step indicator */}
+          <span className="text-cream/50 text-xs font-medium whitespace-nowrap">
+            Step {currentStep}/3
+          </span>
+
+          <div className="flex-1 flex justify-end gap-3">
+            {currentStep > 1 && (
+              <button
+                type="button"
+                onClick={handleBack}
+                disabled={isSubmitting}
+                className="px-5 py-2.5 border border-gold/50 text-gold rounded-lg text-sm font-medium hover:bg-gold/10 transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              >
+                Back
+              </button>
+            )}
+
+            {currentStep < 3 ? (
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={isSubmitting}
+                className="px-6 py-2.5 bg-gold text-charcoal-dark rounded-lg text-sm font-semibold shadow-lg transition-all disabled:opacity-50 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              >
+                {isSubmitting ? (
+                  <>
+                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Calculating...
+                  </>
+                ) : (
+                  'Continue'
+                )}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handlePayment}
+                disabled={isProcessingPayment}
+                className="px-6 py-2.5 bg-gold text-charcoal-dark rounded-lg text-sm font-semibold shadow-lg transition-all disabled:opacity-50 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              >
+                {isProcessingPayment ? (
+                  <>
+                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    Pay Now
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
