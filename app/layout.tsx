@@ -6,7 +6,7 @@ import { Inter } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'] });
 
-const siteUrl = "https://upscaleouthouse.com";
+const siteUrl = "https://www.upscaleouthouse.com";
 
 export const metadata: Metadata = {
   title: {
@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   },
   description: "Premium luxury bathroom trailer rentals for weddings, corporate events, and special occasions in Fresno and Central California. Veteran-owned, serving within 150 miles.",
   metadataBase: new URL(siteUrl),
+  // TODO: Replace placeholder branding assets in /public/branding and /app with final logo/hero images.
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-icon.png",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -24,10 +29,10 @@ export const metadata: Metadata = {
     description: "Premium luxury bathroom trailer rentals for weddings, corporate events, and special occasions in Fresno and Central California.",
     images: [
       {
-        url: "/images/gallery/hero-bg.jpg",
+        url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Upscale Outhouse luxury bathroom trailer",
+        alt: "Upscale Outhouse luxury restroom trailer",
       },
     ],
   },
@@ -35,7 +40,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Upscale Outhouse | Luxury Bathroom Trailer Rentals",
     description: "Premium luxury bathroom trailer rentals for weddings, corporate events, and special occasions in Fresno and Central California.",
-    images: ["/images/gallery/hero-bg.jpg"],
+    images: ["/twitter-image.png"],
   },
   robots: {
     index: true,

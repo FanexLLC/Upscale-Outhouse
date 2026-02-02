@@ -8,7 +8,7 @@ const jsonLd = {
   '@type': 'LocalBusiness',
   name: 'Upscale Outhouse',
   description: 'Premium luxury bathroom trailer rentals for weddings, corporate events, and special occasions in Fresno and Central California.',
-  url: 'https://upscaleouthouse.com',
+  url: 'https://www.upscaleouthouse.com',
   telephone: '+15596630356',
   email: 'upscaleouthouse@gmail.com',
   address: {
@@ -28,7 +28,16 @@ const jsonLd = {
     geoRadius: '241000', // 150 miles in meters
   },
   priceRange: '$450/day',
-  image: 'https://upscaleouthouse.com/images/gallery/hero-bg.jpg',
+  image: 'https://www.upscaleouthouse.com/images/gallery/hero-bg.jpg',
+};
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Upscale Outhouse',
+  url: 'https://www.upscaleouthouse.com',
+  logo: 'https://www.upscaleouthouse.com/branding/logo.png',
+  sameAs: ['https://www.instagram.com/upscale_outhouse/'],
 };
 
 
@@ -38,6 +47,10 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
       />
       {/* Hero Section */}
       <section className="relative bg-charcoal-dark overflow-hidden">
@@ -100,6 +113,26 @@ export default function Home() {
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-4">
+                <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-gold/10">
+                  <Image
+                    src="/images/gallery/gallery-exterior-side-01.jpg"
+                    alt="Side view of the Upscale Outhouse restroom trailer"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                </div>
+                <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-gold/10">
+                  <Image
+                    src="/images/gallery/gallery-interior-doors-01.jpg"
+                    alt="Interior entry of the luxury restroom trailer"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                </div>
               </div>
             </div>
           </div>
