@@ -83,7 +83,7 @@ export default function Home() {
                   <span className="text-gold">&#10003;</span> Climate Controlled
                 </li>
                 <li className="flex items-center gap-1.5">
-                  <span className="text-gold">&#10003;</span> Hot &amp; Cold Running Water
+                  <span className="text-gold">&#10003;</span> Running Water
                 </li>
               </ul>
               <div className="flex flex-col sm:flex-row gap-4">
@@ -175,15 +175,15 @@ export default function Home() {
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="flex-none w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-sm">&#10003;</span>
-                  Flushing porcelain toilets
+                  Flushing toilets
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="flex-none w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-sm">&#10003;</span>
-                  Hot and cold running water
+                  Running water
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="flex-none w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-sm">&#10003;</span>
-                  Vanity with mirrors and lighting
+                  Mirrors and lighting
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="flex-none w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-sm">&#10003;</span>

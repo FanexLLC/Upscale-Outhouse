@@ -178,10 +178,16 @@ export default async function BookingDetailPage({
                   {booking.numberOfDays} day{booking.numberOfDays > 1 ? "s" : ""}
                 </p>
               </div>
-              <div className="md:col-span-2">
+              <div>
                 <p className="text-sm text-gray-500">Water Hookup</p>
                 <p className="font-medium text-charcoal">
                   {booking.hasWaterHookup ? "Yes" : "No"}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Power Available</p>
+                <p className="font-medium text-charcoal">
+                  {booking.hasPowerAvailable ? "Yes" : "No"}
                 </p>
               </div>
             </div>

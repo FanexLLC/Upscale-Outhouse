@@ -28,6 +28,14 @@ for (let hour = 0; hour <= 3; hour++) {
   END_TIME_VALUES.push(`${hour.toString().padStart(2, '0')}:00`);
 }
 
+// Helper to convert 24-hour time to 12-hour format
+const formatTimeDisplay = (time: string): string => {
+  const hour = parseInt(time.split(':')[0], 10);
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+  return `${displayHour}:00 ${ampm}`;
+};
+
 // Event type options
 const EVENT_TYPES = [
   { value: '', label: 'Select event type' },
@@ -139,6 +147,16 @@ export default function QuoteForm() {
   const [googleLoaded, setGoogleLoaded] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  // Promo code state
+  const [promoCode, setPromoCode] = useState('');
+  const [promoCodeValid, setPromoCodeValid] = useState(false);
+  const [promoCodeValidating, setPromoCodeValidating] = useState(false);
+  const [promoCodeMessage, setPromoCodeMessage] = useState<string | null>(null);
+  const [promoCodeDiscount, setPromoCodeDiscount] = useState<{
+    type: 'PERCENTAGE' | 'FULL_BYPASS';
+    percent?: number;
+  } | null>(null);
 
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -380,7 +398,51 @@ export default function QuoteForm() {
     }
   };
 
-  // Handle payment - redirect to Stripe Checkout
+  // Validate promo code
+  const validatePromoCode = async () => {
+    if (!promoCode.trim()) return;
+
+    setPromoCodeValidating(true);
+    setPromoCodeMessage(null);
+
+    try {
+      const res = await fetch('/api/promo-code/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: promoCode }),
+      });
+
+      const data = await res.json();
+
+      if (data.valid) {
+        setPromoCodeValid(true);
+        setPromoCodeDiscount({
+          type: data.discountType,
+          percent: data.discountPercent,
+        });
+        setPromoCodeMessage(data.message);
+      } else {
+        setPromoCodeValid(false);
+        setPromoCodeDiscount(null);
+        setPromoCodeMessage(data.message);
+      }
+    } catch {
+      setPromoCodeValid(false);
+      setPromoCodeMessage('Failed to validate promo code');
+    } finally {
+      setPromoCodeValidating(false);
+    }
+  };
+
+  // Clear promo code
+  const clearPromoCode = () => {
+    setPromoCode('');
+    setPromoCodeValid(false);
+    setPromoCodeMessage(null);
+    setPromoCodeDiscount(null);
+  };
+
+  // Handle payment - redirect to Stripe Checkout or bypass for promo
   const handlePayment = async () => {
     if (!quoteResult?.quoteId) return;
 
@@ -395,6 +457,7 @@ export default function QuoteForm() {
         },
         body: JSON.stringify({
           quoteId: quoteResult.quoteId,
+          promoCode: promoCodeValid ? promoCode : undefined,
         }),
       });
 
@@ -402,6 +465,12 @@ export default function QuoteForm() {
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to create booking');
+      }
+
+      // If promo code bypasses payment, redirect to success page
+      if (data.bypassed) {
+        window.location.href = `/booking/success?booking_id=${data.bookingId}`;
+        return;
       }
 
       // Redirect to Stripe Checkout
@@ -427,6 +496,16 @@ export default function QuoteForm() {
   const errorClass = 'text-red-400 text-sm mt-1.5';
   const sectionCardClass = 'rounded-xl border border-charcoal-light/20 bg-charcoal-dark/40 p-5 md:p-6 space-y-4';
   const sectionHeadingClass = 'text-xs uppercase tracking-widest text-gold/70 font-semibold pb-2 border-b border-gold/10';
+  const baseDeposit = quoteResult?.quote.depositDue ?? 0;
+  const baseTotal = quoteResult?.quote.totalAmount ?? 0;
+  const promoPercent = promoCodeDiscount?.type === 'PERCENTAGE' ? (promoCodeDiscount.percent || 0) : 0;
+  const maxPromoDiscount = Math.max(0, baseTotal - baseDeposit);
+  const promoDiscountTotal = promoPercent > 0
+    ? Math.min(Math.round(baseTotal * promoPercent * 100) / 100, maxPromoDiscount)
+    : 0;
+  const totalAfterPromo = Math.max(0, Math.round((baseTotal - promoDiscountTotal) * 100) / 100);
+  const depositDueNow = promoCodeDiscount?.type === 'FULL_BYPASS' ? 0 : baseDeposit;
+  const balanceDueWithPromo = Math.max(0, Math.round((totalAfterPromo - baseDeposit) * 100) / 100);
 
   return (
     <div className="bg-charcoal rounded-2xl border border-gold/20 shadow-lg overflow-hidden">
@@ -647,7 +726,7 @@ export default function QuoteForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div>
                   <label className={labelClass}>
-                    Is water available within 100 feet?
+                    Is water available within 50 feet?
                   </label>
                   <div className="flex gap-3">
                     <button
@@ -677,7 +756,7 @@ export default function QuoteForm() {
                 </div>
                 <div>
                   <label className={labelClass}>
-                    Is power available within 100 feet?
+                    Is power available within 50 feet?
                   </label>
                   <div className="flex gap-3">
                     <button
@@ -832,7 +911,7 @@ export default function QuoteForm() {
                 </div>
                 <div>
                   <span className="text-cream/60">Time:</span>
-                  <p className="text-cream">{formData.startTime} - {formData.endTime}</p>
+                  <p className="text-cream">{formatTimeDisplay(formData.startTime)} - {formatTimeDisplay(formData.endTime)}</p>
                 </div>
                 <div>
                   <span className="text-cream/60">Event Type:</span>
@@ -852,13 +931,13 @@ export default function QuoteForm() {
                   )}
                 </div>
                 <div>
-                  <span className="text-cream/60">Water within 100 ft:</span>
+                  <span className="text-cream/60">Water within 50 ft:</span>
                   <p className={formData.hasWaterHookup ? 'text-green-400' : 'text-red-400'}>
                     {formData.hasWaterHookup ? 'Yes' : 'No'}
                   </p>
                 </div>
                 <div>
-                  <span className="text-cream/60">Power within 100 ft:</span>
+                  <span className="text-cream/60">Power within 50 ft:</span>
                   <p className={formData.hasPowerAvailable ? 'text-green-400' : 'text-red-400'}>
                     {formData.hasPowerAvailable ? 'Yes' : 'No'}
                   </p>
@@ -945,23 +1024,34 @@ export default function QuoteForm() {
                     {quoteResult.quote.deliveryFeeNote}
                   </p>
                 )}
+                {promoCodeDiscount?.type === 'PERCENTAGE' && promoDiscountTotal > 0 && (
+                  <div className="flex justify-between text-green-400">
+                    <span>Promo discount ({Math.round(promoPercent * 100)}%)</span>
+                    <span>-{formatCurrency(promoDiscountTotal)}</span>
+                  </div>
+                )}
 
                 <div className="border-t border-gold/20 pt-3 mt-3">
                   <div className="flex justify-between text-cream font-semibold text-lg">
                     <span>Total</span>
-                    <span>{formatCurrency(quoteResult.quote.totalAmount)}</span>
+                    <span>{formatCurrency(totalAfterPromo)}</span>
                   </div>
                 </div>
 
                 <div className="bg-gold/10 rounded-lg p-4 mt-4">
                   <div className="flex justify-between text-gold font-bold text-lg mb-2">
                     <span>Deposit Due Now</span>
-                    <span>{formatCurrency(quoteResult.quote.depositDue)}</span>
+                    <span>{formatCurrency(depositDueNow)}</span>
                   </div>
                   <div className="flex justify-between text-cream/70 text-sm">
                     <span>Balance due on delivery</span>
-                    <span>{formatCurrency(quoteResult.quote.balanceDue)}</span>
+                    <span>{formatCurrency(balanceDueWithPromo)}</span>
                   </div>
+                  {promoCodeDiscount?.type === 'FULL_BYPASS' && (
+                    <p className="text-cream/60 text-xs mt-2">
+                      Deposit will be recorded as paid (cash/offline).
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -970,6 +1060,53 @@ export default function QuoteForm() {
             <p className="text-cream/50 text-sm text-center">
               Quote ID: <span className="text-cream font-mono">{quoteResult.quoteId}</span>
             </p>
+
+            {/* Promo Code Input */}
+            <div className="bg-charcoal-dark rounded-xl border border-charcoal-light/20 p-6">
+              <h3 className="font-semibold text-gold border-b border-gold/10 pb-2 mb-4">
+                Promo Code
+              </h3>
+              {promoCodeValid ? (
+                <div className="flex items-center justify-between bg-green-500/10 border border-green-500/30 rounded-lg p-3">
+                  <div>
+                    <p className="text-green-400 font-medium">{promoCode.toUpperCase()}</p>
+                    <p className="text-green-400/70 text-sm">{promoCodeMessage}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={clearPromoCode}
+                    className="text-cream/50 hover:text-cream transition-colors"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={promoCode}
+                      onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                      placeholder="Enter promo code"
+                      className="flex-1 px-4 py-2 bg-charcoal border border-charcoal-light rounded-lg text-cream placeholder-cream/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                    />
+                    <button
+                      type="button"
+                      onClick={validatePromoCode}
+                      disabled={!promoCode.trim() || promoCodeValidating}
+                      className="px-4 py-2 bg-gold/20 text-gold border border-gold/30 rounded-lg font-medium hover:bg-gold/30 transition-colors disabled:opacity-50"
+                    >
+                      {promoCodeValidating ? 'Checking...' : 'Apply'}
+                    </button>
+                  </div>
+                  {promoCodeMessage && !promoCodeValid && (
+                    <p className="text-red-400 text-sm">{promoCodeMessage}</p>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* Payment Error */}
             {paymentError && (

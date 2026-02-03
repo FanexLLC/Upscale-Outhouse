@@ -27,6 +27,12 @@ enum BookingStatus {
   CANCELLED
 }
 
+// Promo code discount type enum
+enum PromoDiscountType {
+  PERCENTAGE
+  FULL_BYPASS
+}
+
 // Event type enum
 enum EventType {
   WEDDING
@@ -150,6 +156,10 @@ model Booking {
   status            BookingStatus @default(PENDING)
   notes             String?
 
+  // Promo code tracking
+  promoCodeUsed     String?
+  promoDiscount     Float         @default(0)
+
   // Relations
   quotes            Quote[]
 
@@ -195,4 +205,21 @@ model User {
   role          UserRole  @default(ADMIN)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
+}
+
+// Promo codes for discounts and payment bypass
+model PromoCode {
+  id              String            @id @default(cuid())
+  code            String            @unique
+  discountType    PromoDiscountType
+  discountPercent Float?            // For percentage discounts (e.g., 0.10 for 10%)
+  maxUses         Int?              // null = unlimited
+  currentUses     Int               @default(0)
+  isActive        Boolean           @default(true)
+  expiresAt       DateTime?
+  createdAt       DateTime          @default(now())
+  createdBy       String?           // Admin who created it
+
+  @@index([code])
+  @@index([isActive])
 }

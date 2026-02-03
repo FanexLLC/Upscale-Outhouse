@@ -18,9 +18,6 @@ export function getStripe(): Stripe {
   return stripeInstance;
 }
 
-// Deposit amount in cents for Stripe
-export const DEPOSIT_AMOUNT_CENTS = 10000; // $100.00
-
 // Create a Stripe Checkout session for the deposit
 export async function createCheckoutSession({
   bookingId,
@@ -28,15 +25,22 @@ export async function createCheckoutSession({
   customerName,
   eventDate,
   totalAmount,
+  depositAmount,
 }: {
   bookingId: string;
   customerEmail: string;
   customerName: string;
   eventDate: string;
   totalAmount: number;
+  depositAmount: number;
 }) {
   const stripe = getStripe();
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const depositAmountCents = Math.max(0, Math.round(depositAmount * 100));
+
+  if (depositAmountCents <= 0) {
+    throw new Error('Deposit amount must be greater than zero to create a Stripe session');
+  }
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
@@ -51,7 +55,7 @@ export async function createCheckoutSession({
             name: 'Upscale Outhouse Rental Deposit',
             description: `Booking deposit for ${customerName} - Event date: ${eventDate}. Total rental: $${totalAmount.toFixed(2)}. Balance due on delivery.`,
           },
-          unit_amount: DEPOSIT_AMOUNT_CENTS,
+          unit_amount: depositAmountCents,
         },
         quantity: 1,
       },
@@ -62,6 +66,7 @@ export async function createCheckoutSession({
       customerEmail,
       eventDate,
       totalAmount: totalAmount.toString(),
+      depositAmount: depositAmount.toString(),
     },
     success_url: `${baseUrl}/booking/success?session_id={CHECKOUT_SESSION_ID}&booking_id=${bookingId}`,
     cancel_url: `${baseUrl}/quote?cancelled=true&booking_id=${bookingId}`,

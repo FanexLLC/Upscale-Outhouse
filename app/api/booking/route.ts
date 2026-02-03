@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { createCheckoutSession } from '@/lib/stripe';
 import { PRICING } from '@/lib/pricing';
+import { sendCustomerConfirmationEmail, sendOwnerNotificationEmail } from '@/lib/email';
+import { createCalendarEvent, isCalendarConfigured } from '@/lib/google-calendar';
 
 // Force Node.js runtime (not Edge) for Stripe compatibility
 export const runtime = 'nodejs';
@@ -10,13 +12,42 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { quoteId } = body;
+    const { quoteId, promoCode } = body;
 
     if (!quoteId) {
       return NextResponse.json(
         { error: 'Quote ID is required' },
         { status: 400 }
       );
+    }
+
+    // Validate promo code if provided
+    let validPromoCode: {
+      id: string;
+      code: string;
+      discountType: 'PERCENTAGE' | 'FULL_BYPASS';
+      discountPercent: number | null;
+    } | null = null;
+
+    if (promoCode) {
+      const promo = await prisma.promoCode.findUnique({
+        where: { code: promoCode.toUpperCase() },
+      });
+
+      if (promo && promo.isActive) {
+        // Check expiration
+        if (!promo.expiresAt || new Date(promo.expiresAt) > new Date()) {
+          // Check max uses
+          if (!promo.maxUses || promo.currentUses < promo.maxUses) {
+            validPromoCode = {
+              id: promo.id,
+              code: promo.code,
+              discountType: promo.discountType,
+              discountPercent: promo.discountPercent,
+            };
+          }
+        }
+      }
     }
 
     // Fetch the quote
@@ -47,6 +78,102 @@ export async function POST(request: NextRequest) {
       });
 
       if (existingBooking && !existingBooking.depositPaid) {
+        const depositAmountToCharge = existingBooking.depositAmount;
+
+        // If deposit is already zero, bypass payment
+        if (depositAmountToCharge <= 0) {
+          await prisma.booking.update({
+            where: { id: existingBooking.id },
+            data: {
+              depositPaid: true,
+              depositPaidAt: new Date(),
+              status: 'CONFIRMED',
+            },
+          });
+
+          await prisma.quote.updateMany({
+            where: { bookingId: existingBooking.id },
+            data: { status: 'PAID' },
+          });
+
+          try {
+            const emailData = {
+              bookingId: existingBooking.id,
+              customerName: existingBooking.customerName,
+              customerEmail: existingBooking.customerEmail,
+              customerPhone: existingBooking.customerPhone,
+              eventAddress: existingBooking.eventAddress,
+              eventCity: existingBooking.eventCity,
+              eventState: existingBooking.eventState,
+              startDate: existingBooking.startDate,
+              endDate: existingBooking.endDate,
+              startTime: existingBooking.startTime,
+              endTime: existingBooking.endTime,
+              eventType: existingBooking.eventType,
+              guestCount: existingBooking.guestCount,
+              hasWaterHookup: existingBooking.hasWaterHookup,
+              numberOfDays: existingBooking.numberOfDays,
+              baseRental: existingBooking.baseRental,
+              discountPercent: existingBooking.discountPercent,
+              discountAmount: existingBooking.discountAmount,
+              deliveryFee: existingBooking.deliveryFee,
+              totalAmount: existingBooking.totalAmount,
+              depositAmount: depositAmountToCharge,
+            };
+
+            await Promise.all([
+              sendCustomerConfirmationEmail(emailData),
+              sendOwnerNotificationEmail(emailData),
+            ]);
+          } catch (emailError) {
+            console.error('Failed to send bypass confirmation emails:', emailError);
+          }
+
+          if (isCalendarConfigured()) {
+            try {
+              const calendarEventData = {
+                bookingId: existingBooking.id,
+                customerName: existingBooking.customerName,
+                customerEmail: existingBooking.customerEmail,
+                customerPhone: existingBooking.customerPhone,
+                eventAddress: existingBooking.eventAddress,
+                eventCity: existingBooking.eventCity,
+                eventState: existingBooking.eventState,
+                eventZip: existingBooking.eventZip,
+                startDate: existingBooking.startDate,
+                endDate: existingBooking.endDate,
+                startTime: existingBooking.startTime,
+                endTime: existingBooking.endTime,
+                eventType: existingBooking.eventType,
+                guestCount: existingBooking.guestCount,
+                hasWaterHookup: existingBooking.hasWaterHookup,
+                numberOfDays: existingBooking.numberOfDays,
+                totalAmount: existingBooking.totalAmount,
+                depositAmount: depositAmountToCharge,
+                depositPaid: true,
+                balancePaid: existingBooking.balancePaid,
+                additionalDetails: existingBooking.additionalDetails,
+              };
+
+              const googleEventId = await createCalendarEvent(calendarEventData);
+              if (googleEventId) {
+                await prisma.booking.update({
+                  where: { id: existingBooking.id },
+                  data: { googleEventId },
+                });
+              }
+            } catch (calendarError) {
+              console.error('Failed to create bypass calendar event:', calendarError);
+            }
+          }
+
+          return NextResponse.json({
+            success: true,
+            bypassed: true,
+            bookingId: existingBooking.id,
+          });
+        }
+
         // Create new checkout session for existing unpaid booking
         const session = await createCheckoutSession({
           bookingId: existingBooking.id,
@@ -54,6 +181,7 @@ export async function POST(request: NextRequest) {
           customerName: existingBooking.customerName,
           eventDate: existingBooking.startDate.toISOString().split('T')[0],
           totalAmount: existingBooking.totalAmount,
+          depositAmount: depositAmountToCharge,
         });
 
         return NextResponse.json({
@@ -104,6 +232,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Calculate promo discount (applies to total only)
+    const baseDeposit = PRICING.DEPOSIT_AMOUNT;
+    const isPercentPromo = validPromoCode?.discountType === 'PERCENTAGE';
+    const rawPromoPercent = isPercentPromo ? (validPromoCode?.discountPercent || 0) : 0;
+    const promoPercent = Math.min(Math.max(rawPromoPercent, 0), 1);
+    const maxPromoDiscount = Math.max(0, quote.totalAmount - baseDeposit);
+    const totalPromoDiscount = isPercentPromo
+      ? Math.min(Math.round(quote.totalAmount * promoPercent * 100) / 100, maxPromoDiscount)
+      : 0;
+    const adjustedTotalAmount = Math.max(
+      0,
+      Math.round((quote.totalAmount - totalPromoDiscount) * 100) / 100
+    );
+
+    // Determine if payment should be bypassed (FULL_BYPASS only)
+    const bypassPayment = validPromoCode?.discountType === 'FULL_BYPASS';
+
+    // Deposit stays at the full amount for percentage promos
+    const bookingDepositAmount = baseDeposit;
+    const bookingTotalAmount = isPercentPromo ? adjustedTotalAmount : quote.totalAmount;
+
     // Create booking from quote
     const booking = await prisma.booking.create({
       data: {
@@ -139,14 +288,29 @@ export async function POST(request: NextRequest) {
         discountAmount: quote.discountAmount,
         rentalAfterDiscount: quote.rentalAfterDiscount,
         deliveryFee: quote.deliveryFee,
-        totalAmount: quote.totalAmount,
-        depositAmount: PRICING.DEPOSIT_AMOUNT,
+        totalAmount: bookingTotalAmount,
+        depositAmount: bookingDepositAmount,
 
-        // Status
-        status: 'PENDING',
-        depositPaid: false,
+        // Promo code tracking
+        promoCodeUsed: validPromoCode?.code || null,
+        promoDiscount: validPromoCode?.discountType === 'PERCENTAGE'
+          ? totalPromoDiscount
+          : (validPromoCode?.discountType === 'FULL_BYPASS' ? baseDeposit : 0),
+
+        // Status - if bypassed, mark as confirmed with deposit "paid"
+        status: bypassPayment ? 'CONFIRMED' : 'PENDING',
+        depositPaid: bypassPayment,
+        depositPaidAt: bypassPayment ? new Date() : null,
       },
     });
+
+    // Increment promo code usage if used
+    if (validPromoCode) {
+      await prisma.promoCode.update({
+        where: { id: validPromoCode.id },
+        data: { currentUses: { increment: 1 } },
+      });
+    }
 
     // Update quote to mark as converted
     await prisma.quote.update({
@@ -154,9 +318,89 @@ export async function POST(request: NextRequest) {
       data: {
         convertedToBooking: true,
         bookingId: booking.id,
-        status: 'CONVERTED',
+        status: bypassPayment ? 'PAID' : 'CONVERTED',
       },
     });
+
+    // If payment is bypassed, send confirmation and return success without Stripe
+    if (bypassPayment) {
+      try {
+        const emailData = {
+          bookingId: booking.id,
+          customerName: booking.customerName,
+          customerEmail: booking.customerEmail,
+          customerPhone: booking.customerPhone,
+          eventAddress: booking.eventAddress,
+          eventCity: booking.eventCity,
+          eventState: booking.eventState,
+          startDate: booking.startDate,
+          endDate: booking.endDate,
+          startTime: booking.startTime,
+          endTime: booking.endTime,
+          eventType: booking.eventType,
+          guestCount: booking.guestCount,
+          hasWaterHookup: booking.hasWaterHookup,
+          numberOfDays: booking.numberOfDays,
+          baseRental: booking.baseRental,
+          discountPercent: booking.discountPercent,
+          discountAmount: booking.discountAmount,
+          deliveryFee: booking.deliveryFee,
+          totalAmount: booking.totalAmount,
+          depositAmount: booking.depositAmount,
+        };
+
+        await Promise.all([
+          sendCustomerConfirmationEmail(emailData),
+          sendOwnerNotificationEmail(emailData),
+        ]);
+      } catch (emailError) {
+        console.error('Failed to send bypass confirmation emails:', emailError);
+      }
+
+      if (isCalendarConfigured()) {
+        try {
+          const calendarEventData = {
+            bookingId: booking.id,
+            customerName: booking.customerName,
+            customerEmail: booking.customerEmail,
+            customerPhone: booking.customerPhone,
+            eventAddress: booking.eventAddress,
+            eventCity: booking.eventCity,
+            eventState: booking.eventState,
+            eventZip: booking.eventZip,
+            startDate: booking.startDate,
+            endDate: booking.endDate,
+            startTime: booking.startTime,
+            endTime: booking.endTime,
+            eventType: booking.eventType,
+            guestCount: booking.guestCount,
+            hasWaterHookup: booking.hasWaterHookup,
+            numberOfDays: booking.numberOfDays,
+            totalAmount: booking.totalAmount,
+            depositAmount: booking.depositAmount,
+            depositPaid: true,
+            balancePaid: booking.balancePaid,
+            additionalDetails: booking.additionalDetails,
+          };
+
+          const googleEventId = await createCalendarEvent(calendarEventData);
+          if (googleEventId) {
+            await prisma.booking.update({
+              where: { id: booking.id },
+              data: { googleEventId },
+            });
+          }
+        } catch (calendarError) {
+          console.error('Failed to create bypass calendar event:', calendarError);
+        }
+      }
+
+      return NextResponse.json({
+        success: true,
+        bypassed: true,
+        bookingId: booking.id,
+      });
+    }
 
     // Create Stripe Checkout session
     const session = await createCheckoutSession({
@@ -165,6 +409,7 @@ export async function POST(request: NextRequest) {
       customerName: booking.customerName,
       eventDate: booking.startDate.toISOString().split('T')[0],
       totalAmount: booking.totalAmount,
+      depositAmount: booking.depositAmount,
     });
 
     return NextResponse.json({
