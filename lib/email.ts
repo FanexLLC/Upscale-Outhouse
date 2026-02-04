@@ -1,6 +1,19 @@
 import { Resend } from 'resend';
 
-// Lazily initialize Resend to avoid build-time errors
+// --- CONFIGURATION ---
+// Replace this with the actual URL of your hosted logo (PNG/JPG)
+// If you don't have one hosted yet, we can use a text fallback in the HTML
+const LOGO_URL = 'https://placehold.co/400x150/1c1c1c/D4AF37?text=UPSCALE+OUTHOUSE'; 
+
+// Colors
+const COLOR_BG_MAIN = '#f3f4f6'; // Light grey outer background for contrast
+const COLOR_BG_CARD = '#ffffff'; // White card for content
+const COLOR_ACCENT = '#D4AF37'; // Luxury Gold
+const COLOR_TEXT_MAIN = '#1f2937'; // Dark Grey for readability
+const COLOR_TEXT_MUTED = '#6b7280'; // Light Grey for labels
+const COLOR_SUCCESS = '#059669'; // Emerald Green for "Paid"
+
+// Lazily initialize Resend
 let resendInstance: Resend | null = null;
 
 function getResend(): Resend {
@@ -13,18 +26,11 @@ function getResend(): Resend {
   return resendInstance;
 }
 
-// Validated From address — must be a verified domain in Resend, never resend.dev
 const EMAIL_FROM_RAW = process.env.EMAIL_FROM || 'invoices@upscaleouthouse.com';
-if (!EMAIL_FROM_RAW.includes('@') || !EMAIL_FROM_RAW.includes('upscaleouthouse.com')) {
-  console.error(
-    `[EMAIL CONFIG ERROR] EMAIL_FROM is invalid: "${EMAIL_FROM_RAW}". ` +
-    'It must be an @upscaleouthouse.com address. Emails will fail.'
-  );
-}
 const FROM_EMAIL = `Upscale Outhouse <${EMAIL_FROM_RAW}>`;
 const REPLY_TO = 'upscaleouthouse@gmail.com';
-const OWNER_EMAIL = process.env.OWNER_EMAIL || process.env.BUSINESS_EMAIL || 'info@upscaleouthouse.com';
-const BUSINESS_PHONE = process.env.BUSINESS_PHONE || '(559) 555-1234';
+const OWNER_EMAIL = process.env.OWNER_EMAIL || 'upscaleouthouse@gmail.com';
+const BUSINESS_PHONE = process.env.BUSINESS_PHONE || '(559) 663-0356';
 
 interface BookingEmailData {
   bookingId: string;
@@ -50,12 +56,13 @@ interface BookingEmailData {
   depositAmount: number;
 }
 
+// --- UTILS ---
 function formatDate(date: Date): string {
   return new Intl.DateTimeFormat('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
+    weekday: 'short',
+    month: 'short',
     day: 'numeric',
+    year: 'numeric'
   }).format(date);
 }
 
@@ -70,141 +77,179 @@ function formatEventType(type: string): string {
   return type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
 }
 
-// Send confirmation email to customer after payment
+// --- TEMPLATES ---
+
 export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
   const balanceDue = data.totalAmount - data.depositAmount;
   const eventDateRange = data.startDate.toDateString() === data.endDate.toDateString()
     ? formatDate(data.startDate)
-    : `${formatDate(data.startDate)} - ${formatDate(data.endDate)}`;
+    : `${formatDate(data.startDate)} – ${formatDate(data.endDate)}`;
 
+  // The "Luxury Card" Template
   const html = `
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Booking Confirmation</title>
+  <style>
+    /* Reset & clients adjustments */
+    body { margin: 0; padding: 0; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    img { border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+    /* Mobile styles */
+    @media only screen and (max-width: 600px) {
+      .container { width: 100% !important; padding: 0 !important; }
+      .content-wrap { padding: 20px !important; }
+      .mobile-stack { display: block !important; width: 100% !important; }
+      .mobile-padding { padding-left: 0 !important; padding-top: 10px !important; }
+    }
+  </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #1a1a1a; font-family: Arial, sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #1a1a1a; padding: 40px 20px;">
+<body style="background-color: ${COLOR_BG_MAIN}; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: ${COLOR_TEXT_MAIN};">
+  
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: ${COLOR_BG_MAIN}; padding: 40px 0;">
     <tr>
       <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #2D3748; border-radius: 12px; overflow: hidden;">
-          <!-- Header -->
+        
+        <table role="presentation" class="container" width="600" cellspacing="0" cellpadding="0" border="0" style="background-color: ${COLOR_BG_CARD}; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-top: 6px solid ${COLOR_ACCENT};">
+          
           <tr>
-            <td style="background-color: #D4AF37; padding: 30px; text-align: center;">
-              <h1 style="margin: 0; color: #2D3748; font-size: 28px; font-weight: bold;">Upscale Outhouse</h1>
-              <p style="margin: 10px 0 0 0; color: #2D3748; font-size: 14px;">Luxury Restroom Trailer Rentals</p>
+            <td align="center" style="padding: 40px 0 20px 0;">
+              <img src="${LOGO_URL}" alt="Upscale Outhouse" width="250" style="max-width: 80%; height: auto; display: block; font-family: serif; font-size: 24px; color: ${COLOR_TEXT_MAIN};" border="0">
+              <p style="margin: 10px 0 0; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: ${COLOR_TEXT_MUTED};">Luxury Restroom Trailers</p>
             </td>
           </tr>
 
-          <!-- Confirmation Message -->
           <tr>
-            <td style="padding: 40px 30px;">
-              <h2 style="margin: 0 0 20px 0; color: #D4AF37; font-size: 24px;">Booking Confirmed!</h2>
-              <p style="margin: 0 0 20px 0; color: #F7FAFC; font-size: 16px; line-height: 1.6;">
-                Dear ${data.customerName},
+            <td class="content-wrap" style="padding: 20px 50px 40px 50px; text-align: center;">
+              <h1 style="margin: 0 0 15px; font-size: 26px; font-weight: 300; color: ${COLOR_TEXT_MAIN};">Your Event is Secured.</h1>
+              <p style="margin: 0 0 30px; font-size: 16px; line-height: 1.6; color: ${COLOR_TEXT_MUTED};">
+                Dear ${data.customerName},<br>
+                Thank you for choosing Upscale Outhouse. We have received your deposit and your luxury trailer is officially reserved for the dates below.
               </p>
-              <p style="margin: 0 0 20px 0; color: #F7FAFC; font-size: 16px; line-height: 1.6;">
-                Thank you for choosing Upscale Outhouse! Your booking has been confirmed and your deposit has been received.
-              </p>
-
-              <!-- Booking ID -->
-              <div style="background-color: #1a1a1a; border-radius: 8px; padding: 15px; margin-bottom: 30px;">
-                <p style="margin: 0; color: #D4AF37; font-size: 14px;">Booking Reference</p>
-                <p style="margin: 5px 0 0 0; color: #F7FAFC; font-size: 18px; font-family: monospace;">${data.bookingId}</p>
+              
+              <div style="display: inline-block; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 10px 20px;">
+                <span style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: ${COLOR_TEXT_MUTED};">Booking Reference</span>
+                <span style="display: block; font-size: 18px; font-family: monospace; font-weight: 700; color: ${COLOR_TEXT_MAIN}; letter-spacing: 2px;">#${data.bookingId}</span>
               </div>
+            </td>
+          </tr>
 
-              <!-- Event Details -->
-              <h3 style="margin: 0 0 15px 0; color: #D4AF37; font-size: 18px; border-bottom: 1px solid #D4AF37; padding-bottom: 10px;">Event Details</h3>
-              <table width="100%" style="margin-bottom: 30px;">
+          <tr>
+            <td style="padding: 0 50px;">
+              <div style="height: 1px; width: 100%; background-color: #e5e7eb;"></div>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="content-wrap" style="padding: 40px 50px;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
                 <tr>
-                  <td style="padding: 8px 0; color: #a0aec0; font-size: 14px;">Date:</td>
-                  <td style="padding: 8px 0; color: #F7FAFC; font-size: 14px; text-align: right;">${eventDateRange}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px 0; color: #a0aec0; font-size: 14px;">Time:</td>
-                  <td style="padding: 8px 0; color: #F7FAFC; font-size: 14px; text-align: right;">${data.startTime} - ${data.endTime}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px 0; color: #a0aec0; font-size: 14px;">Event Type:</td>
-                  <td style="padding: 8px 0; color: #F7FAFC; font-size: 14px; text-align: right;">${formatEventType(data.eventType)}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px 0; color: #a0aec0; font-size: 14px;">Location:</td>
-                  <td style="padding: 8px 0; color: #F7FAFC; font-size: 14px; text-align: right;">${data.eventAddress}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px 0; color: #a0aec0; font-size: 14px;">Water Hookup:</td>
-                  <td style="padding: 8px 0; color: #F7FAFC; font-size: 14px; text-align: right;">${data.hasWaterHookup ? 'Yes' : 'No'}</td>
+                  <td class="mobile-stack" valign="top" width="48%" style="padding-bottom: 20px;">
+                    <h3 style="margin: 0 0 15px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: ${COLOR_ACCENT}; font-weight: bold;">Event Details</h3>
+                    <p style="margin: 0 0 8px; font-size: 14px; color: ${COLOR_TEXT_MAIN};">
+                      <strong style="color: ${COLOR_TEXT_MUTED}; display: inline-block; width: 50px;">Date:</strong> ${eventDateRange}
+                    </p>
+                    <p style="margin: 0 0 8px; font-size: 14px; color: ${COLOR_TEXT_MAIN};">
+                      <strong style="color: ${COLOR_TEXT_MUTED}; display: inline-block; width: 50px;">Time:</strong> ${data.startTime} - ${data.endTime}
+                    </p>
+                    <p style="margin: 0 0 8px; font-size: 14px; color: ${COLOR_TEXT_MAIN};">
+                      <strong style="color: ${COLOR_TEXT_MUTED}; display: inline-block; width: 50px;">Type:</strong> ${formatEventType(data.eventType)}
+                    </p>
+                    <p style="margin: 0; font-size: 14px; color: ${COLOR_TEXT_MAIN};">
+                       <strong style="color: ${COLOR_TEXT_MUTED}; display: inline-block; width: 50px;">Water:</strong> ${data.hasWaterHookup ? 'Yes' : 'No'}
+                    </p>
+                  </td>
+                  
+                  <td class="mobile-stack" width="4%"></td>
+
+                  <td class="mobile-stack mobile-padding" valign="top" width="48%">
+                    <h3 style="margin: 0 0 15px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: ${COLOR_ACCENT}; font-weight: bold;">Location</h3>
+                    <p style="margin: 0; font-size: 14px; line-height: 1.6; color: ${COLOR_TEXT_MAIN};">
+                      ${data.eventAddress}<br>
+                      ${data.eventCity ? data.eventCity : ''}${data.eventState ? ', ' + data.eventState : ''}
+                    </p>
+                  </td>
                 </tr>
               </table>
-
-              <!-- Payment Summary -->
-              <h3 style="margin: 0 0 15px 0; color: #D4AF37; font-size: 18px; border-bottom: 1px solid #D4AF37; padding-bottom: 10px;">Payment Summary</h3>
-              <table width="100%" style="margin-bottom: 20px;">
-                <tr>
-                  <td style="padding: 8px 0; color: #a0aec0; font-size: 14px;">Rental (${data.numberOfDays} day${data.numberOfDays > 1 ? 's' : ''}):</td>
-                  <td style="padding: 8px 0; color: #F7FAFC; font-size: 14px; text-align: right;">${formatCurrency(data.baseRental)}</td>
-                </tr>
-                ${data.discountAmount > 0 ? `
-                <tr>
-                  <td style="padding: 8px 0; color: #48bb78; font-size: 14px;">Multi-day Discount (${data.discountPercent}%):</td>
-                  <td style="padding: 8px 0; color: #48bb78; font-size: 14px; text-align: right;">-${formatCurrency(data.discountAmount)}</td>
-                </tr>
-                ` : ''}
-                <tr>
-                  <td style="padding: 8px 0; color: #a0aec0; font-size: 14px;">Delivery Fee:</td>
-                  <td style="padding: 8px 0; color: #F7FAFC; font-size: 14px; text-align: right;">${data.deliveryFee > 0 ? formatCurrency(data.deliveryFee) : 'Free'}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 12px 0; color: #F7FAFC; font-size: 16px; font-weight: bold; border-top: 1px solid #4a5568;">Total:</td>
-                  <td style="padding: 12px 0; color: #F7FAFC; font-size: 16px; font-weight: bold; text-align: right; border-top: 1px solid #4a5568;">${formatCurrency(data.totalAmount)}</td>
-                </tr>
-              </table>
-
-              <!-- Payment Status -->
-              <div style="background-color: #1a1a1a; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
-                <table width="100%">
-                  <tr>
-                    <td style="color: #48bb78; font-size: 14px;">Deposit Paid:</td>
-                    <td style="color: #48bb78; font-size: 14px; text-align: right; font-weight: bold;">${formatCurrency(data.depositAmount)}</td>
-                  </tr>
-                  <tr>
-                    <td style="padding-top: 10px; color: #D4AF37; font-size: 16px; font-weight: bold;">Balance Due on Delivery:</td>
-                    <td style="padding-top: 10px; color: #D4AF37; font-size: 16px; text-align: right; font-weight: bold;">${formatCurrency(balanceDue)}</td>
-                  </tr>
-                </table>
-              </div>
-
-              <!-- What's Next -->
-              <h3 style="margin: 0 0 15px 0; color: #D4AF37; font-size: 18px;">What's Next?</h3>
-              <ul style="margin: 0 0 30px 0; padding-left: 20px; color: #F7FAFC; font-size: 14px; line-height: 1.8;">
-                <li>We'll contact you 48 hours before your event to confirm delivery details</li>
-                <li>Please ensure the delivery location is accessible for our trailer</li>
-                <li>The balance of ${formatCurrency(balanceDue)} is due upon delivery</li>
-                <li>We accept cash or card for the remaining balance</li>
-              </ul>
-
-              <!-- Contact -->
-              <div style="background-color: #D4AF37; border-radius: 8px; padding: 20px; text-align: center;">
-                <p style="margin: 0 0 10px 0; color: #2D3748; font-size: 14px; font-weight: bold;">Questions? Contact us!</p>
-                <p style="margin: 0; color: #2D3748; font-size: 14px;">Phone: ${BUSINESS_PHONE}</p>
-                <p style="margin: 5px 0 0 0; color: #2D3748; font-size: 14px;">Email: ${REPLY_TO}</p>
-              </div>
             </td>
           </tr>
 
-          <!-- Footer -->
           <tr>
-            <td style="background-color: #1a1a1a; padding: 20px 30px; text-align: center;">
-              <p style="margin: 0; color: #a0aec0; font-size: 12px;">
-                Upscale Outhouse | Fresno, California<br>
-                Veteran-Owned Luxury Restroom Trailer Rentals
+            <td style="padding: 0 30px 40px;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+                <tr>
+                  <td style="padding: 25px;">
+                    <h3 style="margin: 0 0 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: ${COLOR_TEXT_MAIN}; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Payment Summary</h3>
+                    
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                      <tr>
+                        <td style="padding-bottom: 8px; font-size: 14px; color: ${COLOR_TEXT_MUTED};">Rental (${data.numberOfDays} days)</td>
+                        <td align="right" style="padding-bottom: 8px; font-size: 14px; color: ${COLOR_TEXT_MAIN};">${formatCurrency(data.baseRental)}</td>
+                      </tr>
+                      ${data.discountAmount > 0 ? `
+                      <tr>
+                        <td style="padding-bottom: 8px; font-size: 14px; color: ${COLOR_SUCCESS};">Preferred Client Discount</td>
+                        <td align="right" style="padding-bottom: 8px; font-size: 14px; color: ${COLOR_SUCCESS};">-${formatCurrency(data.discountAmount)}</td>
+                      </tr>
+                      ` : ''}
+                      <tr>
+                        <td style="padding-bottom: 8px; font-size: 14px; color: ${COLOR_TEXT_MUTED};">Delivery & Setup</td>
+                        <td align="right" style="padding-bottom: 8px; font-size: 14px; color: ${COLOR_TEXT_MAIN};">${data.deliveryFee > 0 ? formatCurrency(data.deliveryFee) : 'Complimentary'}</td>
+                      </tr>
+                      
+                      <tr>
+                        <td colspan="2" style="padding: 15px 0;"><div style="height: 1px; background-color: #e2e8f0;"></div></td>
+                      </tr>
+                      <tr>
+                        <td style="font-size: 16px; font-weight: bold; color: ${COLOR_TEXT_MAIN};">Total Amount</td>
+                        <td align="right" style="font-size: 16px; font-weight: bold; color: ${COLOR_TEXT_MAIN};">${formatCurrency(data.totalAmount)}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 8px; font-size: 14px; color: ${COLOR_SUCCESS}; font-weight: 500;">Deposit Paid (Thank You)</td>
+                        <td align="right" style="padding-top: 8px; font-size: 14px; color: ${COLOR_SUCCESS}; font-weight: 500;">-${formatCurrency(data.depositAmount)}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 15px; font-size: 16px; color: ${COLOR_TEXT_MAIN}; font-weight: bold;">Balance Due Upon Delivery</td>
+                        <td align="right" style="padding-top: 15px; font-size: 20px; color: ${COLOR_ACCENT}; font-weight: bold;">${formatCurrency(balanceDue)}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="content-wrap" style="padding: 0 50px 40px; text-align: center;">
+               <h4 style="margin: 0 0 15px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: ${COLOR_TEXT_MUTED};">What Happens Next?</h4>
+               <p style="margin: 0; font-size: 14px; color: ${COLOR_TEXT_MUTED}; line-height: 1.6;">
+                 We will contact you 48 hours prior to your event to confirm final delivery logistics. Please ensure the drop-off location is accessible. The remaining balance of <strong>${formatCurrency(balanceDue)}</strong> is due upon arrival.
+               </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="background-color: #1f2937; padding: 30px; text-align: center;">
+              <p style="margin: 0 0 10px; font-size: 16px; font-weight: bold; color: #ffffff;">Upscale Outhouse</p>
+              <p style="margin: 0 0 20px; font-size: 12px; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px;">Veteran-Owned & Operated</p>
+              
+              <p style="margin: 0; font-size: 12px; color: #6b7280;">
+                <a href="tel:${BUSINESS_PHONE}" style="color: #D4AF37; text-decoration: none;">${BUSINESS_PHONE}</a> &bull; 
+                <a href="mailto:${REPLY_TO}" style="color: #D4AF37; text-decoration: none;">${REPLY_TO}</a>
+              </p>
+              <p style="margin: 20px 0 0; font-size: 11px; color: #4b5563;">
+                Fresno, California
               </p>
             </td>
           </tr>
+
         </table>
+        <p style="margin-top: 20px; font-size: 12px; color: #9ca3af;">
+          &copy; ${new Date().getFullYear()} Upscale Outhouse. All rights reserved.
+        </p>
+
       </td>
     </tr>
   </table>
@@ -212,8 +257,7 @@ export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
 </html>
   `;
 
-  const subject = `Booking Confirmed - ${formatEventType(data.eventType)} on ${formatDate(data.startDate)}`;
-  console.log('[Email] Sending customer confirmation:', { from: FROM_EMAIL, to: data.customerEmail, subject });
+  const subject = `Booking Confirmed: ${formatEventType(data.eventType)} on ${formatDate(data.startDate)}`;
 
   const { data: emailData, error } = await getResend().emails.send({
     from: FROM_EMAIL,
@@ -227,11 +271,11 @@ export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
     console.error('Failed to send customer confirmation email:', error);
     throw error;
   }
-
   return emailData;
 }
 
-// Send notification email to owner about new booking
+
+// Send notification email to owner (Simplified but clean)
 export async function sendOwnerNotificationEmail(data: BookingEmailData) {
   const balanceDue = data.totalAmount - data.depositAmount;
   const eventDateRange = data.startDate.toDateString() === data.endDate.toDateString()
@@ -241,141 +285,42 @@ export async function sendOwnerNotificationEmail(data: BookingEmailData) {
   const html = `
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>New Booking Notification</title>
-</head>
-<body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: Arial, sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="border-left: 4px solid ${COLOR_ACCENT}; padding-left: 15px; margin-bottom: 20px;">
+    <h2 style="margin: 0; color: #1f2937;">New Booking Received</h2>
+    <p style="margin: 5px 0 0; color: #666;">Deposit processed successfully.</p>
+  </div>
+  
+  <div style="background: #f9fafb; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+    <strong>Booking ID:</strong> ${data.bookingId}<br>
+    <strong>Customer:</strong> ${data.customerName} (<a href="tel:${data.customerPhone}">${data.customerPhone}</a>)<br>
+    <strong>Dates:</strong> ${eventDateRange}<br>
+    <strong>Location:</strong> ${data.eventAddress}
+  </div>
+
+  <table width="100%" style="border-collapse: collapse;">
+    <tr style="border-bottom: 1px solid #eee;">
+      <td style="padding: 10px 0;">Total Value</td>
+      <td align="right" style="font-weight: bold;">${formatCurrency(data.totalAmount)}</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #eee;">
+      <td style="padding: 10px 0; color: green;">Deposit Paid</td>
+      <td align="right" style="color: green; font-weight: bold;">+${formatCurrency(data.depositAmount)}</td>
+    </tr>
     <tr>
-      <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-          <!-- Header -->
-          <tr>
-            <td style="background-color: #2D3748; padding: 30px; text-align: center;">
-              <h1 style="margin: 0; color: #D4AF37; font-size: 24px; font-weight: bold;">New Booking!</h1>
-              <p style="margin: 10px 0 0 0; color: #F7FAFC; font-size: 14px;">A deposit has been received</p>
-            </td>
-          </tr>
-
-          <!-- Content -->
-          <tr>
-            <td style="padding: 40px 30px;">
-              <!-- Booking ID -->
-              <div style="background-color: #f0f0f0; border-radius: 8px; padding: 15px; margin-bottom: 30px; border-left: 4px solid #D4AF37;">
-                <p style="margin: 0; color: #666; font-size: 12px; text-transform: uppercase;">Booking ID</p>
-                <p style="margin: 5px 0 0 0; color: #2D3748; font-size: 16px; font-family: monospace; font-weight: bold;">${data.bookingId}</p>
-              </div>
-
-              <!-- Customer Info -->
-              <h3 style="margin: 0 0 15px 0; color: #2D3748; font-size: 16px; border-bottom: 2px solid #D4AF37; padding-bottom: 10px;">Customer Information</h3>
-              <table width="100%" style="margin-bottom: 30px;">
-                <tr>
-                  <td style="padding: 8px 0; color: #666; font-size: 14px; width: 120px;">Name:</td>
-                  <td style="padding: 8px 0; color: #2D3748; font-size: 14px; font-weight: bold;">${data.customerName}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px 0; color: #666; font-size: 14px;">Email:</td>
-                  <td style="padding: 8px 0; color: #2D3748; font-size: 14px;"><a href="mailto:${data.customerEmail}" style="color: #2563eb;">${data.customerEmail}</a></td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px 0; color: #666; font-size: 14px;">Phone:</td>
-                  <td style="padding: 8px 0; color: #2D3748; font-size: 14px;"><a href="tel:${data.customerPhone}" style="color: #2563eb;">${data.customerPhone}</a></td>
-                </tr>
-              </table>
-
-              <!-- Event Details -->
-              <h3 style="margin: 0 0 15px 0; color: #2D3748; font-size: 16px; border-bottom: 2px solid #D4AF37; padding-bottom: 10px;">Event Details</h3>
-              <table width="100%" style="margin-bottom: 30px;">
-                <tr>
-                  <td style="padding: 8px 0; color: #666; font-size: 14px; width: 120px;">Date:</td>
-                  <td style="padding: 8px 0; color: #2D3748; font-size: 14px; font-weight: bold;">${eventDateRange}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px 0; color: #666; font-size: 14px;">Time:</td>
-                  <td style="padding: 8px 0; color: #2D3748; font-size: 14px;">${data.startTime} - ${data.endTime}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px 0; color: #666; font-size: 14px;">Event Type:</td>
-                  <td style="padding: 8px 0; color: #2D3748; font-size: 14px;">${formatEventType(data.eventType)}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px 0; color: #666; font-size: 14px;">Guests:</td>
-                  <td style="padding: 8px 0; color: #2D3748; font-size: 14px;">${data.guestCount}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px 0; color: #666; font-size: 14px;">Location:</td>
-                  <td style="padding: 8px 0; color: #2D3748; font-size: 14px;">${data.eventAddress}${data.eventCity ? `, ${data.eventCity}` : ''}${data.eventState ? `, ${data.eventState}` : ''}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px 0; color: #666; font-size: 14px;">Water Hookup:</td>
-                  <td style="padding: 8px 0; color: #2D3748; font-size: 14px;">${data.hasWaterHookup ? 'Yes' : 'No'}</td>
-                </tr>
-              </table>
-
-              <!-- Payment Summary -->
-              <h3 style="margin: 0 0 15px 0; color: #2D3748; font-size: 16px; border-bottom: 2px solid #D4AF37; padding-bottom: 10px;">Payment Summary</h3>
-              <table width="100%" style="margin-bottom: 20px;">
-                <tr>
-                  <td style="padding: 8px 0; color: #666; font-size: 14px;">Rental (${data.numberOfDays} days):</td>
-                  <td style="padding: 8px 0; color: #2D3748; font-size: 14px; text-align: right;">${formatCurrency(data.baseRental)}</td>
-                </tr>
-                ${data.discountAmount > 0 ? `
-                <tr>
-                  <td style="padding: 8px 0; color: #16a34a; font-size: 14px;">Discount (${data.discountPercent}%):</td>
-                  <td style="padding: 8px 0; color: #16a34a; font-size: 14px; text-align: right;">-${formatCurrency(data.discountAmount)}</td>
-                </tr>
-                ` : ''}
-                <tr>
-                  <td style="padding: 8px 0; color: #666; font-size: 14px;">Delivery Fee:</td>
-                  <td style="padding: 8px 0; color: #2D3748; font-size: 14px; text-align: right;">${data.deliveryFee > 0 ? formatCurrency(data.deliveryFee) : 'Free'}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 12px 0; color: #2D3748; font-size: 16px; font-weight: bold; border-top: 2px solid #e5e5e5;">Total:</td>
-                  <td style="padding: 12px 0; color: #2D3748; font-size: 16px; font-weight: bold; text-align: right; border-top: 2px solid #e5e5e5;">${formatCurrency(data.totalAmount)}</td>
-                </tr>
-              </table>
-
-              <!-- Payment Status -->
-              <div style="background-color: #dcfce7; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-                <table width="100%">
-                  <tr>
-                    <td style="color: #16a34a; font-size: 14px; font-weight: bold;">Deposit Received:</td>
-                    <td style="color: #16a34a; font-size: 18px; text-align: right; font-weight: bold;">${formatCurrency(data.depositAmount)}</td>
-                  </tr>
-                </table>
-              </div>
-
-              <div style="background-color: #fef3c7; border-radius: 8px; padding: 20px;">
-                <table width="100%">
-                  <tr>
-                    <td style="color: #92400e; font-size: 14px; font-weight: bold;">Balance Due on Delivery:</td>
-                    <td style="color: #92400e; font-size: 18px; text-align: right; font-weight: bold;">${formatCurrency(balanceDue)}</td>
-                  </tr>
-                </table>
-              </div>
-            </td>
-          </tr>
-
-          <!-- Footer -->
-          <tr>
-            <td style="background-color: #f5f5f5; padding: 20px 30px; text-align: center;">
-              <p style="margin: 0; color: #666; font-size: 12px;">
-                This is an automated notification from Upscale Outhouse booking system.
-              </p>
-            </td>
-          </tr>
-        </table>
-      </td>
+      <td style="padding: 10px 0; color: #d97706;">Balance Due (at delivery)</td>
+      <td align="right" style="color: #d97706; font-weight: bold;">${formatCurrency(balanceDue)}</td>
     </tr>
   </table>
+  
+  <p style="margin-top: 30px; font-size: 12px; color: #888;">
+    Check dashboard for full details.
+  </p>
 </body>
 </html>
   `;
 
-  const subject = `New Booking: ${data.customerName} - ${formatEventType(data.eventType)} on ${formatDate(data.startDate)}`;
-  console.log('[Email] Sending owner notification:', { from: FROM_EMAIL, to: OWNER_EMAIL, subject });
+  const subject = `[NEW BOOKING] ${data.customerName} - ${eventDateRange}`;
 
   const { data: emailData, error } = await getResend().emails.send({
     from: FROM_EMAIL,
@@ -389,6 +334,5 @@ export async function sendOwnerNotificationEmail(data: BookingEmailData) {
     console.error('Failed to send owner notification email:', error);
     throw error;
   }
-
   return emailData;
 }
