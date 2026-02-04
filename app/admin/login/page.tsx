@@ -11,21 +11,28 @@ export default function AdminLoginPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
 
     try {
-      const normalizedEmail = email.trim().toLowerCase();
+      const formData = new FormData(e.currentTarget);
+      const rawEmail = String(formData.get("email") || "");
+      const rawPassword = String(formData.get("password") || "");
+      const normalizedEmail = rawEmail.trim().toLowerCase();
       const result = await signIn("credentials", {
         email: normalizedEmail,
-        password,
+        password: rawPassword,
         redirect: false,
       });
 
       if (result?.error) {
-        setError("Invalid email or password");
+        setError(
+          result.error === "CredentialsSignin"
+            ? "Invalid email or password"
+            : result.error
+        );
         setIsLoading(false);
         return;
       }
@@ -64,6 +71,7 @@ export default function AdminLoginPage() {
               <input
                 type="email"
                 id="email"
+                name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoCapitalize="none"
@@ -87,6 +95,7 @@ export default function AdminLoginPage() {
               <input
                 type="password"
                 id="password"
+                name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
