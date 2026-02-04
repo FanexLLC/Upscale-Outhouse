@@ -1,18 +1,15 @@
 import { Resend } from 'resend';
 
 // --- CONFIGURATION ---
-// Replace with your actual hosted logo URL. 
-// If this image fails to load, the code below will render a beautiful text fallback.
-const LOGO_URL = 'https://placehold.co/600x150/1a1a1a/D4AF37?text=UPSCALE+OUTHOUSE&font=playfair-display';
-
 // BRAND COLORS
-const C_HEADER_BG = '#1a1a1a';    // Dark Charcoal (Brand Anchor)
-const C_BODY_BG   = '#f4f4f5';    // Light Grey (Document Background)
-const C_PAPER     = '#ffffff';    // White (The "Bond Paper")
-const C_GOLD      = '#D4AF37';    // Metallic Gold (Accent)
-const C_TEXT_DARK = '#111827';    // Near Black (Primary Text)
-const C_TEXT_GREY = '#6b7280';    // Muted Grey (Labels)
-const C_BORDER    = '#e5e7eb';    // Light Border
+const C_HEADER_TOP    = '#2C2C2C';    // Lighter Charcoal (Gradient Start)
+const C_HEADER_BOT    = '#1a1a1a';    // Darker Charcoal (Gradient End)
+const C_BODY_BG       = '#f4f4f5';    // Light Grey (Document Background)
+const C_PAPER         = '#ffffff';    // White (The "Bond Paper")
+const C_GOLD          = '#D4AF37';    // Metallic Gold (Accent)
+const C_TEXT_DARK     = '#111827';    // Near Black (Primary Text)
+const C_TEXT_GREY     = '#6b7280';    // Muted Grey (Labels)
+const C_BORDER        = '#e5e7eb';    // Light Border
 
 // FONTS
 const F_SERIF = "Georgia, 'Times New Roman', Times, serif";
@@ -83,12 +80,11 @@ function formatEventType(type: string): string {
   return type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
 }
 
-// Turns a long DB ID into a clean reference: "KNP-8LNV"
 function formatBookingRef(id: string): string {
   if (!id) return 'REF-PENDING';
   const clean = id.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
   return clean.length > 8 
-    ? '#' + clean.slice(-8) // Take last 8 chars
+    ? '#' + clean.slice(-8) 
     : '#' + clean;
 }
 
@@ -111,7 +107,6 @@ export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
   <title>Booking Confirmation</title>
   <style>
     body { margin: 0; padding: 0; width: 100% !important; -webkit-text-size-adjust: 100%; }
-    img { -ms-interpolation-mode: bicubic; }
     /* Mobile Responsive Logic */
     @media only screen and (max-width: 640px) {
       .container { width: 100% !important; max-width: 100% !important; }
@@ -129,8 +124,13 @@ export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
         <table role="presentation" class="container" width="640" cellspacing="0" cellpadding="0" border="0" style="background-color: ${C_PAPER}; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); overflow: hidden;">
           
           <tr>
-            <td align="center" style="background-color: ${C_HEADER_BG}; padding: 40px 20px;">
-              <img src="${LOGO_URL}" alt="UPSCALE OUTHOUSE" width="280" style="display: block; max-width: 100%; height: auto; color: ${C_GOLD}; font-family: ${F_SERIF}; font-size: 28px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; text-align: center;">
+            <td align="center" style="background: linear-gradient(180deg, ${C_HEADER_TOP} 0%, ${C_HEADER_BOT} 100%); padding: 50px 20px; border-bottom: 6px solid ${C_GOLD};">
+              <h1 style="margin: 0; font-family: ${F_SERIF}; font-size: 32px; color: ${C_GOLD}; text-transform: uppercase; letter-spacing: 4px; font-weight: 400; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                Upscale Outhouse
+              </h1>
+              <p style="margin: 10px 0 0; font-family: ${F_SANS}; font-size: 11px; color: #a3a3a3; text-transform: uppercase; letter-spacing: 3px;">
+                Luxury Restroom Trailers
+              </p>
             </td>
           </tr>
 
@@ -139,7 +139,7 @@ export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
               <table width="100%" cellspacing="0" cellpadding="0">
                 <tr>
                   <td style="font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: ${C_TEXT_GREY};">Booking Reference</td>
-                  <td align="right" style="font-family: monospace; font-size: 16px; font-weight: bold; color: ${C_TEXT_DARK}; letter-spacing: 1px;">${bookingRef}</td>
+                  <td align="right" style="font-family: monospace; font-size: 16px; font-weight: bold; color: ${C_TEXT_DARK}; letter-spacing: 1px; background-color: #f3f4f6; padding: 4px 8px; border-radius: 4px;">${bookingRef}</td>
                 </tr>
               </table>
             </td>
@@ -147,9 +147,9 @@ export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
 
           <tr>
             <td class="content-wrap" style="padding: 40px 40px 20px 40px;">
-              <h1 style="margin: 0 0 20px; font-family: ${F_SERIF}; font-size: 28px; color: ${C_TEXT_DARK}; font-weight: normal; border-bottom: 2px solid ${C_GOLD}; display: inline-block; padding-bottom: 5px;">
+              <h2 style="margin: 0 0 20px; font-family: ${F_SERIF}; font-size: 28px; color: ${C_TEXT_DARK}; font-weight: normal; border-bottom: 2px solid ${C_GOLD}; display: inline-block; padding-bottom: 5px;">
                 Booking Confirmed
-              </h1>
+              </h2>
               <p style="margin: 0 0 20px; font-size: 16px; line-height: 1.6; color: #4b5563;">
                 Dear ${data.customerName},
               </p>
@@ -164,7 +164,7 @@ export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
                 <tr>
                   <td class="mobile-block" width="48%" valign="top" style="padding-right: 10px;">
-                    <h3 style="font-family: ${F_SERIF}; font-size: 16px; color: ${C_TEXT_DARK}; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px;">Logistics</h3>
+                    <h3 style="font-family: ${F_SERIF}; font-size: 16px; color: ${C_TEXT_DARK}; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px; border-left: 3px solid ${C_GOLD}; padding-left: 10px;">Logistics</h3>
                     <table width="100%" cellspacing="0" cellpadding="0">
                       <tr>
                         <td style="padding-bottom: 8px; font-size: 14px; color: ${C_TEXT_GREY}; width: 60px;">Date:</td>
@@ -182,7 +182,7 @@ export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
                   </td>
 
                   <td class="mobile-block" width="48%" valign="top" style="padding-left: 10px;">
-                    <h3 style="font-family: ${F_SERIF}; font-size: 16px; color: ${C_TEXT_DARK}; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px;">Location</h3>
+                    <h3 style="font-family: ${F_SERIF}; font-size: 16px; color: ${C_TEXT_DARK}; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px; border-left: 3px solid ${C_GOLD}; padding-left: 10px;">Location</h3>
                     <p style="margin: 0; font-size: 14px; line-height: 1.6; color: ${C_TEXT_DARK};">
                       ${data.eventAddress}<br>
                       ${data.eventCity ? data.eventCity : ''}${data.eventState ? ', ' + data.eventState : ''}<br>
@@ -196,38 +196,43 @@ export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
 
           <tr>
             <td class="content-wrap" style="padding: 0 40px 40px 40px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-top: 2px solid ${C_TEXT_DARK}; border-bottom: 1px solid ${C_BORDER};">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #fafafa; border: 1px solid #eeeeee; border-radius: 4px;">
                 <tr>
-                  <td style="padding: 15px 0; font-family: ${F_SERIF}; font-size: 16px; font-weight: bold; color: ${C_TEXT_DARK};">Service Description</td>
-                  <td align="right" style="padding: 15px 0; font-family: ${F_SERIF}; font-size: 16px; font-weight: bold; color: ${C_TEXT_DARK};">Amount</td>
+                  <td style="padding: 15px 20px; font-family: ${F_SERIF}; font-size: 16px; font-weight: bold; color: ${C_TEXT_DARK}; border-bottom: 1px solid #eeeeee;">Service Description</td>
+                  <td align="right" style="padding: 15px 20px; font-family: ${F_SERIF}; font-size: 16px; font-weight: bold; color: ${C_TEXT_DARK}; border-bottom: 1px solid #eeeeee;">Amount</td>
                 </tr>
                 
                 <tr>
-                  <td style="padding: 8px 0; font-size: 14px; color: ${C_TEXT_DARK};">Luxury Restroom Trailer Rental (${data.numberOfDays} days)</td>
-                  <td align="right" style="padding: 8px 0; font-size: 14px; color: ${C_TEXT_DARK};">${formatCurrency(data.baseRental)}</td>
+                  <td style="padding: 15px 20px 5px; font-size: 14px; color: ${C_TEXT_DARK};">Luxury Restroom Trailer Rental (${data.numberOfDays} days)</td>
+                  <td align="right" style="padding: 15px 20px 5px; font-size: 14px; color: ${C_TEXT_DARK};">${formatCurrency(data.baseRental)}</td>
                 </tr>
+                <tr>
+                  <td style="padding: 5px 20px 15px; font-size: 14px; color: ${C_TEXT_DARK};">Delivery, Setup & Pickup</td>
+                  <td align="right" style="padding: 5px 20px 15px; font-size: 14px; color: ${C_TEXT_DARK};">${data.deliveryFee > 0 ? formatCurrency(data.deliveryFee) : 'Included'}</td>
+                </tr>
+                
                 ${data.discountAmount > 0 ? `
                 <tr>
-                  <td style="padding: 8px 0; font-size: 14px; color: #059669;">Preferred Client Discount</td>
-                  <td align="right" style="padding: 8px 0; font-size: 14px; color: #059669;">- ${formatCurrency(data.discountAmount)}</td>
+                  <td style="padding: 5px 20px; font-size: 14px; color: #059669;">Preferred Client Discount</td>
+                  <td align="right" style="padding: 5px 20px; font-size: 14px; color: #059669;">- ${formatCurrency(data.discountAmount)}</td>
                 </tr>
                 ` : ''}
+
                 <tr>
-                  <td style="padding: 8px 0 20px 0; font-size: 14px; color: ${C_TEXT_DARK};">Delivery, Setup & Pickup</td>
-                  <td align="right" style="padding: 8px 0 20px 0; font-size: 14px; color: ${C_TEXT_DARK};">${data.deliveryFee > 0 ? formatCurrency(data.deliveryFee) : 'Included'}</td>
+                  <td colspan="2"><div style="height: 1px; background-color: #eeeeee; margin: 0 20px;"></div></td>
                 </tr>
                 
                 <tr>
-                  <td style="padding: 15px 0 5px 0; font-size: 14px; color: ${C_TEXT_GREY}; border-top: 1px solid ${C_BORDER};">Subtotal</td>
-                  <td align="right" style="padding: 15px 0 5px 0; font-size: 14px; color: ${C_TEXT_DARK}; border-top: 1px solid ${C_BORDER}; font-weight: bold;">${formatCurrency(data.totalAmount)}</td>
+                  <td style="padding: 15px 20px 5px; font-size: 14px; color: ${C_TEXT_GREY};">Subtotal</td>
+                  <td align="right" style="padding: 15px 20px 5px; font-size: 14px; color: ${C_TEXT_DARK}; font-weight: bold;">${formatCurrency(data.totalAmount)}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 5px 0; font-size: 14px; color: #059669;">Deposit Received (Paid)</td>
-                  <td align="right" style="padding: 5px 0; font-size: 14px; color: #059669;">- ${formatCurrency(data.depositAmount)}</td>
+                  <td style="padding: 5px 20px; font-size: 14px; color: #059669;">Deposit Paid</td>
+                  <td align="right" style="padding: 5px 20px; font-size: 14px; color: #059669;">- ${formatCurrency(data.depositAmount)}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 15px 0 20px 0; font-family: ${F_SERIF}; font-size: 18px; color: ${C_TEXT_DARK}; font-weight: bold;">Balance Due Upon Delivery</td>
-                  <td align="right" style="padding: 15px 0 20px 0; font-family: ${F_SERIF}; font-size: 22px; color: ${C_GOLD}; font-weight: bold;">${formatCurrency(balanceDue)}</td>
+                  <td style="padding: 15px 20px; font-family: ${F_SERIF}; font-size: 18px; color: ${C_TEXT_DARK}; font-weight: bold;">Balance Due Upon Delivery</td>
+                  <td align="right" style="padding: 15px 20px; font-family: ${F_SERIF}; font-size: 22px; color: ${C_GOLD}; font-weight: bold;">${formatCurrency(balanceDue)}</td>
                 </tr>
               </table>
             </td>
@@ -283,24 +288,23 @@ export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
 }
 
 export async function sendOwnerNotificationEmail(data: BookingEmailData) {
+  // Keep owner email simple but clean
   const balanceDue = data.totalAmount - data.depositAmount;
   const eventDateRange = data.startDate.toDateString() === data.endDate.toDateString()
     ? formatDate(data.startDate)
     : `${formatDate(data.startDate)} – ${formatDate(data.endDate)}`;
   
-  // Concise version for the owner
   const html = `
 <!DOCTYPE html>
 <html>
 <body style="font-family: ${F_SANS}; color: ${C_TEXT_DARK}; background-color: #f3f4f6; padding: 20px;">
   <div style="max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-left: 5px solid ${C_GOLD};">
     <h2 style="margin-top: 0; color: ${C_TEXT_DARK};">New Booking Received</h2>
-    <p style="color: ${C_TEXT_GREY};">Booking ID: <strong style="color: ${C_TEXT_DARK}; font-family: monospace;">${data.bookingId}</strong></p>
+    <p style="color: ${C_TEXT_GREY};">Booking ID: <strong style="color: ${C_TEXT_DARK}; font-family: monospace;">${formatBookingRef(data.bookingId)}</strong></p>
     
     <div style="background: #f9fafb; padding: 15px; margin: 20px 0;">
       <strong>Customer:</strong> ${data.customerName}<br>
-      <strong>Phone:</strong> <a href="tel:${data.customerPhone}">${data.customerPhone}</a><br>
-      <strong>Email:</strong> <a href="mailto:${data.customerEmail}">${data.customerEmail}</a>
+      <strong>Phone:</strong> <a href="tel:${data.customerPhone}">${data.customerPhone}</a>
     </div>
 
     <div style="margin-bottom: 20px;">
@@ -325,7 +329,7 @@ export async function sendOwnerNotificationEmail(data: BookingEmailData) {
   `;
 
   const subject = `[NEW BOOKING] ${data.customerName} - ${eventDateRange}`;
-
+  
   const { data: emailData, error } = await getResend().emails.send({
     from: FROM_EMAIL,
     to: [OWNER_EMAIL],
