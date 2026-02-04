@@ -1,4 +1,5 @@
 import { google, calendar_v3 } from 'googleapis';
+import { formatTimeRange } from './time';
 
 // Lazily initialize the Google Calendar client
 let calendarClient: calendar_v3.Calendar | null = null;
@@ -110,7 +111,7 @@ function buildEventDescription(data: BookingEventData): string {
 Booking ID: ${data.bookingId}
 Event Type: ${formatEventType(data.eventType)}
 Duration: ${data.numberOfDays} day${data.numberOfDays > 1 ? 's' : ''}
-Time: ${data.startTime} - ${data.endTime}
+Time: ${formatTimeRange(data.startTime, data.endTime)}
 Guests: ${data.guestCount}
 Water Hookup: ${data.hasWaterHookup ? 'Yes' : 'No'}
 

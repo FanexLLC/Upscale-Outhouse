@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { formatTimeRange } from "@/lib/time";
 
 interface QuoteDetails {
   id: string;
@@ -37,6 +38,17 @@ function formatCurrency(amount: number) {
     style: "currency",
     currency: "USD",
   }).format(amount);
+}
+
+function formatDateTime(date: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).format(new Date(date));
 }
 
 export default function QuoteRowActions({ quote }: { quote: QuoteDetails }) {
@@ -158,7 +170,7 @@ export default function QuoteRowActions({ quote }: { quote: QuoteDetails }) {
                   </div>
                   <div>
                     <span className="text-gray-500">Time</span>
-                    <p className="font-medium text-charcoal">{quote.startTime} - {quote.endTime}</p>
+                    <p className="font-medium text-charcoal">{formatTimeRange(quote.startTime, quote.endTime)}</p>
                   </div>
                   <div>
                     <span className="text-gray-500">Event Type</span>
@@ -242,7 +254,7 @@ export default function QuoteRowActions({ quote }: { quote: QuoteDetails }) {
               {/* Meta */}
               <div className="text-xs text-gray-400 pt-2 border-t">
                 <p>Quote ID: {quote.id}</p>
-                <p>Created: {new Date(quote.createdAt).toLocaleString()}</p>
+                <p>Created: {formatDateTime(quote.createdAt)}</p>
                 {quote.convertedToBooking && <p className="text-green-600">Converted to booking</p>}
               </div>
             </div>

@@ -9,6 +9,7 @@ import {
   isValidEmail,
   isValidPhone,
 } from '@/lib/pricing';
+import { formatTimeDisplay } from '@/lib/time';
 import CalendarPicker from '@/components/ui/CalendarPicker';
 import TimePicker from '@/components/quote/TimePicker';
 
@@ -27,14 +28,6 @@ for (let hour = 6; hour <= 23; hour++) {
 for (let hour = 0; hour <= 3; hour++) {
   END_TIME_VALUES.push(`${hour.toString().padStart(2, '0')}:00`);
 }
-
-// Helper to convert 24-hour time to 12-hour format
-const formatTimeDisplay = (time: string): string => {
-  const hour = parseInt(time.split(':')[0], 10);
-  const ampm = hour >= 12 ? 'PM' : 'AM';
-  const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-  return `${displayHour}:00 ${ampm}`;
-};
 
 // Event type options
 const EVENT_TYPES = [

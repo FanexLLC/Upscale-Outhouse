@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { formatTimeDisplay } from '@/lib/time';
 
 interface TimePickerProps {
   label: string;
@@ -24,15 +25,7 @@ export default function TimePicker({
   const listRef = useRef<HTMLUListElement>(null);
   const selectedRef = useRef<HTMLLIElement>(null);
 
-  // Format "HH:00" to display label
-  const formatTime = (t: string) => {
-    const hour = parseInt(t.split(':')[0], 10);
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-    return `${displayHour}:00 ${ampm}`;
-  };
-
-  const displayValue = value ? formatTime(value) : 'Select time';
+  const displayValue = value ? formatTimeDisplay(value) : 'Select time';
 
   // Close on outside click
   useEffect(() => {
@@ -121,7 +114,7 @@ export default function TimePicker({
                     : 'text-cream hover:bg-gold/10 hover:text-gold'
                 }`}
               >
-                {formatTime(t)}
+                {formatTimeDisplay(t)}
               </li>
             );
           })}

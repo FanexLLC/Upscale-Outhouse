@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import QuotesFilter from "@/components/admin/QuotesFilter";
 import QuoteRowActions from "@/components/admin/QuoteRowActions";
+import { formatTimeRange } from "@/lib/time";
 
 export const dynamic = "force-dynamic";
 
@@ -185,7 +186,7 @@ export default async function QuotesPage({
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
                       <div className="text-sm text-charcoal">
-                        {quote.startTime} - {quote.endTime}
+                        {formatTimeRange(quote.startTime, quote.endTime)}
                       </div>
                     </td>
                     <td className="px-4 py-4">

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import BookingActions from "@/components/admin/BookingActions";
+import { formatTimeRange } from "@/lib/time";
 
 // Prevent static generation - render on demand only
 export const dynamic = "force-dynamic";
@@ -41,6 +42,7 @@ function formatDateTime(date: Date) {
     year: "numeric",
     hour: "numeric",
     minute: "2-digit",
+    hour12: true,
   }).format(new Date(date));
 }
 
@@ -169,7 +171,7 @@ export default async function BookingDetailPage({
               <div>
                 <p className="text-sm text-gray-500">Time</p>
                 <p className="font-medium text-charcoal">
-                  {booking.startTime} - {booking.endTime}
+                  {formatTimeRange(booking.startTime, booking.endTime)}
                 </p>
               </div>
               <div>

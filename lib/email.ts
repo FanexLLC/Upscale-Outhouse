@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { formatTimeRange } from './time';
 
 // --- CONFIGURATION ---
 // BRAND COLORS
@@ -172,7 +173,7 @@ export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
                       </tr>
                       <tr>
                         <td style="padding-bottom: 8px; font-size: 14px; color: ${C_TEXT_GREY};">Time:</td>
-                        <td style="padding-bottom: 8px; font-size: 14px; color: ${C_TEXT_DARK}; font-weight: 500;">${data.startTime} - ${data.endTime}</td>
+                        <td style="padding-bottom: 8px; font-size: 14px; color: ${C_TEXT_DARK}; font-weight: 500;">${formatTimeRange(data.startTime, data.endTime)}</td>
                       </tr>
                       <tr>
                         <td style="padding-bottom: 8px; font-size: 14px; color: ${C_TEXT_GREY};">Type:</td>

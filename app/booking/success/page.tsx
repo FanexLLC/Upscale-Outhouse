@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { formatTimeRange } from '@/lib/time';
 
 interface BookingDetails {
   id: string;
@@ -163,7 +164,7 @@ function BookingSuccessContent() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-cream/60">Time</span>
-                  <span className="text-cream">{booking.startTime} - {booking.endTime}</span>
+                  <span className="text-cream">{formatTimeRange(booking.startTime, booking.endTime)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-cream/60">Event Type</span>
