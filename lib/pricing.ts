@@ -90,13 +90,24 @@ export function calculateDays(startDate: Date, endDate: Date): number {
 
 /**
  * Get the discount percentage based on number of days
+ * Accepts optional custom discount rates from admin settings
  */
-export function getDiscountPercent(days: number): number {
+export function getDiscountPercent(
+  days: number,
+  customDiscounts?: { days3to4?: number; days5plus?: number }
+): number {
+  const days5PlusDiscount = customDiscounts?.days5plus !== undefined
+    ? customDiscounts.days5plus / 100
+    : DISCOUNTS.FIVE_PLUS_DAYS.discount;
+  const days3to4Discount = customDiscounts?.days3to4 !== undefined
+    ? customDiscounts.days3to4 / 100
+    : DISCOUNTS.THREE_FOUR_DAYS.discount;
+
   if (days >= DISCOUNTS.FIVE_PLUS_DAYS.minDays) {
-    return DISCOUNTS.FIVE_PLUS_DAYS.discount;
+    return days5PlusDiscount;
   }
   if (days >= DISCOUNTS.THREE_FOUR_DAYS.minDays) {
-    return DISCOUNTS.THREE_FOUR_DAYS.discount;
+    return days3to4Discount;
   }
   return DISCOUNTS.STANDARD.discount;
 }
@@ -104,22 +115,29 @@ export function getDiscountPercent(days: number): number {
 /**
  * Get discount label for display
  */
-export function getDiscountLabel(days: number): string {
-  if (days >= 5) return '15% multi-day discount';
-  if (days >= 3) return '10% multi-day discount';
+export function getDiscountLabel(
+  days: number,
+  customDiscounts?: { days3to4?: number; days5plus?: number }
+): string {
+  const days5PlusPercent = customDiscounts?.days5plus ?? 15;
+  const days3to4Percent = customDiscounts?.days3to4 ?? 10;
+
+  if (days >= 5) return `${days5PlusPercent}% multi-day discount`;
+  if (days >= 3) return `${days3to4Percent}% multi-day discount`;
   return '';
 }
 
 /**
  * Calculate the full quote based on event details
- * Supports separate weekday/weekend pricing
+ * Supports separate weekday/weekend pricing and custom multi-day discounts
  */
 export function calculateQuote(
   startDate: Date,
   endDate: Date,
   distanceMiles?: number,
   weekdayPrice?: number,
-  weekendPrice?: number
+  weekendPrice?: number,
+  multiDayDiscounts?: { days3to4?: number; days5plus?: number }
 ): QuoteCalculation {
   const numberOfDays = calculateDays(startDate, endDate);
   const { weekdays, weekends } = countDayTypes(startDate, endDate);
@@ -129,7 +147,7 @@ export function calculateQuote(
 
   const baseRental = (weekdays * effectiveWeekdayRate) + (weekends * effectiveWeekendRate);
 
-  const discountPercent = getDiscountPercent(numberOfDays);
+  const discountPercent = getDiscountPercent(numberOfDays, multiDayDiscounts);
   const discountAmount = baseRental * discountPercent;
   const rentalAfterDiscount = baseRental - discountAmount;
 

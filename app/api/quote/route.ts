@@ -86,14 +86,16 @@ export async function POST(request: NextRequest) {
     const pricingConfig = pricingSetting?.value as any;
     const weekdayPrice = pricingConfig?.weekdayPrice ?? pricingConfig?.baseRate ?? PRICING.WEEKDAY_RATE;
     const weekendPrice = pricingConfig?.weekendPrice ?? pricingConfig?.baseRate ?? PRICING.WEEKEND_RATE;
+    const multiDayDiscounts = pricingConfig?.multiDayDiscounts;
 
-    // Calculate pricing with weekday/weekend rates
+    // Calculate pricing with weekday/weekend rates and multi-day discounts
     const quoteCalc = calculateQuote(
       new Date(startDate),
       new Date(endDate),
       distanceResult?.distanceMiles,
       weekdayPrice,
-      weekendPrice
+      weekendPrice,
+      multiDayDiscounts
     );
 
     // Map event type to enum

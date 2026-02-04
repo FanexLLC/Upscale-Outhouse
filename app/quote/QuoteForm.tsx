@@ -5,7 +5,6 @@ import {
   formatCurrency,
   formatDate,
   formatPhoneNumber,
-  getDiscountLabel,
   isValidEmail,
   isValidPhone,
 } from '@/lib/pricing';
@@ -1007,7 +1006,7 @@ export default function QuoteForm() {
 
                 {quoteResult.quote.discountPercent > 0 && (
                   <div className="flex justify-between text-green-400">
-                    <span>{getDiscountLabel(quoteResult.quote.numberOfDays)}</span>
+                    <span>{Math.round(quoteResult.quote.discountPercent * 100)}% multi-day discount</span>
                     <span>-{formatCurrency(quoteResult.quote.discountAmount)}</span>
                   </div>
                 )}
