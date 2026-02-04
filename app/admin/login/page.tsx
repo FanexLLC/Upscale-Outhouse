@@ -17,8 +17,9 @@ export default function AdminLoginPage() {
     setError("");
 
     try {
+      const normalizedEmail = email.trim().toLowerCase();
       const result = await signIn("credentials", {
-        email,
+        email: normalizedEmail,
         password,
         redirect: false,
       });
@@ -65,6 +66,10 @@ export default function AdminLoginPage() {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoCapitalize="none"
+                autoCorrect="off"
+                autoComplete="username"
+                inputMode="email"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold outline-none transition-colors"
                 placeholder="admin@upscaleouthouse.com"
                 required
@@ -84,6 +89,7 @@ export default function AdminLoginPage() {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold outline-none transition-colors"
                 placeholder="Enter your password"
                 required
