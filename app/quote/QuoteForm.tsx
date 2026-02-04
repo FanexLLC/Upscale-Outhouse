@@ -154,7 +154,7 @@ export default function QuoteForm() {
   const [promoCodeValidating, setPromoCodeValidating] = useState(false);
   const [promoCodeMessage, setPromoCodeMessage] = useState<string | null>(null);
   const [promoCodeDiscount, setPromoCodeDiscount] = useState<{
-    type: 'PERCENTAGE' | 'FULL_BYPASS';
+    type: 'PERCENTAGE' | 'FULL_BYPASS' | 'FULL_DISCOUNT';
     percent?: number;
   } | null>(null);
 
@@ -499,13 +499,21 @@ export default function QuoteForm() {
   const baseDeposit = quoteResult?.quote.depositDue ?? 0;
   const baseTotal = quoteResult?.quote.totalAmount ?? 0;
   const promoPercent = promoCodeDiscount?.type === 'PERCENTAGE' ? (promoCodeDiscount.percent || 0) : 0;
+  const isFullDiscount = promoCodeDiscount?.type === 'FULL_DISCOUNT';
+  const isFullBypass = promoCodeDiscount?.type === 'FULL_BYPASS';
+
   const maxPromoDiscount = Math.max(0, baseTotal - baseDeposit);
   const promoDiscountTotal = promoPercent > 0
     ? Math.min(Math.round(baseTotal * promoPercent * 100) / 100, maxPromoDiscount)
     : 0;
-  const totalAfterPromo = Math.max(0, Math.round((baseTotal - promoDiscountTotal) * 100) / 100);
-  const depositDueNow = promoCodeDiscount?.type === 'FULL_BYPASS' ? 0 : baseDeposit;
-  const balanceDueWithPromo = Math.max(0, Math.round((totalAfterPromo - baseDeposit) * 100) / 100);
+  const displayPromoDiscountTotal = isFullDiscount ? baseTotal : promoDiscountTotal;
+  const totalAfterPromo = isFullDiscount
+    ? 0
+    : Math.max(0, Math.round((baseTotal - promoDiscountTotal) * 100) / 100);
+  const depositDueNow = (isFullBypass || isFullDiscount) ? 0 : baseDeposit;
+  const balanceDueWithPromo = isFullDiscount
+    ? 0
+    : Math.max(0, Math.round((totalAfterPromo - baseDeposit) * 100) / 100);
 
   return (
     <div className="bg-charcoal rounded-2xl border border-gold/20 shadow-lg overflow-hidden">
@@ -1024,12 +1032,12 @@ export default function QuoteForm() {
                     {quoteResult.quote.deliveryFeeNote}
                   </p>
                 )}
-                {promoCodeDiscount?.type === 'PERCENTAGE' && promoDiscountTotal > 0 && (
+                {(promoCodeDiscount?.type === 'PERCENTAGE' && promoDiscountTotal > 0) || isFullDiscount ? (
                   <div className="flex justify-between text-green-400">
-                    <span>Promo discount ({Math.round(promoPercent * 100)}%)</span>
-                    <span>-{formatCurrency(promoDiscountTotal)}</span>
+                    <span>Promo discount ({isFullDiscount ? 100 : Math.round(promoPercent * 100)}%)</span>
+                    <span>-{formatCurrency(displayPromoDiscountTotal)}</span>
                   </div>
-                )}
+                ) : null}
 
                 <div className="border-t border-gold/20 pt-3 mt-3">
                   <div className="flex justify-between text-cream font-semibold text-lg">
@@ -1047,9 +1055,11 @@ export default function QuoteForm() {
                     <span>Balance due on delivery</span>
                     <span>{formatCurrency(balanceDueWithPromo)}</span>
                   </div>
-                  {promoCodeDiscount?.type === 'FULL_BYPASS' && (
+                  {(isFullBypass || isFullDiscount) && (
                     <p className="text-cream/60 text-xs mt-2">
-                      Deposit will be recorded as paid (cash/offline).
+                      {isFullDiscount
+                        ? 'Total and deposit are fully waived.'
+                        : 'Deposit will be recorded as paid (cash/offline).'}
                     </p>
                   )}
                 </div>

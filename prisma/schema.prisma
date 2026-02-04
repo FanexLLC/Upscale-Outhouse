@@ -31,6 +31,7 @@ enum BookingStatus {
 enum PromoDiscountType {
   PERCENTAGE
   FULL_BYPASS
+  FULL_DISCOUNT
 }
 
 // Event type enum

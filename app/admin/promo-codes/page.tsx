@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 interface PromoCode {
   id: string;
   code: string;
-  discountType: "PERCENTAGE" | "FULL_BYPASS";
+  discountType: "PERCENTAGE" | "FULL_BYPASS" | "FULL_DISCOUNT";
   discountPercent: number | null;
   maxUses: number | null;
   currentUses: number;
@@ -24,7 +24,7 @@ export default function PromoCodesPage() {
 
   // Form state
   const [newCode, setNewCode] = useState("");
-  const [discountType, setDiscountType] = useState<"PERCENTAGE" | "FULL_BYPASS">("PERCENTAGE");
+  const [discountType, setDiscountType] = useState<"PERCENTAGE" | "FULL_BYPASS" | "FULL_DISCOUNT">("PERCENTAGE");
   const [discountPercent, setDiscountPercent] = useState("");
   const [maxUses, setMaxUses] = useState("");
   const [expiresAt, setExpiresAt] = useState("");
@@ -212,19 +212,27 @@ export default function PromoCodesPage() {
                   <td className="px-6 py-4">
                     <span
                       className={`px-2 py-1 text-xs rounded-full ${
-                        promo.discountType === "FULL_BYPASS"
-                          ? "bg-purple-100 text-purple-800"
+                      promo.discountType === "FULL_BYPASS"
+                        ? "bg-purple-100 text-purple-800"
+                        : promo.discountType === "FULL_DISCOUNT"
+                          ? "bg-green-100 text-green-800"
                           : "bg-blue-100 text-blue-800"
-                      }`}
-                    >
-                      {promo.discountType === "FULL_BYPASS" ? "Full Bypass" : "Percentage"}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-gray-700">
+                    }`}
+                  >
+                      {promo.discountType === "FULL_BYPASS"
+                        ? "Full Bypass"
+                        : promo.discountType === "FULL_DISCOUNT"
+                          ? "Full Discount"
+                          : "Percentage"}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-gray-700">
                     {promo.discountType === "FULL_BYPASS"
-                      ? "100% (No Payment)"
-                      : `${(promo.discountPercent || 0) * 100}%`}
-                  </td>
+                      ? "Deposit paid offline"
+                      : promo.discountType === "FULL_DISCOUNT"
+                        ? "100% (Total + Deposit)"
+                        : `${(promo.discountPercent || 0) * 100}%`}
+                </td>
                   <td className="px-6 py-4 text-gray-700">
                     {promo.currentUses} / {promo.maxUses || "∞"}
                   </td>
@@ -294,16 +302,19 @@ export default function PromoCodesPage() {
                 </label>
                 <select
                   value={discountType}
-                  onChange={(e) => setDiscountType(e.target.value as "PERCENTAGE" | "FULL_BYPASS")}
+                  onChange={(e) => setDiscountType(e.target.value as "PERCENTAGE" | "FULL_BYPASS" | "FULL_DISCOUNT")}
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-gold focus:border-gold"
                 >
                   <option value="PERCENTAGE">Percentage Discount</option>
                   <option value="FULL_BYPASS">Full Bypass (No Payment)</option>
+                  <option value="FULL_DISCOUNT">Full Discount (Free Booking)</option>
                 </select>
                 <p className="text-xs text-gray-500 mt-1">
                   {discountType === "FULL_BYPASS"
                     ? "Customer can skip payment entirely (use for cash payments)"
-                    : "Customer gets a percentage off the total"}
+                    : discountType === "FULL_DISCOUNT"
+                      ? "Customer gets 100% off total and deposit"
+                      : "Customer gets a percentage off the total"}
                 </p>
               </div>
 

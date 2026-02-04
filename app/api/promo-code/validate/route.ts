@@ -58,7 +58,9 @@ export async function POST(request: NextRequest) {
       message:
         promoCode.discountType === "FULL_BYPASS"
           ? "Promo code applied! Payment will be bypassed."
-          : `Promo code applied! ${(promoCode.discountPercent || 0) * 100}% off the total`,
+          : promoCode.discountType === "FULL_DISCOUNT"
+            ? "Promo code applied! Booking is free (total + deposit waived)."
+            : `Promo code applied! ${(promoCode.discountPercent || 0) * 100}% off the total`,
     });
   } catch (error) {
     console.error("Error validating promo code:", error);

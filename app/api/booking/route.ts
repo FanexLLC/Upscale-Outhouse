@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     let validPromoCode: {
       id: string;
       code: string;
-      discountType: 'PERCENTAGE' | 'FULL_BYPASS';
+      discountType: 'PERCENTAGE' | 'FULL_BYPASS' | 'FULL_DISCOUNT';
       discountPercent: number | null;
     } | null = null;
 
@@ -235,6 +235,9 @@ export async function POST(request: NextRequest) {
     // Calculate promo discount (applies to total only)
     const baseDeposit = PRICING.DEPOSIT_AMOUNT;
     const isPercentPromo = validPromoCode?.discountType === 'PERCENTAGE';
+    const isFullBypass = validPromoCode?.discountType === 'FULL_BYPASS';
+    const isFullDiscount = validPromoCode?.discountType === 'FULL_DISCOUNT';
+
     const rawPromoPercent = isPercentPromo ? (validPromoCode?.discountPercent || 0) : 0;
     const promoPercent = Math.min(Math.max(rawPromoPercent, 0), 1);
     const maxPromoDiscount = Math.max(0, quote.totalAmount - baseDeposit);
@@ -246,12 +249,13 @@ export async function POST(request: NextRequest) {
       Math.round((quote.totalAmount - totalPromoDiscount) * 100) / 100
     );
 
-    // Determine if payment should be bypassed (FULL_BYPASS only)
-    const bypassPayment = validPromoCode?.discountType === 'FULL_BYPASS';
+    // Determine if payment should be bypassed (FULL_BYPASS or FULL_DISCOUNT)
+    const bypassPayment = isFullBypass || isFullDiscount;
 
-    // Deposit stays at the full amount for percentage promos
-    const bookingDepositAmount = baseDeposit;
-    const bookingTotalAmount = isPercentPromo ? adjustedTotalAmount : quote.totalAmount;
+    const bookingDepositAmount = isFullDiscount ? 0 : baseDeposit;
+    const bookingTotalAmount = isFullDiscount
+      ? 0
+      : (isPercentPromo ? adjustedTotalAmount : quote.totalAmount);
 
     // Create booking from quote
     const booking = await prisma.booking.create({
@@ -295,7 +299,9 @@ export async function POST(request: NextRequest) {
         promoCodeUsed: validPromoCode?.code || null,
         promoDiscount: validPromoCode?.discountType === 'PERCENTAGE'
           ? totalPromoDiscount
-          : (validPromoCode?.discountType === 'FULL_BYPASS' ? baseDeposit : 0),
+          : (validPromoCode?.discountType === 'FULL_BYPASS'
+            ? baseDeposit
+            : (validPromoCode?.discountType === 'FULL_DISCOUNT' ? (quote.totalAmount + baseDeposit) : 0)),
 
         // Status - if bypassed, mark as confirmed with deposit "paid"
         status: bypassPayment ? 'CONFIRMED' : 'PENDING',
