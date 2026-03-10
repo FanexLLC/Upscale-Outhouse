@@ -8,6 +8,12 @@ import { EventType } from '@prisma/client';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
+/** Parse "YYYY-MM-DD" as local midnight instead of UTC (avoids off-by-one day shift) */
+function parseLocalDate(dateStr: string): Date {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
 // Map form event types to Prisma enum
 const eventTypeMap: Record<string, EventType> = {
   wedding: 'WEDDING',
@@ -90,8 +96,8 @@ export async function POST(request: NextRequest) {
 
     // Calculate pricing with weekday/weekend rates and multi-day discounts
     const quoteCalc = calculateQuote(
-      new Date(startDate),
-      new Date(endDate),
+      parseLocalDate(startDate),
+      parseLocalDate(endDate),
       distanceResult?.distanceMiles,
       weekdayPrice,
       weekendPrice,
@@ -109,8 +115,8 @@ export async function POST(request: NextRequest) {
     const quote = await prisma.quote.create({
       data: {
         // Event details
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
+        startDate: parseLocalDate(startDate),
+        endDate: parseLocalDate(endDate),
         startTime,
         endTime,
         eventType: prismaEventType,
