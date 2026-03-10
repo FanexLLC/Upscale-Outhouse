@@ -12,6 +12,12 @@ import { formatTimeDisplay } from '@/lib/time';
 import CalendarPicker from '@/components/ui/CalendarPicker';
 import TimePicker from '@/components/quote/TimePicker';
 
+/** Parse "YYYY-MM-DD" as local midnight instead of UTC (avoids off-by-one day shift) */
+function parseLocalDate(dateStr: string): Date {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
 // Start time values (6 AM – 11 PM)
 const START_TIME_VALUES: string[] = [];
 for (let hour = 6; hour <= 23; hour++) {
@@ -903,9 +909,9 @@ export default function QuoteForm() {
                 <div>
                   <span className="text-cream/60">Dates:</span>
                   <p className="text-cream">
-                    {formData.startDate && formatDate(new Date(formData.startDate))}
+                    {formData.startDate && formatDate(parseLocalDate(formData.startDate))}
                     {formData.startDate !== formData.endDate && (
-                      <> to {formData.endDate && formatDate(new Date(formData.endDate))}</>
+                      <> to {formData.endDate && formatDate(parseLocalDate(formData.endDate))}</>
                     )}
                   </p>
                 </div>
