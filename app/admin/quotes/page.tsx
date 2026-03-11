@@ -43,11 +43,13 @@ function formatCurrency(amount: number) {
 }
 
 function formatDate(date: Date) {
+  // Use UTC components to avoid off-by-one from timezone shift
+  const d = new Date(date);
   return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
-  }).format(new Date(date));
+  }).format(new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
 }
 
 function getStatusLabel(status: string) {
