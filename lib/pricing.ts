@@ -1,7 +1,7 @@
 // Pricing configuration
 export const PRICING = {
   HOURLY_RATE: 100,           // $100/hour for events under 4 hours
-  HOURLY_THRESHOLD: 4,        // Hours threshold — at or above this, use daily flat rate
+  HOURLY_THRESHOLD: 4,        // Hours threshold — above this, use daily flat rate
   DAILY_FLAT_RATE: 650,       // $650 flat rate per day (4+ hours)
   DEPOSIT_AMOUNT: 100,
   FREE_DELIVERY_MILES: 50,
@@ -128,7 +128,7 @@ export function calculateQuote(
   let isHourlyRate: boolean;
   let rentalDescription: string;
 
-  if (numberOfDays === 1 && totalHours < PRICING.HOURLY_THRESHOLD) {
+  if (numberOfDays === 1 && totalHours <= PRICING.HOURLY_THRESHOLD) {
     // Under 4 hours on a single day — charge hourly
     isHourlyRate = true;
     baseRental = Math.ceil(totalHours) * hourlyRate;
