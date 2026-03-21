@@ -289,7 +289,7 @@ export default async function BookingDetailPage({
               </div>
               {booking.discountAmount > 0 && (
                 <div className="flex justify-between text-green-600">
-                  <span>Discount ({booking.discountPercent}%)</span>
+                  <span>Discount ({Math.round(booking.discountPercent * 100)}%)</span>
                   <span>-{formatCurrency(booking.discountAmount)}</span>
                 </div>
               )}

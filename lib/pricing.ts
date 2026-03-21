@@ -1,8 +1,8 @@
 // Pricing configuration
 export const PRICING = {
-  BASE_DAILY_RATE: 450,
-  WEEKDAY_RATE: 450,
-  WEEKEND_RATE: 450,
+  HOURLY_RATE: 100,           // $100/hour for events under 4 hours
+  HOURLY_THRESHOLD: 4,        // Hours threshold — at or above this, use daily flat rate
+  DAILY_FLAT_RATE: 650,       // $650 flat rate per day (4+ hours)
   DEPOSIT_AMOUNT: 100,
   FREE_DELIVERY_MILES: 50,
   DELIVERY_RATE_PER_MILE: 2,
@@ -18,11 +18,12 @@ export const DISCOUNTS = {
 
 export interface QuoteCalculation {
   numberOfDays: number;
-  weekdayCount: number;
-  weekendCount: number;
-  weekdayRate: number;
-  weekendRate: number;
+  totalHours: number;
+  isHourlyRate: boolean;
+  hourlyRate: number;
+  dailyRate: number;
   baseRental: number;
+  rentalDescription: string;
   discountPercent: number;
   discountAmount: number;
   rentalAfterDiscount: number;
@@ -31,48 +32,6 @@ export interface QuoteCalculation {
   subtotal: number;
   depositDue: number;
   balanceDue: number;
-}
-
-/**
- * Check if a date falls on a weekend (Friday, Saturday, or Sunday)
- */
-export function isWeekendDay(date: Date): boolean {
-  const day = date.getDay(); // 0=Sun, 1=Mon, ..., 5=Fri, 6=Sat
-  return day === 0 || day === 5 || day === 6;
-}
-
-/**
- * Count weekday and weekend days in a date range (inclusive)
- */
-export function countDayTypes(startDate: Date, endDate: Date): { weekdays: number; weekends: number } {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  start.setHours(0, 0, 0, 0);
-  end.setHours(0, 0, 0, 0);
-
-  let weekdays = 0;
-  let weekends = 0;
-  const current = new Date(start);
-
-  while (current <= end) {
-    if (isWeekendDay(current)) {
-      weekends++;
-    } else {
-      weekdays++;
-    }
-    current.setDate(current.getDate() + 1);
-  }
-
-  // Ensure at least 1 total day
-  if (weekdays + weekends === 0) {
-    if (isWeekendDay(start)) {
-      weekends = 1;
-    } else {
-      weekdays = 1;
-    }
-  }
-
-  return { weekdays, weekends };
 }
 
 /**
@@ -86,6 +45,22 @@ export function calculateDays(startDate: Date, endDate: Date): number {
   const diffTime = end.getTime() - start.getTime();
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
   return Math.max(1, diffDays);
+}
+
+/**
+ * Calculate event hours from start/end times (24h format "HH:MM").
+ * If endTime is earlier than startTime (e.g. ends after midnight), wraps around.
+ */
+export function calculateHours(startTime: string, endTime: string): number {
+  const [startH, startM] = startTime.split(':').map(Number);
+  const [endH, endM] = endTime.split(':').map(Number);
+  const startMinutes = startH * 60 + (startM || 0);
+  let endMinutes = endH * 60 + (endM || 0);
+  // Handle wrapping past midnight (e.g. 22:00 to 01:00)
+  if (endMinutes <= startMinutes) {
+    endMinutes += 24 * 60;
+  }
+  return (endMinutes - startMinutes) / 60;
 }
 
 /**
@@ -128,26 +103,47 @@ export function getDiscountLabel(
 }
 
 /**
- * Calculate the full quote based on event details
- * Supports separate weekday/weekend pricing and custom multi-day discounts
+ * Calculate the full quote based on event details.
+ *
+ * Pricing model:
+ * - Single-day event under 4 hours: $100/hour
+ * - Single-day event 4+ hours: $650 flat rate
+ * - Multi-day event: $650 per day (with multi-day discounts)
  */
 export function calculateQuote(
   startDate: Date,
   endDate: Date,
+  startTime: string,
+  endTime: string,
   distanceMiles?: number,
-  weekdayPrice?: number,
-  weekendPrice?: number,
-  multiDayDiscounts?: { days3to4?: number; days5plus?: number }
+  multiDayDiscounts?: { days3to4?: number; days5plus?: number },
 ): QuoteCalculation {
   const numberOfDays = calculateDays(startDate, endDate);
-  const { weekdays, weekends } = countDayTypes(startDate, endDate);
+  const totalHours = calculateHours(startTime, endTime);
 
-  const effectiveWeekdayRate = weekdayPrice ?? PRICING.WEEKDAY_RATE;
-  const effectiveWeekendRate = weekendPrice ?? PRICING.WEEKEND_RATE;
+  const hourlyRate = PRICING.HOURLY_RATE;
+  const dailyRate = PRICING.DAILY_FLAT_RATE;
 
-  const baseRental = (weekdays * effectiveWeekdayRate) + (weekends * effectiveWeekendRate);
+  let baseRental: number;
+  let isHourlyRate: boolean;
+  let rentalDescription: string;
 
-  const discountPercent = getDiscountPercent(numberOfDays, multiDayDiscounts);
+  if (numberOfDays === 1 && totalHours < PRICING.HOURLY_THRESHOLD) {
+    // Under 4 hours on a single day — charge hourly
+    isHourlyRate = true;
+    baseRental = Math.ceil(totalHours) * hourlyRate;
+    rentalDescription = `${Math.ceil(totalHours)} ${Math.ceil(totalHours) === 1 ? 'hour' : 'hours'} × $${hourlyRate}/hr`;
+  } else {
+    // 4+ hours or multi-day — flat daily rate
+    isHourlyRate = false;
+    baseRental = numberOfDays * dailyRate;
+    rentalDescription = numberOfDays === 1
+      ? `Full day flat rate`
+      : `${numberOfDays} days × $${dailyRate}/day`;
+  }
+
+  // Multi-day discount (only applies to daily rate bookings)
+  const discountPercent = isHourlyRate ? 0 : getDiscountPercent(numberOfDays, multiDayDiscounts);
   const discountAmount = baseRental * discountPercent;
   const rentalAfterDiscount = baseRental - discountAmount;
 
@@ -174,11 +170,12 @@ export function calculateQuote(
 
   return {
     numberOfDays,
-    weekdayCount: weekdays,
-    weekendCount: weekends,
-    weekdayRate: effectiveWeekdayRate,
-    weekendRate: effectiveWeekendRate,
+    totalHours,
+    isHourlyRate,
+    hourlyRate,
+    dailyRate,
     baseRental,
+    rentalDescription,
     discountPercent,
     discountAmount,
     rentalAfterDiscount,

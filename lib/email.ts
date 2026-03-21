@@ -204,17 +204,17 @@ export async function sendCustomerConfirmationEmail(data: BookingEmailData) {
                 </tr>
                 
                 <tr>
-                  <td style="padding: 15px 20px 5px; font-size: 14px; color: ${C_TEXT_DARK};">Luxury Restroom Trailer Rental (${data.numberOfDays} days)</td>
+                  <td style="padding: 15px 20px 5px; font-size: 14px; color: ${C_TEXT_DARK};">Luxury Restroom Trailer Rental (${data.numberOfDays} ${data.numberOfDays === 1 ? 'day' : 'days'})</td>
                   <td align="right" style="padding: 15px 20px 5px; font-size: 14px; color: ${C_TEXT_DARK};">${formatCurrency(data.baseRental)}</td>
                 </tr>
                 <tr>
                   <td style="padding: 5px 20px 15px; font-size: 14px; color: ${C_TEXT_DARK};">Delivery, Setup & Pickup</td>
                   <td align="right" style="padding: 5px 20px 15px; font-size: 14px; color: ${C_TEXT_DARK};">${data.deliveryFee > 0 ? formatCurrency(data.deliveryFee) : 'Included'}</td>
                 </tr>
-                
+
                 ${data.discountAmount > 0 ? `
                 <tr>
-                  <td style="padding: 5px 20px; font-size: 14px; color: #059669;">Preferred Client Discount</td>
+                  <td style="padding: 5px 20px; font-size: 14px; color: #059669;">Multi-Day Discount</td>
                   <td align="right" style="padding: 5px 20px; font-size: 14px; color: #059669;">- ${formatCurrency(data.discountAmount)}</td>
                 </tr>
                 ` : ''}

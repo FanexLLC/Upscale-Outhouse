@@ -4,8 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface PricingSettings {
-  weekdayPrice: number;
-  weekendPrice: number;
   deliveryRatePerMile: number;
   freeDeliveryRadius: number;
   maxDeliveryRadius: number;
@@ -108,41 +106,13 @@ export default function SettingsForm({ settings }: SettingsFormProps) {
           Pricing Settings
         </h2>
 
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <p className="text-sm text-blue-800">
+            <strong>Current pricing model:</strong> Events under 4 hours are charged $100/hour. Events 4 hours or longer are charged a $650 flat rate per day.
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Weekday Rate ($)
-            </label>
-            <input
-              type="number"
-              value={pricing.weekdayPrice}
-              onChange={(e) =>
-                handlePricingChange("weekdayPrice", Number(e.target.value))
-              }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold outline-none"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Price per day for Monday through Thursday
-            </p>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Weekend Rate ($)
-            </label>
-            <input
-              type="number"
-              value={pricing.weekendPrice}
-              onChange={(e) =>
-                handlePricingChange("weekendPrice", Number(e.target.value))
-              }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold outline-none"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Price per day for Friday, Saturday, and Sunday
-            </p>
-          </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Deposit Amount ($)
