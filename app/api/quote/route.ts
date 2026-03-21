@@ -84,24 +84,22 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Fetch pricing settings from database
+    // Fetch multi-day discount settings from database
     const pricingSetting = await prisma.setting.findUnique({
       where: { key: 'pricing' },
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const pricingConfig = pricingSetting?.value as any;
-    const weekdayPrice = pricingConfig?.weekdayPrice ?? pricingConfig?.baseRate ?? PRICING.WEEKDAY_RATE;
-    const weekendPrice = pricingConfig?.weekendPrice ?? pricingConfig?.baseRate ?? PRICING.WEEKEND_RATE;
     const multiDayDiscounts = pricingConfig?.multiDayDiscounts;
 
-    // Calculate pricing with weekday/weekend rates and multi-day discounts
+    // Calculate pricing with hourly/daily rate model
     const quoteCalc = calculateQuote(
       parseLocalDate(startDate),
       parseLocalDate(endDate),
+      startTime,
+      endTime,
       distanceResult?.distanceMiles,
-      weekdayPrice,
-      weekendPrice,
-      multiDayDiscounts
+      multiDayDiscounts,
     );
 
     // Map event type to enum
@@ -162,11 +160,12 @@ export async function POST(request: NextRequest) {
       quote: {
         id: quote.id,
         numberOfDays: quoteCalc.numberOfDays,
-        weekdayCount: quoteCalc.weekdayCount,
-        weekendCount: quoteCalc.weekendCount,
-        weekdayRate: quoteCalc.weekdayRate,
-        weekendRate: quoteCalc.weekendRate,
+        totalHours: quoteCalc.totalHours,
+        isHourlyRate: quoteCalc.isHourlyRate,
+        hourlyRate: quoteCalc.hourlyRate,
+        dailyRate: quoteCalc.dailyRate,
         baseRental: quoteCalc.baseRental,
+        rentalDescription: quoteCalc.rentalDescription,
         discountPercent: quoteCalc.discountPercent,
         discountAmount: quoteCalc.discountAmount,
         rentalAfterDiscount: quoteCalc.rentalAfterDiscount,

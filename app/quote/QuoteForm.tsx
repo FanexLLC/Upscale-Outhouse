@@ -84,11 +84,12 @@ interface QuoteResponse {
   quote: {
     id: string;
     numberOfDays: number;
-    weekdayCount: number;
-    weekendCount: number;
-    weekdayRate: number;
-    weekendRate: number;
+    totalHours: number;
+    isHourlyRate: boolean;
+    hourlyRate: number;
+    dailyRate: number;
     baseRental: number;
+    rentalDescription: string;
     discountPercent: number;
     discountAmount: number;
     rentalAfterDiscount: number;
@@ -982,33 +983,12 @@ export default function QuoteForm() {
                 Price Breakdown
               </h3>
               <div className="space-y-3 text-sm">
-                {quoteResult.quote.weekdayRate === quoteResult.quote.weekendRate ? (
-                  <div className="flex justify-between text-cream">
-                    <span>
-                      Rental ({quoteResult.quote.numberOfDays} {quoteResult.quote.numberOfDays === 1 ? 'day' : 'days'} x {formatCurrency(quoteResult.quote.weekdayRate)})
-                    </span>
-                    <span>{formatCurrency(quoteResult.quote.baseRental)}</span>
-                  </div>
-                ) : (
-                  <>
-                    {quoteResult.quote.weekdayCount > 0 && (
-                      <div className="flex justify-between text-cream">
-                        <span>
-                          Weekday rental ({quoteResult.quote.weekdayCount} {quoteResult.quote.weekdayCount === 1 ? 'day' : 'days'} x {formatCurrency(quoteResult.quote.weekdayRate)})
-                        </span>
-                        <span>{formatCurrency(quoteResult.quote.weekdayCount * quoteResult.quote.weekdayRate)}</span>
-                      </div>
-                    )}
-                    {quoteResult.quote.weekendCount > 0 && (
-                      <div className="flex justify-between text-cream">
-                        <span>
-                          Weekend rental ({quoteResult.quote.weekendCount} {quoteResult.quote.weekendCount === 1 ? 'day' : 'days'} x {formatCurrency(quoteResult.quote.weekendRate)})
-                        </span>
-                        <span>{formatCurrency(quoteResult.quote.weekendCount * quoteResult.quote.weekendRate)}</span>
-                      </div>
-                    )}
-                  </>
-                )}
+                <div className="flex justify-between text-cream">
+                  <span>
+                    Rental ({quoteResult.quote.rentalDescription})
+                  </span>
+                  <span>{formatCurrency(quoteResult.quote.baseRental)}</span>
+                </div>
 
                 {quoteResult.quote.discountPercent > 0 && (
                   <div className="flex justify-between text-green-400">
