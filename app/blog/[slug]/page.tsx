@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/blog";
 import OverlineLabel from "@/components/ui/OverlineLabel";
@@ -95,10 +96,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </section>
 
       {/* Hero Image */}
-      {/* TODO: Replace with real blog post images */}
       <div className="max-w-4xl mx-auto px-6 mb-16">
-        <div className="aspect-video bg-bg-secondary rounded-card flex items-center justify-center">
-          <span className="text-text-muted text-small">Featured Image</span>
+        <div className="aspect-video bg-bg-secondary rounded-card relative overflow-hidden">
+          <Image
+            src={post.image}
+            alt={post.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 896px"
+            priority
+          />
         </div>
       </div>
 
