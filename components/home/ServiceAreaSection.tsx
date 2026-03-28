@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import OverlineLabel from '@/components/ui/OverlineLabel';
 import Button from '@/components/ui/Button';
 import AnimatedSection from '@/components/ui/AnimatedSection';
+import ServiceAreaMap from '@/components/ui/ServiceAreaMap';
 
 const cities = [
   'Fresno',
@@ -72,12 +73,10 @@ export default function ServiceAreaSection() {
             </Button>
           </AnimatedSection>
 
-          {/* Right: map placeholder */}
+          {/* Right: map */}
           <AnimatedSection variant="slideRight">
-            <div className="relative rounded-card overflow-hidden bg-bg-secondary border border-[rgba(201,168,76,0.15)] h-[400px] flex items-center justify-center">
-              <span className="text-text-muted text-small font-body text-center px-md">
-                Map Placeholder
-              </span>
+            <div className="relative rounded-card overflow-hidden bg-bg-secondary border border-[rgba(201,168,76,0.15)] h-[400px]">
+              <ServiceAreaMap />
             </div>
           </AnimatedSection>
         </div>

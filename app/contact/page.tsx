@@ -1,8 +1,18 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import OverlineLabel from '@/components/ui/OverlineLabel';
 import Card from '@/components/ui/Card';
 import SectionDivider from '@/components/ui/SectionDivider';
 import ContactForm from '@/components/contact/ContactForm';
+
+const ServiceAreaMap = dynamic(() => import('@/components/ui/ServiceAreaMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full bg-bg-secondary flex items-center justify-center text-text-muted text-sm">
+      Loading map...
+    </div>
+  ),
+});
 
 export const metadata: Metadata = {
   title: 'Contact Us | Upscale Outhouse — Luxury Restroom Trailer Rentals',
@@ -161,11 +171,11 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Map Placeholder */}
+      {/* Service Area Map */}
       <section className="bg-bg-primary py-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-bg-secondary h-[400px] rounded-card flex items-center justify-center text-text-muted text-sm">
-            {/* TODO: Add dark-themed Google Map with 150-mile radius */}
+          <div className="bg-bg-secondary h-[400px] rounded-card overflow-hidden">
+            <ServiceAreaMap />
           </div>
           <p className="text-gold-primary text-center mt-lg text-body">
             Free delivery within 50 miles of Fresno
