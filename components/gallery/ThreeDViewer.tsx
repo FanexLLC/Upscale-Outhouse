@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, type ComponentType } from 'react';
-import Button from '@/components/ui/Button';
 
 // Lazy-load the entire Three.js scene to avoid module evaluation issues
 // with @react-three/fiber under Next.js 16 Turbopack
@@ -16,57 +15,56 @@ function ThreeDScene({ reducedMotion }: { reducedMotion: boolean }) {
       try {
         const [
           { Canvas, useFrame },
-          { OrbitControls, Environment },
-          THREE,
+          { OrbitControls, Environment, useGLTF, Center },
         ] = await Promise.all([
           import('@react-three/fiber'),
           import('@react-three/drei'),
-          import('three'),
         ]);
 
         if (cancelled) return;
 
-        // Build the scene component after all imports resolve
-        function TrailerPlaceholder({ reducedMotion: rm }: { reducedMotion: boolean }) {
+        // Preload the model
+        useGLTF.preload('/upscale-outhouse.glb');
+
+        function TrailerModel({ reducedMotion: rm }: { reducedMotion: boolean }) {
           // eslint-disable-next-line @typescript-eslint/no-require-imports
           const { useRef: useRefHook } = require('react');
           const ref = useRefHook(null);
+          const { scene } = useGLTF('/upscale-outhouse.glb');
 
           useFrame(() => {
             if (ref.current && !rm) {
-              ref.current.rotation.y += 0.005;
+              ref.current.rotation.y += 0.003;
             }
           });
 
           return (
-            <mesh ref={ref} position={[0, 0.75, 0]}>
-              <boxGeometry args={[4, 1.5, 2]} />
-              <meshStandardMaterial
-                color="#C9A84C"
-                metalness={0.8}
-                roughness={0.3}
-              />
-            </mesh>
+            <Center>
+              <group ref={ref}>
+                <primitive object={scene} />
+              </group>
+            </Center>
           );
         }
 
         function LoadedScene({ reducedMotion: rm }: { reducedMotion: boolean }) {
           return (
             <Canvas
-              camera={{ position: [0, 1.5, 5], fov: 50 }}
+              camera={{ position: [5, 3, 8], fov: 45 }}
               dpr={[1, 1.5]}
               frameloop="always"
               style={{ background: 'transparent' }}
             >
-              <ambientLight intensity={0.3} />
-              <pointLight position={[5, 5, 5]} intensity={1} color="#C9A84C" />
-              <pointLight position={[-3, -2, -3]} intensity={0.3} />
-              <TrailerPlaceholder reducedMotion={rm} />
+              <ambientLight intensity={0.5} />
+              <directionalLight position={[10, 10, 5]} intensity={1} />
+              <pointLight position={[5, 5, 5]} intensity={0.8} color="#C9A84C" />
+              <pointLight position={[-5, 3, -5]} intensity={0.3} />
+              <TrailerModel reducedMotion={rm} />
               <OrbitControls
-                minPolarAngle={Math.PI / 4}
-                maxPolarAngle={Math.PI / 1.8}
-                minDistance={3}
-                maxDistance={10}
+                minPolarAngle={Math.PI / 6}
+                maxPolarAngle={Math.PI / 2.2}
+                minDistance={4}
+                maxDistance={20}
                 enablePan={false}
               />
               <Environment preset="night" />
@@ -141,14 +139,6 @@ export default function ThreeDViewer() {
       <p className="text-text-muted text-sm text-center mt-2">
         Drag to rotate &bull; Scroll to zoom
       </p>
-      <p className="text-text-secondary text-sm text-center mt-4 max-w-md mx-auto">
-        Full 3D trailer model coming soon. In the meantime, schedule an in-person tour.
-      </p>
-      <div className="mt-6 text-center">
-        <Button variant="secondary" href="/contact">
-          Schedule a Tour
-        </Button>
-      </div>
     </div>
   );
 }
