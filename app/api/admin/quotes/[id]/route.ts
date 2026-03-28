@@ -24,12 +24,26 @@ export async function DELETE(
       return NextResponse.json({ error: "Quote not found" }, { status: 404 });
     }
 
-    // Don't allow deleting quotes that have been converted to a booking
+    // If quote was converted to a booking, check if the booking was actually paid
     if (quote.convertedToBooking && quote.bookingId) {
-      return NextResponse.json(
-        { error: "Cannot delete a quote that has been converted to a booking" },
-        { status: 400 }
-      );
+      const booking = await prisma.booking.findUnique({
+        where: { id: quote.bookingId },
+      });
+
+      // Only block deletion if the booking has a paid deposit (real booking)
+      if (booking && booking.depositPaid) {
+        return NextResponse.json(
+          { error: "Cannot delete a quote with a paid booking" },
+          { status: 400 }
+        );
+      }
+
+      // Delete the unpaid/abandoned booking first
+      if (booking) {
+        await prisma.booking.delete({
+          where: { id: booking.id },
+        });
+      }
     }
 
     await prisma.quote.delete({

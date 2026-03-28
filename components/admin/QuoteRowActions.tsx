@@ -102,18 +102,16 @@ export default function QuoteRowActions({ quote }: { quote: QuoteDetails }) {
     <>
       <div className="flex items-center gap-2 justify-end">
         {/* Delete */}
-        {!quote.convertedToBooking && (
-          <button
-            onClick={deleteQuote}
-            disabled={deleting}
-            title="Delete quote"
-            className="text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          </button>
-        )}
+        <button
+          onClick={deleteQuote}
+          disabled={deleting}
+          title="Delete quote"
+          className="text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
 
         {/* Copy Email */}
         <button
@@ -301,15 +299,13 @@ export default function QuoteRowActions({ quote }: { quote: QuoteDetails }) {
             {/* Modal Footer */}
             <div className="flex items-center justify-between p-6 border-t">
               <div>
-                {!quote.convertedToBooking && (
-                  <button
-                    onClick={deleteQuote}
-                    disabled={deleting}
-                    className="px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
-                  >
-                    {deleting ? "Deleting..." : "Delete Quote"}
-                  </button>
-                )}
+                <button
+                  onClick={deleteQuote}
+                  disabled={deleting}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
+                >
+                  {deleting ? "Deleting..." : "Delete Quote"}
+                </button>
               </div>
               <div className="flex items-center gap-3">
                 <a
