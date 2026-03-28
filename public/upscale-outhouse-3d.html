@@ -240,26 +240,26 @@ function addExtDoor(px,py,pz,isBack,isLeft){
 }
 
 function addExtDoorAccents(px,pz,isRight,isLeft){
-  var iconY2=TY+skH+dH+0.15,ledY2=TY+skH+dH+0.22;
+  var iconY2=TY+skH+dH+0.30,ledY2=TY+skH+dH+0.38;
   var dx2=isRight?sideDoorX+0.04:(isLeft?leftDoorX-0.04:px);
   var dz2=isRight||isLeft?pz:pz+0.04;
   if(isRight){
     var ic=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic.position.set(dx2,iconY2,dz2);ic.rotation.y=Math.PI/2;ext.add(ic);
     var sl=B(0.03,0.06,dW*0.65,glM,dx2,ledY2,dz2);ext.add(sl);gls.push(sl);
     var sgl=new THREE.PointLight(0x00e676,0.5,4);sgl.position.set(dx2+0.26,ledY2,dz2);ext.add(sgl);gls.push(sgl);
-    ext.add(B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.18,dz2));
-    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(dx2+0.02).translateY(TY+skH+0.03).translateZ(dz2));
+    ext.add(B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.33,dz2));
+    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(dx2+0.02).translateY(TY+skH+0.22).translateZ(dz2));
   }else if(isLeft){
     var ic2=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic2.position.set(dx2,iconY2,dz2);ic2.rotation.y=-Math.PI/2;ext.add(ic2);
     var sl2=B(0.03,0.06,dW*0.65,glM,dx2,ledY2,dz2);ext.add(sl2);gls.push(sl2);
     var sgl2=new THREE.PointLight(0x00e676,0.5,4);sgl2.position.set(dx2-0.26,ledY2,dz2);ext.add(sgl2);gls.push(sgl2);
-    ext.add(B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.18,dz2));
-    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(dx2-0.02).translateY(TY+skH+0.03).translateZ(dz2));
+    ext.add(B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.33,dz2));
+    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(dx2-0.02).translateY(TY+skH+0.22).translateZ(dz2));
   }else{
     var ic3=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic3.position.set(px,iconY2,dz2);ext.add(ic3);
     var sl3=B(dW*0.65,0.06,0.03,glM,px,ledY2,dz2);ext.add(sl3);gls.push(sl3);
     var bgl=new THREE.PointLight(0x00e676,0.5,4);bgl.position.set(px,ledY2,dz2+0.26);ext.add(bgl);gls.push(bgl);
-    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(px).translateY(TY+skH+0.03).translateZ(dz2));
+    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(px).translateY(TY+skH+0.22).translateZ(dz2));
   }
 }
 
@@ -356,8 +356,8 @@ ext.add(B(0.12,0.06,0.03,rlM,TW/2-0.15,TY+skH+0.15,backDoorZ));
 [-TW/2+0.08,TW/2-0.08].forEach(function(rx){ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),rlM).translateX(rx).translateY(TY+TH+0.05).translateZ(-TL/2-0.04))});
 
 // QR code on back
-ext.add(B(0.2,0.2,0.01,new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.5}),(bdX1+bdX2)/2,TY+skH+dH+0.18,backDoorZ+0.04));
-ext.add(B(0.16,0.16,0.012,bkM,(bdX1+bdX2)/2,TY+skH+dH+0.18,backDoorZ+0.042));
+ext.add(B(0.2,0.2,0.01,new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.5}),(bdX1+bdX2)/2,TY+skH+dH+0.33,backDoorZ+0.04));
+ext.add(B(0.16,0.16,0.012,bkM,(bdX1+bdX2)/2,TY+skH+dH+0.33,backDoorZ+0.042));
 
 // Stabilizer jacks
 [-TW/2+0.15,TW/2-0.15].forEach(function(jx){
