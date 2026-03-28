@@ -1,7 +1,6 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import OverlineLabel from '@/components/ui/OverlineLabel';
 import Button from '@/components/ui/Button';
@@ -62,15 +61,14 @@ export default function ExperienceSection() {
 
         {/* 2-column grid */}
         <div className="grid md:grid-cols-2 gap-2xl items-start">
-          {/* Left: image */}
+          {/* Left: 3D trailer viewer */}
           <AnimatedSection variant="slideLeft">
             <div className="relative aspect-[4/5] rounded-card overflow-hidden bg-bg-secondary border border-[rgba(201,168,76,0.15)]">
-              <Image
-                src="/images/gallery/gallery-interior-womens-01.jpg"
-                alt="Elegant women's restroom interior with vanity mirrors and premium finishes"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
+              <iframe
+                src="/api/3d-viewer"
+                className="w-full h-full border-none"
+                allowFullScreen
+                title="Interactive 3D Trailer Tour"
               />
             </div>
           </AnimatedSection>
