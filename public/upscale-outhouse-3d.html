@@ -401,7 +401,7 @@ var frontLY=TY+skH+bH/2;
 })();
 
 // ═══ INTERIOR ═══
-var intG=new THREE.Group();intG.visible=false;trailer.add(intG);
+var intG=new THREE.Group();intG.visible=false;intG.position.y=TY+skH;trailer.add(intG);
 var IW=3.05,IL=6.1,IH=2.5;
 intG.add(B(IW,0.04,IL,flMat,0,0.02,0));
 for(var fz=-IL/2+0.12;fz<IL/2;fz+=0.12){intG.add(B(IW,0.004,0.006,new THREE.MeshStandardMaterial({color:0x706458,roughness:0.7}),0,0.045,fz))}
@@ -593,7 +593,7 @@ setTimeout(function(){document.getElementById('loading').classList.add('done')},
 (function anim(){requestAnimationFrame(anim);var t=ck.getElapsedTime();
 var gp=2+Math.sin(t*3);gls.forEach(function(o){if(o.material)o.material.emissiveIntensity=gp;if(o.intensity!==undefined)o.intensity=0.3+Math.sin(t*3)*0.3});
 if(mode==='exterior'){ext.visible=true;intG.visible=false;roofParts.forEach(function(r){r.visible=true});var r=13;cam.position.set(Math.sin(ms.ry)*r*Math.cos(ms.rx),Math.max(3.5+Math.sin(ms.rx)*5,1.2),Math.cos(ms.ry)*r*Math.cos(ms.rx));cam.lookAt(0,1.6,0)}
-else if(mode==='floorplan'){ext.visible=true;intG.visible=true;roofParts.forEach(function(r){r.visible=false});intWalls.forEach(function(w){w.visible=false});urinalG.visible=false;var fpR=ia.dist;cam.position.set(Math.sin(ms.ry)*fpR*0.15,fpR,Math.cos(ms.ry)*fpR*0.15);cam.lookAt(0,0.2,0)}
+else if(mode==='floorplan'){ext.visible=true;intG.visible=true;roofParts.forEach(function(r){r.visible=false});intWalls.forEach(function(w){w.visible=false});urinalG.visible=false;var fpR=ia.dist;cam.position.set(Math.sin(ms.ry)*fpR*0.15,fpR,Math.cos(ms.ry)*fpR*0.15);cam.lookAt(0,TY+skH+0.2,0)}
 else{ext.visible=true;intG.visible=true;roofParts.forEach(function(r){r.visible=false});intWalls.forEach(function(w){w.visible=false});extWalls.forEach(function(w){w.visible=false});var iR=ia.dist;cam.position.set(Math.sin(ia.yaw)*iR*0.35,1.8+Math.sin(ia.pitch)*iR*0.5,Math.cos(ia.yaw)*iR*0.35);cam.lookAt(0,1.8,0)}
 R.render(S,cam)})();
 })();
