@@ -52,7 +52,7 @@ export default function AboutPage() {
                 src="/images/about-us.jpg"
                 alt="Upscale Outhouse team"
                 fill
-                className="object-cover"
+                className="object-cover object-[center_25%]"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
