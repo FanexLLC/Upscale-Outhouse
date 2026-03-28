@@ -242,26 +242,21 @@ function addExtDoor(px,py,pz,isBack,isLeft){
 }
 
 function addExtDoorAccents(px,pz,isRight,isLeft){
-  var iconY2=TY+skH+dH+0.30,ledY2=TY+skH+dH+0.38;
+  var ledY2=TY+skH+dH+0.02,iconY2=ledY2+0.12;
   var dx2=isRight?sideDoorX+0.04:(isLeft?leftDoorX-0.04:px);
   var dz2=isRight||isLeft?pz:pz+0.04;
   if(isRight){
     var ic=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic.position.set(dx2,iconY2,dz2);ic.rotation.y=Math.PI/2;ext.add(ic);extWalls.push(ic);
     var sl=B(0.03,0.06,dW*0.65,glM,dx2,ledY2,dz2);ext.add(sl);gls.push(sl);extWalls.push(sl);
     var sgl=new THREE.PointLight(0x00e676,0.5,4);sgl.position.set(dx2+0.26,ledY2,dz2);ext.add(sgl);gls.push(sgl);extWalls.push(sgl);
-    _ew=B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.33,dz2);ext.add(_ew);extWalls.push(_ew);
-    _ew=new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM);_ew.translateX(dx2+0.02);_ew.translateY(TY+skH+0.15);_ew.translateZ(dz2);ext.add(_ew);extWalls.push(_ew);
   }else if(isLeft){
     var ic2=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic2.position.set(dx2,iconY2,dz2);ic2.rotation.y=-Math.PI/2;ext.add(ic2);extWalls.push(ic2);
     var sl2=B(0.03,0.06,dW*0.65,glM,dx2,ledY2,dz2);ext.add(sl2);gls.push(sl2);extWalls.push(sl2);
     var sgl2=new THREE.PointLight(0x00e676,0.5,4);sgl2.position.set(dx2-0.26,ledY2,dz2);ext.add(sgl2);gls.push(sgl2);extWalls.push(sgl2);
-    _ew=B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.33,dz2);ext.add(_ew);extWalls.push(_ew);
-    _ew=new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM);_ew.translateX(dx2-0.02);_ew.translateY(TY+skH+0.15);_ew.translateZ(dz2);ext.add(_ew);extWalls.push(_ew);
   }else{
     var ic3=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic3.position.set(px,iconY2,dz2);ext.add(ic3);extWalls.push(ic3);
     var sl3=B(dW*0.65,0.06,0.03,glM,px,ledY2,dz2);ext.add(sl3);gls.push(sl3);extWalls.push(sl3);
     var bgl=new THREE.PointLight(0x00e676,0.5,4);bgl.position.set(px,ledY2,dz2+0.26);ext.add(bgl);gls.push(bgl);extWalls.push(bgl);
-    _ew=new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM);_ew.translateX(px);_ew.translateY(TY+skH+0.15);_ew.translateZ(dz2);ext.add(_ew);extWalls.push(_ew);
   }
 }
 
