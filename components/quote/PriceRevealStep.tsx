@@ -57,7 +57,7 @@ export default function PriceRevealStep({ data, onBack }: PriceRevealStepProps) 
         startTime: data.startTime,
         endTime: data.endTime,
         eventType: data.eventType,
-        guestCount: data.guestCount,
+        guestCount: String(data.guestCount),
         hasWaterHookup: false,
         hasPowerAvailable: false,
         eventLocation: data.eventLocation,
