@@ -567,7 +567,7 @@ else{ia.yaw-=dx*0.005;ia.pitch=Math.max(0.05,Math.min(1.2,ia.pitch+dy*0.005))}
 ms.lx=e.clientX;ms.ly=e.clientY});
 window.addEventListener('mouseup',function(){ms.dn=false});
 cv.addEventListener('wheel',function(e){e.preventDefault();
-if(mode==='interior')ia.dist=Math.max(2.5,Math.min(18,ia.dist+e.deltaY*0.005));
+if(mode==='interior')ia.dist=Math.max(2.5,Math.min(25,ia.dist+e.deltaY*0.005));
 else if(mode==='floorplan')ia.dist=Math.max(4,Math.min(14,ia.dist+e.deltaY*0.005))},{passive:false});
 cv.addEventListener('touchstart',function(e){var t=e.touches[0];ms.dn=true;ms.lx=t.clientX;ms.ly=t.clientY},{passive:true});
 cv.addEventListener('touchmove',function(e){e.preventDefault();var t=e.touches[0];var dx=t.clientX-ms.lx,dy=t.clientY-ms.ly;
@@ -578,14 +578,14 @@ ms.lx=t.clientX;ms.ly=t.clientY},{passive:false});
 cv.addEventListener('touchend',function(){ms.dn=false});
 var lastPinchDist=0;
 cv.addEventListener('touchstart',function(e){if(e.touches.length===2){var dx2=e.touches[0].clientX-e.touches[1].clientX,dy2=e.touches[0].clientY-e.touches[1].clientY;lastPinchDist=Math.sqrt(dx2*dx2+dy2*dy2)}},{passive:true});
-cv.addEventListener('touchmove',function(e){if(e.touches.length===2){var dx2=e.touches[0].clientX-e.touches[1].clientX,dy2=e.touches[0].clientY-e.touches[1].clientY;var dist=Math.sqrt(dx2*dx2+dy2*dy2);var delta=(lastPinchDist-dist)*0.02;if(mode==='interior')ia.dist=Math.max(2.5,Math.min(12,ia.dist+delta));if(mode==='floorplan')ia.dist=Math.max(4,Math.min(14,ia.dist+delta));lastPinchDist=dist}},{passive:true});
+cv.addEventListener('touchmove',function(e){if(e.touches.length===2){var dx2=e.touches[0].clientX-e.touches[1].clientX,dy2=e.touches[0].clientY-e.touches[1].clientY;var dist=Math.sqrt(dx2*dx2+dy2*dy2);var delta=(lastPinchDist-dist)*0.02;if(mode==='interior')ia.dist=Math.max(2.5,Math.min(25,ia.dist+delta));if(mode==='floorplan')ia.dist=Math.max(4,Math.min(14,ia.dist+delta));lastPinchDist=dist}},{passive:true});
 window.addEventListener('resize',function(){W=innerWidth;H=innerHeight-70;cam.aspect=W/H;cam.updateProjectionMatrix();R.setSize(W,H)});
 
 window.SM=function(m){mode=m;var btns=document.querySelectorAll('#tg button');btns.forEach(function(b){b.classList.remove('on')});
 if(m==='exterior')btns[0].classList.add('on');else if(m==='floorplan')btns[1].classList.add('on');else btns[2].classList.add('on');
 document.getElementById('ht').textContent={exterior:'Drag to rotate \u00b7 explore every angle',floorplan:'Drag to rotate \u00b7 scroll to zoom \u00b7 top-down view',interior:'Drag to orbit \u00b7 scroll to zoom \u00b7 walls hidden'}[m];
 roofParts.forEach(function(r){r.visible=true});intWalls.forEach(function(w){w.visible=true});urinalG.visible=true;
-if(m==='floorplan'){ia.dist=14;ms.ry=Math.PI*0.5}if(m==='interior'){ia.dist=18;ia.yaw=0.8;ia.pitch=0.5}};
+if(m==='floorplan'){ia.dist=14;ms.ry=Math.PI*0.5}if(m==='interior'){ia.dist=25;ia.yaw=0.8;ia.pitch=0.5}};
 
 // ANIMATION
 var ck=new THREE.Clock();
