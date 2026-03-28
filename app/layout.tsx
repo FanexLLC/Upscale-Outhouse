@@ -2,9 +2,32 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { Inter } from 'next/font/google';
+import StickyMobileCTA from "@/components/layout/StickyMobileCTA";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
+import { Playfair_Display, Outfit, Cormorant_Garamond } from "next/font/google";
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages, getLocale } from 'next-intl/server';
 
-const inter = Inter({ subsets: ['latin'] });
+const playfairDisplay = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-display",
+  display: "swap",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-body",
+  display: "swap",
+});
+
+const cormorantGaramond = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-accent",
+  display: "swap",
+});
 
 const siteUrl = "https://www.upscaleouthouse.com";
 
@@ -46,25 +69,32 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  themeColor: '#0A0A0A',
   alternates: {
     canonical: siteUrl,
   },
-  
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="en">
-      <body className={`${inter.className} antialiased bg-cream min-h-screen flex flex-col`}>
-        <Header />
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Footer />
+    <html lang={locale} className={`${playfairDisplay.variable} ${outfit.variable} ${cormorantGaramond.variable}`}>
+      <body className="font-body antialiased min-h-screen flex flex-col">
+        <NextIntlClientProvider messages={messages}>
+          <GoogleAnalytics />
+          <Header />
+          <main className="flex-grow pb-20 md:pb-0">
+            {children}
+          </main>
+          <Footer />
+          <StickyMobileCTA />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

@@ -1,199 +1,200 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
-import Accordion from '@/components/ui/Accordion';
-import PageHeader from '@/components/ui/PageHeader';
+import OverlineLabel from '@/components/ui/OverlineLabel';
+import Card from '@/components/ui/Card';
+import AnimatedCounter from '@/components/ui/AnimatedCounter';
+import SectionDivider from '@/components/ui/SectionDivider';
+import Button from '@/components/ui/Button';
 
 export const metadata: Metadata = {
-  title: 'About Us',
-  description: 'Learn about Upscale Outhouse — a veteran-owned luxury bathroom trailer rental company serving Fresno and Central California. Quality, reliability, and service.',
+  title: 'About Us — Veteran-Owned Luxury Restroom Rentals | Upscale Outhouse',
+  description:
+    'Learn about Upscale Outhouse — a veteran-owned luxury bathroom trailer rental company serving Fresno and Central California with military precision and five-star service.',
+  openGraph: {
+    title: 'About Us — Veteran-Owned Luxury Restroom Rentals | Upscale Outhouse',
+    description: 'Learn about Upscale Outhouse — a veteran-owned luxury bathroom trailer rental company serving Fresno and Central California with military precision and five-star service.',
+    url: 'https://www.upscaleouthouse.com/about',
+    siteName: 'Upscale Outhouse',
+    type: 'website',
+    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'About Upscale Outhouse — veteran-owned luxury restroom trailer company' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About Us — Veteran-Owned Luxury Restroom Rentals | Upscale Outhouse',
+    description: 'Learn about Upscale Outhouse — a veteran-owned luxury bathroom trailer rental company serving Fresno and Central California with military precision and five-star service.',
+    images: ['/twitter-image.png'],
+  },
 };
-
-const faqs = [
-  {
-    question: 'How far in advance should I book?',
-    answer: 'We recommend booking at least 2-4 weeks in advance, especially during peak wedding season (April-October). However, we can sometimes accommodate last-minute requests depending on availability.',
-  },
-  {
-    question: 'What is included in the rental?',
-    answer: 'Your rental includes delivery, setup, all supplies (toilet paper, hand soap, paper towels), and pickup. We also provide a fresh water tank and waste tank service.',
-  },
-  {
-    question: 'Do I need a water hookup?',
-    answer: 'No, our trailer comes with a fresh water tank that provides water for your event. However, if you have a water hookup available, we can connect to it for extended events.',
-  },
-  {
-    question: 'How much space is needed for the trailer?',
-    answer: 'The trailer requires a flat, level surface approximately 25 feet long and 10 feet wide. We need vehicle access for delivery and pickup.',
-  },
-  {
-    question: 'What is your service area?',
-    answer: 'We serve events within 150 miles of Fresno, California. This includes Bakersfield, Visalia, Merced, Modesto, Madera, and the entire Central Valley region.',
-  },
-  {
-    question: 'What is your cancellation policy?',
-    answer: 'The $100 deposit is non-refundable. For cancellations, please contact us directly to discuss rescheduling options. We understand plans change and will work with you when possible.',
-  },
-  {
-    question: 'How many guests can the trailer accommodate?',
-    answer: 'Our luxury trailer comfortably serves events with up to 250+ guests. For larger events or multi-day festivals, please contact us to discuss additional units.',
-  },
-  {
-    question: 'Is the trailer climate controlled?',
-    answer: 'Yes! Our trailer features both air conditioning and heating, ensuring your guests are comfortable regardless of the weather.',
-  },
-];
 
 export default function AboutPage() {
   return (
     <>
-      <PageHeader
-        title="About Upscale Outhouse"
-        subtitle="Veteran-owned and operated, bringing luxury and dignity to outdoor events throughout Central California."
-        primaryCta={{ label: 'Get an Instant Quote', href: '/quote' }}
-        secondaryCta={{ label: 'Call (559) 663-0356', href: 'tel:+15596630356' }}
-      />
-
-      {/* Story Section */}
-      <section className="py-24 bg-charcoal-dark">
+      {/* Hero */}
+      <section className="bg-bg-primary pt-32 md:pt-40 pb-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gold mb-4">Our Story</h2>
-              <div className="space-y-4 text-cream/80">
-                <p>
-                  Upscale Outhouse was founded with a simple mission: to provide event guests
-                  with restroom facilities that match the quality and elegance of the events
-                  they attend.
-                </p>
-                <p>
-                  Started by three friends who grew up right here in the Central Valley,
-                  we saw firsthand that outdoor events deserved a better bathroom option.
-                  As a veteran-owned business, we bring that same discipline and attention
-                  to detail to every rental.
-                </p>
-                <p>
-                  Based in Fresno, we proudly serve the entire Central Valley region,
-                  bringing luxury restroom trailers to weddings, corporate events, private
-                  parties, and special occasions of all kinds.
-                </p>
-              </div>
-            </div>
-            <div className="relative rounded-2xl border border-charcoal/10 shadow-lg overflow-hidden aspect-[4/3]">
+          <OverlineLabel>OUR STORY</OverlineLabel>
+          <h1 className="font-display text-h1 text-white mt-md mb-lg max-w-3xl">
+            Built on Service. Driven by Excellence.
+          </h1>
+          <p className="text-text-secondary text-body max-w-2xl leading-relaxed">
+            Veteran-owned and operated, bringing luxury and dignity to outdoor
+            events throughout Central California.
+          </p>
+        </div>
+      </section>
+
+      {/* Origin Story */}
+      <section className="bg-bg-primary py-section">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-12 items-start">
+            <div className="relative bg-bg-secondary aspect-[4/3] rounded-card overflow-hidden">
               <Image
                 src="/images/about-us.jpg"
-                alt="The Upscale Outhouse team"
+                alt="Upscale Outhouse team"
                 fill
-                className="object-cover object-[center_25%]"
+                className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
+            <div className="space-y-6">
+              <p className="text-text-secondary text-body leading-relaxed">
+                Upscale Outhouse was born from a simple observation: even at the most
+                beautiful outdoor events in the Central Valley, the restroom situation
+                was always the weakest link. Guests in cocktail attire, stepping into
+                dark, cramped porta-potties — it just didn&apos;t make sense.
+              </p>
+              <p className="text-text-secondary text-body leading-relaxed">
+                Founded by three friends who grew up right here in Fresno, we decided
+                to change that. As veterans, we learned that preparation, discipline,
+                and attention to detail aren&apos;t optional — they&apos;re the baseline. We
+                bring that same mindset to every event we serve. Every trailer is
+                delivered on time, immaculately clean, and fully stocked.
+              </p>
+              <p className="text-text-secondary text-body leading-relaxed">
+                We&apos;ve watched brides breathe a sigh of relief, seen corporate event
+                planners actually smile when the restrooms arrive, and heard guests say
+                &quot;this is nicer than my bathroom at home.&quot; That&apos;s the reaction we work
+                for — every single time.
+              </p>
+              <p className="text-text-secondary text-body leading-relaxed">
+                The Central Valley is our home, and its people are our community. We
+                take pride in serving the families, businesses, and organizations that
+                make this region special. When you book with us, you&apos;re not hiring a
+                faceless rental company — you&apos;re partnering with your neighbors.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="py-28 bg-charcoal">
+      <SectionDivider variant="flourish" className="max-w-7xl mx-auto px-4" />
+
+      {/* Values */}
+      <section className="bg-bg-primary py-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-12 text-center">
-            Why Choose Us
-          </h2>
+          <div className="text-center mb-2xl">
+            <OverlineLabel>OUR VALUES</OverlineLabel>
+            <h2 className="font-display text-h2 text-white mt-md">
+              Why We&apos;re Different
+            </h2>
+          </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="rounded-2xl p-8 border border-charcoal/10 shadow-md hover:shadow-lg transition text-center">
-              <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="h-8 w-8 text-gold" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
+            <Card className="text-center">
+              <div className="w-16 h-16 bg-gold-primary/10 rounded-full flex items-center justify-center mx-auto mb-lg">
+                <svg className="w-8 h-8 text-gold-primary" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gold mb-2">Quality</h3>
-              <p className="text-cream/70">
-                Immaculate trailers maintained to the highest standards for every event.
+              <h3 className="font-display text-h4 text-white mb-sm">
+                Military Precision
+              </h3>
+              <p className="text-text-secondary text-body">
+                Every delivery is on time. Every trailer is spotless. Every detail
+                is checked twice.
               </p>
-            </div>
-            <div className="rounded-2xl p-8 border border-charcoal/10 shadow-md hover:shadow-lg transition text-center">
-              <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="h-8 w-8 text-gold" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </Card>
+
+            <Card className="text-center">
+              <div className="w-16 h-16 bg-gold-primary/10 rounded-full flex items-center justify-center mx-auto mb-lg">
+                <svg className="w-8 h-8 text-gold-primary" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gold mb-2">Reliability</h3>
-              <p className="text-cream/70">
-                On-time delivery and pickup so your event stays on schedule.
+              <h3 className="font-display text-h4 text-white mb-sm">
+                Community Roots
+              </h3>
+              <p className="text-text-secondary text-body">
+                Born and raised in the Central Valley. We know this community
+                because we ARE this community.
               </p>
-            </div>
-            <div className="rounded-2xl p-8 border border-charcoal/10 shadow-md hover:shadow-lg transition text-center">
-              <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="h-8 w-8 text-gold" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+            </Card>
+
+            <Card className="text-center">
+              <div className="w-16 h-16 bg-gold-primary/10 rounded-full flex items-center justify-center mx-auto mb-lg">
+                <svg className="w-8 h-8 text-gold-primary" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gold mb-2">Service</h3>
-              <p className="text-cream/70">
-                Friendly, professional service from booking to pickup.
+              <h3 className="font-display text-h4 text-white mb-sm">
+                No Compromises
+              </h3>
+              <p className="text-text-secondary text-body">
+                We don&apos;t do &quot;good enough.&quot; Our trailers feature real plumbing,
+                real climate control, and real luxury.
               </p>
-            </div>
+            </Card>
           </div>
         </div>
       </section>
 
-      {/* Service Area */}
-      <section className="py-24 bg-charcoal-dark">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-4">Service Area</h2>
-          <p className="text-cream/80 text-lg mb-8">
-            Based in Fresno, California, we serve events within a 150-mile radius,
-            covering the entire Central Valley and beyond.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            {['Fresno', 'Clovis', 'Visalia', 'Bakersfield', 'Merced', 'Modesto', 'Madera', 'Hanford'].map((city) => (
-              <span
-                key={city}
-                className="px-4 py-2 rounded-full border border-gold/20 text-cream/80 text-sm"
-              >
-                {city}
-              </span>
-            ))}
-          </div>
-          <span className="inline-block bg-gold/10 text-gold border border-gold/30 px-5 py-2 rounded-full text-sm font-semibold">
-            Free delivery within 50 miles of Fresno
-          </span>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-28 bg-charcoal">
+      {/* By The Numbers */}
+      <section className="bg-bg-light py-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-12 text-center">
-            Frequently Asked Questions
-          </h2>
-          <div className="max-w-3xl mx-auto">
-            <Accordion items={faqs} />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <AnimatedCounter
+              value={250}
+              suffix="+"
+              label="Events Served"
+              className="[&>span:first-child]:text-text-on-light [&>span:last-child]:text-text-on-light/60"
+            />
+            <AnimatedCounter
+              value={5.0}
+              label="Star Rating"
+              className="[&>span:first-child]:text-text-on-light [&>span:last-child]:text-text-on-light/60"
+            />
+            <AnimatedCounter
+              value={150}
+              label="Mile Service Radius"
+              className="[&>span:first-child]:text-text-on-light [&>span:last-child]:text-text-on-light/60"
+            />
+            <AnimatedCounter
+              value={250}
+              suffix="+"
+              label="Guest Capacity"
+              className="[&>span:first-child]:text-text-on-light [&>span:last-child]:text-text-on-light/60"
+            />
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 bg-charcoal-dark">
+      {/* CTA */}
+      <section className="bg-bg-secondary py-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-4">
-            Ready to Book?
+          <OverlineLabel>READY TO ELEVATE YOUR EVENT?</OverlineLabel>
+          <h2 className="font-display text-h2 text-white mt-md mb-lg">
+            Get Your Instant Quote
           </h2>
-          <p className="text-lg text-cream/80 mb-8 max-w-2xl mx-auto">
-            Get an instant quote for your upcoming event.
+          <p className="text-text-secondary text-body mb-2xl max-w-xl mx-auto">
+            See transparent pricing for your event in under 60 seconds.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/quote"
-              className="bg-gold text-charcoal-dark px-10 py-4 rounded-lg text-lg font-semibold hover:bg-gold-light shadow-lg hover:shadow-xl transition-all text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
-            >
+            <Button variant="primary" size="lg" href="/quote">
               Get Your Free Quote
-            </Link>
-            <a
-              href="tel:+15596630356"
-              className="border-2 border-cream/80 text-cream px-10 py-4 rounded-lg text-lg font-semibold hover:bg-cream hover:text-charcoal-dark transition-all text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
-            >
-              Call (559) 663-0356
-            </a>
+            </Button>
+            <Button variant="phone" size="lg" href="tel:+15596630356">
+              (559) 663-0356
+            </Button>
           </div>
         </div>
       </section>
