@@ -30,7 +30,6 @@ export default function Lightbox({
     [onClose, onPrevious, onNext]
   );
 
-  // Keyboard navigation + disable background scroll
   useEffect(() => {
     if (!isOpen) return;
     document.body.style.overflow = 'hidden';
@@ -47,16 +46,23 @@ export default function Lightbox({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/95"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-label="Image lightbox"
     >
-      {/* Close button */}
+      {/* Image counter — top-left */}
+      <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10">
+        <span className="font-body text-sm text-text-muted">
+          {startIndex + 1} / {images.length}
+        </span>
+      </div>
+
+      {/* Close button — top-right */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-10 w-11 h-11 flex items-center justify-center text-white/80 hover:text-white rounded-full bg-black/40 hover:bg-black/60 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+        className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10 w-11 h-11 flex items-center justify-center text-gold-primary hover:text-gold-light rounded-full bg-bg-elevated/60 hover:bg-bg-elevated transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-primary"
         aria-label="Close lightbox"
       >
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
@@ -67,7 +73,7 @@ export default function Lightbox({
       {/* Previous button */}
       <button
         onClick={(e) => { e.stopPropagation(); onPrevious(); }}
-        className="absolute left-3 sm:left-6 z-10 w-11 h-11 flex items-center justify-center text-white/80 hover:text-white rounded-full bg-black/40 hover:bg-black/60 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+        className="absolute left-3 sm:left-6 z-10 w-12 h-12 flex items-center justify-center text-gold-primary hover:text-gold-light rounded-full bg-bg-elevated/60 hover:bg-bg-elevated transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-primary"
         aria-label="Previous image"
       >
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
@@ -78,7 +84,7 @@ export default function Lightbox({
       {/* Next button */}
       <button
         onClick={(e) => { e.stopPropagation(); onNext(); }}
-        className="absolute right-3 sm:right-6 z-10 w-11 h-11 flex items-center justify-center text-white/80 hover:text-white rounded-full bg-black/40 hover:bg-black/60 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+        className="absolute right-3 sm:right-6 z-10 w-12 h-12 flex items-center justify-center text-gold-primary hover:text-gold-light rounded-full bg-bg-elevated/60 hover:bg-bg-elevated transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-primary"
         aria-label="Next image"
       >
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
@@ -91,7 +97,7 @@ export default function Lightbox({
         className="relative w-full max-w-5xl mx-4 sm:mx-8"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="relative aspect-[4/3] sm:aspect-[16/10] rounded-2xl overflow-hidden">
+        <div className="relative w-full max-h-[75vh] aspect-[4/3] sm:aspect-[16/10] rounded-card overflow-hidden">
           <Image
             src={current.src}
             alt={current.alt}
@@ -101,11 +107,15 @@ export default function Lightbox({
             priority
           />
         </div>
+        {/* Caption */}
         <div className="mt-4 text-center">
-          <p className="text-white/80 text-sm">{current.alt}</p>
-          <p className="text-white/50 text-xs mt-1">
-            {startIndex + 1} / {images.length}
-          </p>
+          <p className="font-display text-lg text-text-primary">{current.title}</p>
+          {current.description && (
+            <p className="font-body text-sm text-text-secondary mt-1">{current.description}</p>
+          )}
+          <span className="inline-block mt-2 font-body text-[10px] uppercase tracking-[0.15em] text-gold-primary">
+            {current.category}
+          </span>
         </div>
       </div>
     </div>

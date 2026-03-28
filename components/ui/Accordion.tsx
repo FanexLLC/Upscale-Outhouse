@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 
 interface AccordionItem {
   question: string;
@@ -13,6 +14,7 @@ interface AccordionProps {
 
 export default function Accordion({ items }: AccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <div className="space-y-4">
@@ -34,24 +36,36 @@ export default function Accordion({ items }: AccordionProps) {
               className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 rounded-2xl"
             >
               <span className="text-lg font-semibold text-gold">{item.question}</span>
-              <svg
-                className={`h-5 w-5 shrink-0 text-gold transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+              <motion.svg
+                className="h-5 w-5 shrink-0 text-gold"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="2"
                 stroke="currentColor"
+                animate={{ rotate: isOpen ? 180 : 0 }}
+                transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-              </svg>
+              </motion.svg>
             </button>
-            <div
-              id={`${id}-panel`}
-              role="region"
-              aria-labelledby={`${id}-trigger`}
-              className={`overflow-hidden transition-all duration-200 ${isOpen ? 'max-h-96 pb-5 px-6' : 'max-h-0'}`}
-            >
-              <p className="text-cream/70">{item.answer}</p>
-            </div>
+            <AnimatePresence initial={false}>
+              {isOpen && (
+                <motion.div
+                  id={`${id}-panel`}
+                  role="region"
+                  aria-labelledby={`${id}-trigger`}
+                  initial={prefersReducedMotion ? false : { height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={prefersReducedMotion ? undefined : { height: 0, opacity: 0 }}
+                  transition={{ duration: prefersReducedMotion ? 0 : 0.2, ease: 'easeOut' as const }}
+                  className="overflow-hidden"
+                >
+                  <div className="pb-5 px-6">
+                    <p className="text-cream/70">{item.answer}</p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         );
       })}

@@ -224,3 +224,19 @@ model PromoCode {
   @@index([code])
   @@index([isActive])
 }
+
+// Contact form submissions
+model ContactSubmission {
+  id          String     @id @default(cuid())
+  name        String
+  email       String
+  phone       String
+  eventType   String?
+  eventDate   DateTime?
+  message     String?
+  ipAddress   String?
+  createdAt   DateTime   @default(now())
+
+  @@index([email])
+  @@index([createdAt])
+}

@@ -1,16 +1,31 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
-import PageHeader from '@/components/ui/PageHeader';
+import dynamic from 'next/dynamic';
+import OverlineLabel from '@/components/ui/OverlineLabel';
+import SectionDivider from '@/components/ui/SectionDivider';
+import Button from '@/components/ui/Button';
 import GalleryGrid from '@/components/gallery/GalleryGrid';
 import Lightbox from '@/components/gallery/Lightbox';
 import { galleryImages, GalleryImage } from '@/components/gallery/galleryData';
 
-const categories = ['All', 'Exterior', 'Interior', 'Floorplan'] as const;
+const ThreeDViewer = dynamic(
+  () => import('@/components/gallery/ThreeDViewer'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="aspect-video max-w-4xl mx-auto rounded-card bg-bg-secondary flex items-center justify-center">
+        <div className="text-gold-primary animate-pulse">Loading 3D viewer...</div>
+      </div>
+    ),
+  }
+);
+
+const categories = ['All', 'Exterior', 'Interior', 'Events', 'Floorplan'] as const;
 type Category = (typeof categories)[number];
 
 export default function GalleryPage() {
-  const [activeCategory, setActiveCategory] = useState<Category>('Exterior');
+  const [activeCategory, setActiveCategory] = useState<Category>('All');
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -36,53 +51,59 @@ export default function GalleryPage() {
 
   return (
     <>
-      <PageHeader
-        title="Gallery"
-        subtitle="A look at our luxury trailer, inside and out."
-        primaryCta={{ label: 'Get an Instant Quote', href: '/quote' }}
-      />
+      {/* Hero / Header */}
+      <section className="pt-32 md:pt-40 pb-8 bg-bg-primary">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <OverlineLabel>See For Yourself</OverlineLabel>
+          <h1 className="font-display text-h1 text-text-primary mt-4">
+            The Upscale Outhouse Experience
+          </h1>
+          <p className="font-body text-body text-text-secondary mt-4 max-w-2xl mx-auto">
+            Every detail designed for your guests&apos; comfort.
+          </p>
+        </div>
+      </section>
 
-      {/* Filter Pills + Grid */}
-      <section className="py-24 bg-cream">
+      {/* Filter Tabs + Gallery Grid */}
+      <section className="pb-16 md:pb-24 bg-bg-primary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Filter Pills */}
-          <div className="flex flex-wrap gap-3 justify-center">
+          {/* Filter Tabs */}
+          <div className="flex flex-wrap gap-1 justify-center mb-10">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 ${
+                className={`relative px-4 py-2.5 font-body text-sm uppercase tracking-wide transition-colors duration-200 min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary ${
                   activeCategory === cat
-                    ? 'bg-charcoal-dark text-cream'
-                    : 'bg-white border border-charcoal/20 text-charcoal hover:bg-charcoal/5'
+                    ? 'text-gold-primary'
+                    : 'text-text-muted hover:text-text-secondary'
                 }`}
               >
                 {cat}
+                {activeCategory === cat && (
+                  <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-gold-primary rounded-full" />
+                )}
               </button>
             ))}
           </div>
 
-          {/* White Panel */}
-          <div className="mt-8 bg-white rounded-2xl border border-charcoal/10 shadow-md p-4 sm:p-6 lg:p-8">
-            <GalleryGrid
-              images={filteredImages}
-              onImageClick={openLightbox}
-            />
-          </div>
+          {/* Gallery Grid */}
+          <GalleryGrid images={filteredImages} onImageClick={openLightbox} />
         </div>
       </section>
 
       {/* Video Tour Section */}
-      <section className="py-16 bg-charcoal">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-6">
-            Video Tour
+      <SectionDivider className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" />
+      <section className="py-16 md:py-24 bg-bg-primary">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <OverlineLabel>Take a Tour</OverlineLabel>
+          <h2 className="font-display text-h2 text-text-primary mt-4">
+            Walk Through Our Luxury Trailer
           </h2>
-          <p className="text-base md:text-lg text-cream/80 leading-relaxed mb-8">
-            Take a walkthrough of our luxury trailer.
-          </p>
-          <div className="mx-auto max-w-sm">
-            <div className="relative aspect-[9/16] rounded-2xl overflow-hidden border border-gold/20 shadow-2xl bg-charcoal-dark">
+
+          {/* Video embed */}
+          <div className="mt-10 mx-auto max-w-sm">
+            <div className="relative aspect-[9/16] rounded-card overflow-hidden border border-[rgba(201,168,76,0.15)] bg-bg-secondary shadow-card">
               <iframe
                 src="https://www.youtube.com/embed/HUH7S3XYHLQ"
                 title="Upscale Outhouse Video Tour"
@@ -96,28 +117,17 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* Bottom CTA */}
-      <section className="py-24 bg-charcoal-dark">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gold mb-6">
-            Like What You See?
+      {/* 3D Viewer Placeholder */}
+      <SectionDivider className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" />
+      <section className="py-16 md:py-24 bg-bg-primary">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <OverlineLabel>Explore in 3D</OverlineLabel>
+          <h2 className="font-display text-h2 text-text-primary mt-4">
+            Interactive Trailer Tour
           </h2>
-          <p className="text-base md:text-lg text-cream/80 leading-relaxed mb-8">
-            Get an instant quote for your upcoming event.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="/quote"
-              className="inline-block bg-gold text-charcoal-dark px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gold-light shadow-lg hover:shadow-xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-dark"
-            >
-              Get Your Free Quote
-            </a>
-            <a
-              href="tel:+1XXXXXXXXXX"
-              className="inline-block text-gold border border-gold/40 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gold/10 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-dark"
-            >
-              Call Us
-            </a>
+
+          <div className="mt-10">
+            <ThreeDViewer />
           </div>
         </div>
       </section>
