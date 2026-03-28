@@ -10,8 +10,7 @@ export const blogPosts: BlogPost[] = [
     date: '2025-10-15',
     readTime: '6 min read',
     category: 'industry',
-    /* TODO: Replace with real blog hero photo */
-    image: 'https://images.unsplash.com/photo-1478146896981-b80fe463b330?w=1200&h=600&fit=crop',
+    image: '/images/gallery/gallery-exterior-showcase-01.jpeg',
     tags: ['luxury restroom', 'porta potty', 'comparison', 'event planning'],
     content: `
 <p>If you're planning an outdoor event, one of the most important — and often overlooked — decisions you'll make is how to handle restroom facilities. For decades, the default answer was a row of porta potties. But today, there's a far better option: the luxury restroom trailer.</p>
@@ -62,8 +61,7 @@ export const blogPosts: BlogPost[] = [
     date: '2025-11-02',
     readTime: '5 min read',
     category: 'tips',
-    /* TODO: Replace with real blog hero photo */
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=600&fit=crop',
+    image: '/images/gallery/gallery-exterior-night-01.jpg',
     tags: ['wedding', 'planning', 'capacity', 'tips'],
     content: `
 <p>You've booked the venue, chosen the caterer, and found the perfect dress. But here's a question that trips up even experienced event planners: how many portable restrooms do you actually need for your wedding?</p>
@@ -112,8 +110,7 @@ export const blogPosts: BlogPost[] = [
     date: '2025-12-10',
     readTime: '5 min read',
     category: 'events',
-    /* TODO: Replace with real blog hero photo */
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=600&fit=crop',
+    image: '/images/gallery/gallery-exterior-side-01.jpg',
     tags: ['rental process', 'first-time', 'experience', 'how it works'],
     content: `
 <p>If you've never rented a luxury restroom trailer before, you might have questions about how the process works. We get it — this isn't something most people do every day. The good news is that we've designed the experience to be as straightforward and stress-free as possible.</p>
