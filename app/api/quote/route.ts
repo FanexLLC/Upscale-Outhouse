@@ -20,6 +20,8 @@ const eventTypeMap: Record<string, EventType> = {
   corporate: 'CORPORATE',
   birthday: 'BIRTHDAY',
   graduation: 'GRADUATION',
+  festival: 'OTHER',
+  quinceanera: 'OTHER',
   other: 'OTHER',
 };
 
@@ -179,8 +181,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Quote creation error:', error);
+    const message = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Failed to create quote' },
+      { error: 'Failed to create quote', message },
       { status: 500 }
     );
   }
