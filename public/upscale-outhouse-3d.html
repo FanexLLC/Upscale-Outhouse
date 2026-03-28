@@ -218,26 +218,26 @@ var leftDoorX=-TW/2-0.05;
 
 function addExtDoor(px,py,pz,isBack,isLeft){
   if(isBack){
-    ext.add(B(dW,dH,0.06,drM,px,py,pz));
+    _ew=B(dW,dH,0.06,drM,px,py,pz);ext.add(_ew);extWalls.push(_ew);
     ext.add(B(dW+0.08,0.04,0.04,dpM,px,py+dH/2+0.02,pz));
     ext.add(B(0.04,dH+0.04,0.04,dpM,px-dW/2-0.02,py,pz));
     ext.add(B(0.04,dH+0.04,0.04,dpM,px+dW/2+0.02,py,pz));
-    ext.add(B(0.1,0.04,0.04,bkM,px+0.25,py+0.1,pz+(pz>0?0.04:-0.04)));
-    ext.add(B(0.03,0.45,0.03,cM,px-0.2,py+0.1,pz+(pz>0?0.06:-0.06)));
+    _ew=B(0.1,0.04,0.04,bkM,px+0.25,py+0.1,pz+(pz>0?0.04:-0.04));ext.add(_ew);extWalls.push(_ew);
+    _ew=B(0.03,0.45,0.03,cM,px-0.2,py+0.1,pz+(pz>0?0.06:-0.06));ext.add(_ew);extWalls.push(_ew);
   }else if(isLeft){
-    ext.add(B(0.06,dH,dW,drM,px,py,pz));
+    _ew=B(0.06,dH,dW,drM,px,py,pz);ext.add(_ew);extWalls.push(_ew);
     ext.add(B(0.04,0.04,dW+0.08,dpM,px,py+dH/2+0.02,pz));
     ext.add(B(0.04,dH+0.04,0.04,dpM,px,py,pz-dW/2-0.02));
     ext.add(B(0.04,dH+0.04,0.04,dpM,px,py,pz+dW/2+0.02));
-    ext.add(B(0.04,0.04,0.1,bkM,px-0.04,py+0.1,pz+0.25));
-    ext.add(B(0.03,0.45,0.03,cM,px-0.06,py+0.1,pz-0.2));
+    _ew=B(0.04,0.04,0.1,bkM,px-0.04,py+0.1,pz+0.25);ext.add(_ew);extWalls.push(_ew);
+    _ew=B(0.03,0.45,0.03,cM,px-0.06,py+0.1,pz-0.2);ext.add(_ew);extWalls.push(_ew);
   }else{
-    ext.add(B(0.06,dH,dW,drM,px,py,pz));
+    _ew=B(0.06,dH,dW,drM,px,py,pz);ext.add(_ew);extWalls.push(_ew);
     ext.add(B(0.04,0.04,dW+0.08,dpM,px,py+dH/2+0.02,pz));
     ext.add(B(0.04,dH+0.04,0.04,dpM,px,py,pz-dW/2-0.02));
     ext.add(B(0.04,dH+0.04,0.04,dpM,px,py,pz+dW/2+0.02));
-    ext.add(B(0.04,0.04,0.1,bkM,px+0.04,py+0.1,pz+0.25));
-    ext.add(B(0.03,0.45,0.03,cM,px+0.06,py+0.1,pz-0.2));
+    _ew=B(0.04,0.04,0.1,bkM,px+0.04,py+0.1,pz+0.25);ext.add(_ew);extWalls.push(_ew);
+    _ew=B(0.03,0.45,0.03,cM,px+0.06,py+0.1,pz-0.2);ext.add(_ew);extWalls.push(_ew);
   }
 }
 
@@ -246,22 +246,22 @@ function addExtDoorAccents(px,pz,isRight,isLeft){
   var dx2=isRight?sideDoorX+0.04:(isLeft?leftDoorX-0.04:px);
   var dz2=isRight||isLeft?pz:pz+0.04;
   if(isRight){
-    var ic=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic.position.set(dx2,iconY2,dz2);ic.rotation.y=Math.PI/2;ext.add(ic);
-    var sl=B(0.03,0.06,dW*0.65,glM,dx2,ledY2,dz2);ext.add(sl);gls.push(sl);
-    var sgl=new THREE.PointLight(0x00e676,0.5,4);sgl.position.set(dx2+0.26,ledY2,dz2);ext.add(sgl);gls.push(sgl);
-    ext.add(B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.33,dz2));
-    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(dx2+0.02).translateY(TY+skH+0.15).translateZ(dz2));
+    var ic=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic.position.set(dx2,iconY2,dz2);ic.rotation.y=Math.PI/2;ext.add(ic);extWalls.push(ic);
+    var sl=B(0.03,0.06,dW*0.65,glM,dx2,ledY2,dz2);ext.add(sl);gls.push(sl);extWalls.push(sl);
+    var sgl=new THREE.PointLight(0x00e676,0.5,4);sgl.position.set(dx2+0.26,ledY2,dz2);ext.add(sgl);gls.push(sgl);extWalls.push(sgl);
+    _ew=B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.33,dz2);ext.add(_ew);extWalls.push(_ew);
+    _ew=new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM);_ew.translateX(dx2+0.02);_ew.translateY(TY+skH+0.15);_ew.translateZ(dz2);ext.add(_ew);extWalls.push(_ew);
   }else if(isLeft){
-    var ic2=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic2.position.set(dx2,iconY2,dz2);ic2.rotation.y=-Math.PI/2;ext.add(ic2);
-    var sl2=B(0.03,0.06,dW*0.65,glM,dx2,ledY2,dz2);ext.add(sl2);gls.push(sl2);
-    var sgl2=new THREE.PointLight(0x00e676,0.5,4);sgl2.position.set(dx2-0.26,ledY2,dz2);ext.add(sgl2);gls.push(sgl2);
-    ext.add(B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.33,dz2));
-    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(dx2-0.02).translateY(TY+skH+0.15).translateZ(dz2));
+    var ic2=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic2.position.set(dx2,iconY2,dz2);ic2.rotation.y=-Math.PI/2;ext.add(ic2);extWalls.push(ic2);
+    var sl2=B(0.03,0.06,dW*0.65,glM,dx2,ledY2,dz2);ext.add(sl2);gls.push(sl2);extWalls.push(sl2);
+    var sgl2=new THREE.PointLight(0x00e676,0.5,4);sgl2.position.set(dx2-0.26,ledY2,dz2);ext.add(sgl2);gls.push(sgl2);extWalls.push(sgl2);
+    _ew=B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.33,dz2);ext.add(_ew);extWalls.push(_ew);
+    _ew=new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM);_ew.translateX(dx2-0.02);_ew.translateY(TY+skH+0.15);_ew.translateZ(dz2);ext.add(_ew);extWalls.push(_ew);
   }else{
-    var ic3=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic3.position.set(px,iconY2,dz2);ext.add(ic3);
-    var sl3=B(dW*0.65,0.06,0.03,glM,px,ledY2,dz2);ext.add(sl3);gls.push(sl3);
-    var bgl=new THREE.PointLight(0x00e676,0.5,4);bgl.position.set(px,ledY2,dz2+0.26);ext.add(bgl);gls.push(bgl);
-    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(px).translateY(TY+skH+0.15).translateZ(dz2));
+    var ic3=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic3.position.set(px,iconY2,dz2);ext.add(ic3);extWalls.push(ic3);
+    var sl3=B(dW*0.65,0.06,0.03,glM,px,ledY2,dz2);ext.add(sl3);gls.push(sl3);extWalls.push(sl3);
+    var bgl=new THREE.PointLight(0x00e676,0.5,4);bgl.position.set(px,ledY2,dz2+0.26);ext.add(bgl);gls.push(bgl);extWalls.push(bgl);
+    _ew=new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM);_ew.translateX(px);_ew.translateY(TY+skH+0.15);_ew.translateZ(dz2);ext.add(_ew);extWalls.push(_ew);
   }
 }
 
@@ -343,11 +343,11 @@ addExtStairs(leftDoorX,sdZ_tools,'x-');
 var winZ1=sdZ_women+dW/2+0.8,winZ2=winZ1+0.8;
 [winZ1,winZ2].forEach(function(wz){
   if(wz<TL/2-0.3){
-    ext.add(B(0.02,0.3,0.35,wM,TW/2+0.05,TY+TH-0.4,wz));
-    ext.add(B(0.03,0.03,0.39,bkM,TW/2+0.06,TY+TH-0.25,wz));
-    ext.add(B(0.03,0.03,0.39,bkM,TW/2+0.06,TY+TH-0.55,wz));
-    ext.add(B(0.03,0.34,0.03,bkM,TW/2+0.06,TY+TH-0.4,wz-0.19));
-    ext.add(B(0.03,0.34,0.03,bkM,TW/2+0.06,TY+TH-0.4,wz+0.19));
+    _ew=B(0.02,0.3,0.35,wM,TW/2+0.05,TY+TH-0.4,wz);ext.add(_ew);extWalls.push(_ew);
+    _ew=B(0.03,0.03,0.39,bkM,TW/2+0.06,TY+TH-0.25,wz);ext.add(_ew);extWalls.push(_ew);
+    _ew=B(0.03,0.03,0.39,bkM,TW/2+0.06,TY+TH-0.55,wz);ext.add(_ew);extWalls.push(_ew);
+    _ew=B(0.03,0.34,0.03,bkM,TW/2+0.06,TY+TH-0.4,wz-0.19);ext.add(_ew);extWalls.push(_ew);
+    _ew=B(0.03,0.34,0.03,bkM,TW/2+0.06,TY+TH-0.4,wz+0.19);ext.add(_ew);extWalls.push(_ew);
   }
 });
 
@@ -384,20 +384,18 @@ var frontLY=TY+skH+bH/2;
     var logoPlane=new THREE.Mesh(new THREE.PlaneGeometry(2.4,2.4),logoMat);
     logoPlane.position.set(lx,sideLY,logoZ);
     logoPlane.rotation.y=Math.PI/2;
-    ext.add(logoPlane);
+    ext.add(logoPlane);extWalls.push(logoPlane);
     // Left wall logo — moved down
     var logoPlane2=new THREE.Mesh(new THREE.PlaneGeometry(2.4,2.4),logoMat);
     logoPlane2.position.set(-lx,sideLY,logoZ);
     logoPlane2.rotation.y=-Math.PI/2;
-    ext.add(logoPlane2);
+    ext.add(logoPlane2);extWalls.push(logoPlane2);
     // Front wall logo — blown up to fill the wall
-    // Wall is TW wide (~3.05) and bH tall (~2.25). Use the smaller
-    // dimension (height) but scale aggressively to dominate the face
     var frontLogoSize=TW*0.92;
     var logoFront=new THREE.Mesh(new THREE.PlaneGeometry(frontLogoSize,frontLogoSize),logoMat);
     logoFront.position.set(0,frontLY,frontZ);
     logoFront.rotation.y=Math.PI;
-    ext.add(logoFront);
+    ext.add(logoFront);extWalls.push(logoFront);
   };
   img.src=LOGO_SRC;
 })();
@@ -596,7 +594,7 @@ setTimeout(function(){document.getElementById('loading').classList.add('done')},
 var gp=2+Math.sin(t*3);gls.forEach(function(o){if(o.material)o.material.emissiveIntensity=gp;if(o.intensity!==undefined)o.intensity=0.3+Math.sin(t*3)*0.3});
 if(mode==='exterior'){ext.visible=true;intG.visible=false;roofParts.forEach(function(r){r.visible=true});var r=13;cam.position.set(Math.sin(ms.ry)*r*Math.cos(ms.rx),Math.max(3.5+Math.sin(ms.rx)*5,1.2),Math.cos(ms.ry)*r*Math.cos(ms.rx));cam.lookAt(0,1.6,0)}
 else if(mode==='floorplan'){ext.visible=true;intG.visible=true;roofParts.forEach(function(r){r.visible=false});intWalls.forEach(function(w){w.visible=false});urinalG.visible=false;var fpR=ia.dist;cam.position.set(Math.sin(ms.ry)*fpR*0.15,fpR,Math.cos(ms.ry)*fpR*0.15);cam.lookAt(0,0.2,0)}
-else{ext.visible=true;intG.visible=true;roofParts.forEach(function(r){r.visible=false});intWalls.forEach(function(w){w.visible=false});extWalls.forEach(function(w){w.visible=false});var iR=ia.dist;cam.position.set(Math.sin(ia.yaw)*iR*0.35,0.5+Math.sin(ia.pitch)*iR*0.5,Math.cos(ia.yaw)*iR*0.35);cam.lookAt(0,0.6,0)}
+else{ext.visible=true;intG.visible=true;roofParts.forEach(function(r){r.visible=false});intWalls.forEach(function(w){w.visible=false});extWalls.forEach(function(w){w.visible=false});var iR=ia.dist;cam.position.set(Math.sin(ia.yaw)*iR*0.35,1.8+Math.sin(ia.pitch)*iR*0.5,Math.cos(ia.yaw)*iR*0.35);cam.lookAt(0,1.8,0)}
 R.render(S,cam)})();
 })();
 </script>
