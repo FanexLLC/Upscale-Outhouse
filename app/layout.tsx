@@ -40,8 +40,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   // TODO: Replace placeholder branding assets in /public/branding and /app with final logo/hero images.
   icons: {
-    icon: "/favicon.ico",
-    apple: "/branding/logo.png",
+    icon: "/images/gallery/logo-clear.jpg",
+    apple: "/images/gallery/logo-clear.jpg",
   },
   openGraph: {
     type: "website",
@@ -52,9 +52,9 @@ export const metadata: Metadata = {
     description: "Premium luxury bathroom trailer rentals for weddings, corporate events, and special occasions in Fresno and Central California.",
     images: [
       {
-        url: "/opengraph-image.png",
-        width: 1200,
-        height: 630,
+        url: "/images/gallery/hero-bg.jpg",
+        width: 1920,
+        height: 1280,
         alt: "Upscale Outhouse luxury restroom trailer",
       },
     ],
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Upscale Outhouse | Luxury Bathroom Trailer Rentals",
     description: "Premium luxury bathroom trailer rentals for weddings, corporate events, and special occasions in Fresno and Central California.",
-    images: ["/twitter-image.png"],
+    images: ["/images/gallery/hero-bg.jpg"],
   },
   robots: {
     index: true,
