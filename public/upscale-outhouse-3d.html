@@ -150,29 +150,31 @@ var gls=[],pls=[];
 var ext=new THREE.Group();trailer.add(ext);
 ext.add(B(TW+0.05,0.2,TL+0.3,dkM,0,TY-0.1,0));
 [-1,1].forEach(function(s){ext.add(B(0.12,0.35,TL+0.5,dkM,s*TW/2,TY-0.18,0))});
-ext.add(B(TW+0.08,skH,0.04,dpM,0,TY+skH/2,-TL/2-0.02));
-ext.add(B(TW+0.08,skH,0.04,dpM,0,TY+skH/2,TL/2+0.02));
-[-1,1].forEach(function(s){ext.add(B(0.04,skH,TL+0.08,dpM,s*(TW/2+0.02),TY+skH/2,0))});
-ext.add(B(0.08,bH,TL,sM,-TW/2,bY,0));
-ext.add(B(0.08,bH,TL,sM,TW/2,bY,0));
-ext.add(B(TW,bH,0.08,sM,0,bY,-TL/2));
+var extWalls=[];
+var _ew;
+_ew=B(TW+0.08,skH,0.04,dpM,0,TY+skH/2,-TL/2-0.02);ext.add(_ew);extWalls.push(_ew);
+_ew=B(TW+0.08,skH,0.04,dpM,0,TY+skH/2,TL/2+0.02);ext.add(_ew);extWalls.push(_ew);
+[-1,1].forEach(function(s){_ew=B(0.04,skH,TL+0.08,dpM,s*(TW/2+0.02),TY+skH/2,0);ext.add(_ew);extWalls.push(_ew)});
+_ew=B(0.08,bH,TL,sM,-TW/2,bY,0);ext.add(_ew);extWalls.push(_ew);
+_ew=B(0.08,bH,TL,sM,TW/2,bY,0);ext.add(_ew);extWalls.push(_ew);
+_ew=B(TW,bH,0.08,sM,0,bY,-TL/2);ext.add(_ew);extWalls.push(_ew);
 
 var _bdX1=((-2.85/2+0.18)/2)*(TW/2.85);
 var _bdX2=((0.18+2.85/2)/2)*(TW/2.85);
 var _dW=0.8;
 var lpW=(_bdX1-_dW/2)-(-TW/2);
-if(lpW>0.05)ext.add(B(lpW,bH,0.08,sM,-TW/2+lpW/2,bY,TL/2));
+if(lpW>0.05){_ew=B(lpW,bH,0.08,sM,-TW/2+lpW/2,bY,TL/2);ext.add(_ew);extWalls.push(_ew)}
 var cpLeft=_bdX1+_dW/2;
 var cpRight=_bdX2-_dW/2;
 var cpW=cpRight-cpLeft;
-if(cpW>0.05)ext.add(B(cpW,bH,0.08,sM,(cpLeft+cpRight)/2,bY,TL/2));
+if(cpW>0.05){_ew=B(cpW,bH,0.08,sM,(cpLeft+cpRight)/2,bY,TL/2);ext.add(_ew);extWalls.push(_ew)}
 var rpLeft=_bdX2+_dW/2;
 var rpW=TW/2-rpLeft;
-if(rpW>0.05)ext.add(B(rpW,bH,0.08,sM,rpLeft+rpW/2,bY,TL/2));
+if(rpW>0.05){_ew=B(rpW,bH,0.08,sM,rpLeft+rpW/2,bY,TL/2);ext.add(_ew);extWalls.push(_ew)}
 var aboveH=bH-2.0-0.05;
-if(aboveH>0)ext.add(B(TW,aboveH,0.08,sM,0,TY+skH+2.0+0.05+aboveH/2,TL/2));
-[[-1,-1],[-1,1],[1,-1],[1,1]].forEach(function(p){ext.add(B(0.06,TH,0.06,dpM,p[0]*TW/2,TY+TH/2,p[1]*TL/2))});
-[-1,1].forEach(function(s){[TY+skH+0.02,TY+TH-0.05].forEach(function(y){ext.add(B(0.02,0.03,TL,dpM,s*(TW/2+0.04),y,0))})});
+if(aboveH>0){_ew=B(TW,aboveH,0.08,sM,0,TY+skH+2.0+0.05+aboveH/2,TL/2);ext.add(_ew);extWalls.push(_ew)}
+[[-1,-1],[-1,1],[1,-1],[1,1]].forEach(function(p){_ew=B(0.06,TH,0.06,dpM,p[0]*TW/2,TY+TH/2,p[1]*TL/2);ext.add(_ew);extWalls.push(_ew)});
+[-1,1].forEach(function(s){[TY+skH+0.02,TY+TH-0.05].forEach(function(y){_ew=B(0.02,0.03,TL,dpM,s*(TW/2+0.04),y,0);ext.add(_ew);extWalls.push(_ew)})});
 
 // Roof
 var roofParts=[];
@@ -248,18 +250,18 @@ function addExtDoorAccents(px,pz,isRight,isLeft){
     var sl=B(0.03,0.06,dW*0.65,glM,dx2,ledY2,dz2);ext.add(sl);gls.push(sl);
     var sgl=new THREE.PointLight(0x00e676,0.5,4);sgl.position.set(dx2+0.26,ledY2,dz2);ext.add(sgl);gls.push(sgl);
     ext.add(B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.33,dz2));
-    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(dx2+0.02).translateY(TY+skH+0.22).translateZ(dz2));
+    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(dx2+0.02).translateY(TY+skH+0.15).translateZ(dz2));
   }else if(isLeft){
     var ic2=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic2.position.set(dx2,iconY2,dz2);ic2.rotation.y=-Math.PI/2;ext.add(ic2);
     var sl2=B(0.03,0.06,dW*0.65,glM,dx2,ledY2,dz2);ext.add(sl2);gls.push(sl2);
     var sgl2=new THREE.PointLight(0x00e676,0.5,4);sgl2.position.set(dx2-0.26,ledY2,dz2);ext.add(sgl2);gls.push(sgl2);
     ext.add(B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.33,dz2));
-    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(dx2-0.02).translateY(TY+skH+0.22).translateZ(dz2));
+    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(dx2-0.02).translateY(TY+skH+0.15).translateZ(dz2));
   }else{
     var ic3=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic3.position.set(px,iconY2,dz2);ext.add(ic3);
     var sl3=B(dW*0.65,0.06,0.03,glM,px,ledY2,dz2);ext.add(sl3);gls.push(sl3);
     var bgl=new THREE.PointLight(0x00e676,0.5,4);bgl.position.set(px,ledY2,dz2+0.26);ext.add(bgl);gls.push(bgl);
-    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(px).translateY(TY+skH+0.22).translateZ(dz2));
+    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(px).translateY(TY+skH+0.15).translateZ(dz2));
   }
 }
 
@@ -547,7 +549,6 @@ addSpeaker(mVanCX,(womenMenDivZ+toolsWallZ)/2);
 addSpeaker(0,(-IL/2+womenMenDivZ)/2);
 
 // Extra women's toilet (front-left of women's area)
-addToilet(IW/2-0.28,womenMenDivZ+0.3,'x+');
 
 // Men's storage cabinet
 var cabMat=new THREE.MeshStandardMaterial({color:0x5c4a3a,roughness:0.6,metalness:0.1});
@@ -585,7 +586,7 @@ window.addEventListener('resize',function(){W=innerWidth;H=innerHeight-70;cam.as
 window.SM=function(m){mode=m;var btns=document.querySelectorAll('#tg button');btns.forEach(function(b){b.classList.remove('on')});
 if(m==='exterior')btns[0].classList.add('on');else if(m==='floorplan')btns[1].classList.add('on');else btns[2].classList.add('on');
 document.getElementById('ht').textContent={exterior:'Drag to rotate \u00b7 explore every angle',floorplan:'Drag to rotate \u00b7 scroll to zoom \u00b7 top-down view',interior:'Drag to orbit \u00b7 scroll to zoom \u00b7 walls hidden'}[m];
-roofParts.forEach(function(r){r.visible=true});intWalls.forEach(function(w){w.visible=true});urinalG.visible=true;
+roofParts.forEach(function(r){r.visible=true});intWalls.forEach(function(w){w.visible=true});extWalls.forEach(function(w){w.visible=true});urinalG.visible=true;
 if(m==='floorplan'){ia.dist=14;ms.ry=Math.PI*0.5}if(m==='interior'){ia.dist=25;ia.yaw=0.8;ia.pitch=0.5}};
 
 // ANIMATION
@@ -595,7 +596,7 @@ setTimeout(function(){document.getElementById('loading').classList.add('done')},
 var gp=2+Math.sin(t*3);gls.forEach(function(o){if(o.material)o.material.emissiveIntensity=gp;if(o.intensity!==undefined)o.intensity=0.3+Math.sin(t*3)*0.3});
 if(mode==='exterior'){ext.visible=true;intG.visible=false;roofParts.forEach(function(r){r.visible=true});var r=13;cam.position.set(Math.sin(ms.ry)*r*Math.cos(ms.rx),Math.max(3.5+Math.sin(ms.rx)*5,1.2),Math.cos(ms.ry)*r*Math.cos(ms.rx));cam.lookAt(0,1.6,0)}
 else if(mode==='floorplan'){ext.visible=true;intG.visible=true;roofParts.forEach(function(r){r.visible=false});intWalls.forEach(function(w){w.visible=false});urinalG.visible=false;var fpR=ia.dist;cam.position.set(Math.sin(ms.ry)*fpR*0.15,fpR,Math.cos(ms.ry)*fpR*0.15);cam.lookAt(0,0.2,0)}
-else{ext.visible=false;intG.visible=true;intWalls.forEach(function(w){w.visible=false});var iR=ia.dist;cam.position.set(Math.sin(ia.yaw)*iR*0.35,0.5+Math.sin(ia.pitch)*iR*0.5,Math.cos(ia.yaw)*iR*0.35);cam.lookAt(0,0.6,0)}
+else{ext.visible=true;intG.visible=true;roofParts.forEach(function(r){r.visible=false});intWalls.forEach(function(w){w.visible=false});extWalls.forEach(function(w){w.visible=false});var iR=ia.dist;cam.position.set(Math.sin(ia.yaw)*iR*0.35,0.5+Math.sin(ia.pitch)*iR*0.5,Math.cos(ia.yaw)*iR*0.35);cam.lookAt(0,0.6,0)}
 R.render(S,cam)})();
 })();
 </script>

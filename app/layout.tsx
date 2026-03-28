@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   // TODO: Replace placeholder branding assets in /public/branding and /app with final logo/hero images.
   icons: {
     icon: "/favicon.ico",
-    apple: "/apple-icon.png",
+    apple: "/branding/apple-icon-180.png",
   },
   openGraph: {
     type: "website",
