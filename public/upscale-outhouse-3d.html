@@ -142,7 +142,7 @@ var potM=new THREE.MeshStandardMaterial({color:0x888880});
 var spkM=new THREE.MeshStandardMaterial({color:0x111111,roughness:0.8,metalness:0.3});
 
 var trailer=new THREE.Group();S.add(trailer);
-var TL=6.1,TW=3.05,TH=2.7,TY=0.75,skH=0.45;
+var TL=6.1,TW=3.05,TH=2.7,TY=0.75,skH=0.08;
 var bH=TH-skH,bY=TY+skH+bH/2;
 var gls=[],pls=[];
 
@@ -196,9 +196,10 @@ function mkW(x,y,z){
   var hub=new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.08,0.2,12),new THREE.MeshStandardMaterial({color:0x333333,roughness:0.2,metalness:0.9}));hub.position.set(x,y,z);hub.rotation.z=Math.PI/2;ext.add(hub);
   for(var i=0;i<5;i++){var a=(i/5)*Math.PI*2;var ln=new THREE.Mesh(new THREE.CylinderGeometry(0.015,0.015,0.22,6),cM);ln.position.set(x,y+Math.sin(a)*0.12,z+Math.cos(a)*0.12*(z>0?1:-1));ln.rotation.z=Math.PI/2;ext.add(ln)}
 }
-var axSp=0.85;
-[-1,1].forEach(function(side){mkW(side*(TW/2+0.12),TY-0.35,-axSp/2);mkW(side*(TW/2+0.12),TY-0.35,axSp/2)});
-[-axSp/2,axSp/2].forEach(function(az){var axle=new THREE.Mesh(new THREE.CylinderGeometry(0.03,0.03,TW+0.5,8),dkM);axle.position.set(0,TY-0.35,az);axle.rotation.z=Math.PI/2;ext.add(axle)});
+var axSp=1.4;
+var axCenter=TL/2-1.2;
+[-1,1].forEach(function(side){mkW(side*(TW/2+0.12),TY-0.35,axCenter-axSp/2);mkW(side*(TW/2+0.12),TY-0.35,axCenter+axSp/2)});
+[axCenter-axSp/2,axCenter+axSp/2].forEach(function(az){var axle=new THREE.Mesh(new THREE.CylinderGeometry(0.03,0.03,TW+0.5,8),dkM);axle.position.set(0,TY-0.35,az);axle.rotation.z=Math.PI/2;ext.add(axle)});
 
 // DOOR SYSTEM
 var _cwZ=5.8*0.15;
