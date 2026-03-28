@@ -263,9 +263,9 @@ function addExtDoorAccents(px,pz,isRight,isLeft){
 }
 
 function addExtStairs(px,pz,dir){
-  var stW=0.7,numSteps=3,gap=0.06;
-  var groundY=TY-1.0,topY=TY+skH-0.02;
-  var totalRise=topY-groundY,stH=totalRise/numSteps,stD=0.25,totalRun=numSteps*stD;
+  var stW=0.7,numSteps=4,gap=0.06;
+  var groundY=TY-0.15,topY=TY+skH-0.02;
+  var totalRise=topY-groundY,stH=totalRise/numSteps,stD=0.22,totalRun=numSteps*stD;
   var alMat=new THREE.MeshStandardMaterial({color:0xa8a8a8,roughness:0.3,metalness:0.7});
   var gripMat=new THREE.MeshStandardMaterial({color:0x555555,roughness:0.85,metalness:0.2});
   var halfW=stW/2;
