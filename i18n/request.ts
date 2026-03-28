@@ -1,8 +1,8 @@
 import { getRequestConfig } from 'next-intl/server';
 import { cookies } from 'next/headers';
 import { defaultLocale, locales, type Locale } from './config';
-import en from '@/content/translations/en.json';
-import es from '@/content/translations/es.json';
+import en from '@/content/translations/en';
+import es from '@/content/translations/es';
 
 const messages = { en, es } as const;
 
