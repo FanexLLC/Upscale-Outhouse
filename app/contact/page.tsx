@@ -1,18 +1,9 @@
 import type { Metadata } from 'next';
-import dynamic from 'next/dynamic';
 import OverlineLabel from '@/components/ui/OverlineLabel';
 import Card from '@/components/ui/Card';
 import SectionDivider from '@/components/ui/SectionDivider';
 import ContactForm from '@/components/contact/ContactForm';
-
-const ServiceAreaMap = dynamic(() => import('@/components/ui/ServiceAreaMap'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full bg-bg-secondary flex items-center justify-center text-text-muted text-sm">
-      Loading map...
-    </div>
-  ),
-});
+import ServiceAreaMap from '@/components/ui/ServiceAreaMap';
 
 export const metadata: Metadata = {
   title: 'Contact Us | Upscale Outhouse — Luxury Restroom Trailer Rentals',
