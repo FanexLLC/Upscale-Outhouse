@@ -131,7 +131,7 @@ export default function HeroSection() {
           transition={{ delayChildren: 0.3 }}
         >
           <motion.div variants={fadeUp}>
-            <AnimatedCounter value={250} suffix="+" label={t('eventsServed')} />
+            <AnimatedCounter value={100} suffix="+" label={t('eventsServed')} />
           </motion.div>
           <motion.div variants={fadeUp}>
             <AnimatedCounter value={5.0} suffix="" prefix="" label={t('starRating')} />
