@@ -9,29 +9,6 @@ import AnimatedCounter from '@/components/ui/AnimatedCounter';
 import Button from '@/components/ui/Button';
 import { fadeIn, fadeUp, staggerContainer } from '@/lib/animations';
 
-function ScrollIndicator({ label }: { label: string }) {
-  return (
-    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-      <span className="text-text-muted text-small font-body">{label}</span>
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        className="text-gold-primary animate-bounce"
-        aria-hidden="true"
-      >
-        <path
-          d="M6 9L12 15L18 9"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </div>
-  );
-}
 
 export default function HeroSection() {
   const prefersReducedMotion = useReducedMotion();
@@ -193,10 +170,6 @@ export default function HeroSection() {
         </p>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="relative">
-        <ScrollIndicator label={t('scroll')} />
-      </div>
     </section>
   );
 }
