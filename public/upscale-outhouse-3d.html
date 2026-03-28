@@ -196,7 +196,7 @@ function mkW(x,y,z){
   var hub=new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.08,0.2,12),new THREE.MeshStandardMaterial({color:0x333333,roughness:0.2,metalness:0.9}));hub.position.set(x,y,z);hub.rotation.z=Math.PI/2;ext.add(hub);
   for(var i=0;i<5;i++){var a=(i/5)*Math.PI*2;var ln=new THREE.Mesh(new THREE.CylinderGeometry(0.015,0.015,0.22,6),cM);ln.position.set(x,y+Math.sin(a)*0.12,z+Math.cos(a)*0.12*(z>0?1:-1));ln.rotation.z=Math.PI/2;ext.add(ln)}
 }
-var axSp=1.4;
+var axSp=0.7;
 var axCenter=TL/2-1.2;
 [-1,1].forEach(function(side){mkW(side*(TW/2+0.12),TY-0.35,axCenter-axSp/2);mkW(side*(TW/2+0.12),TY-0.35,axCenter+axSp/2)});
 [axCenter-axSp/2,axCenter+axSp/2].forEach(function(az){var axle=new THREE.Mesh(new THREE.CylinderGeometry(0.03,0.03,TW+0.5,8),dkM);axle.position.set(0,TY-0.35,az);axle.rotation.z=Math.PI/2;ext.add(axle)});
@@ -240,32 +240,32 @@ function addExtDoor(px,py,pz,isBack,isLeft){
 }
 
 function addExtDoorAccents(px,pz,isRight,isLeft){
-  var iconY2=TY+skH+dH+0.12,ledY2=TY+skH+dH+0.2;
+  var iconY2=TY+skH+dH+0.45,ledY2=TY+skH+dH+0.55;
   var dx2=isRight?sideDoorX+0.04:(isLeft?leftDoorX-0.04:px);
   var dz2=isRight||isLeft?pz:pz+0.04;
   if(isRight){
     var ic=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic.position.set(dx2,iconY2,dz2);ic.rotation.y=Math.PI/2;ext.add(ic);
     var sl=B(0.03,0.06,dW*0.65,glM,dx2,ledY2,dz2);ext.add(sl);gls.push(sl);
     var sgl=new THREE.PointLight(0x00e676,0.5,4);sgl.position.set(dx2+0.26,ledY2,dz2);ext.add(sgl);gls.push(sgl);
-    ext.add(B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.15,dz2));
-    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(dx2+0.02).translateY(TY+skH+0.06).translateZ(dz2));
+    ext.add(B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.48,dz2));
+    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(dx2+0.02).translateY(TY+skH+0.35).translateZ(dz2));
   }else if(isLeft){
     var ic2=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic2.position.set(dx2,iconY2,dz2);ic2.rotation.y=-Math.PI/2;ext.add(ic2);
     var sl2=B(0.03,0.06,dW*0.65,glM,dx2,ledY2,dz2);ext.add(sl2);gls.push(sl2);
     var sgl2=new THREE.PointLight(0x00e676,0.5,4);sgl2.position.set(dx2-0.26,ledY2,dz2);ext.add(sgl2);gls.push(sgl2);
-    ext.add(B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.15,dz2));
-    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(dx2-0.02).translateY(TY+skH+0.06).translateZ(dz2));
+    ext.add(B(0.04,0.04,0.12,dlM,dx2,TY+skH+dH+0.48,dz2));
+    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(dx2-0.02).translateY(TY+skH+0.35).translateZ(dz2));
   }else{
     var ic3=new THREE.Mesh(new THREE.CircleGeometry(0.08,16),gM);ic3.position.set(px,iconY2,dz2);ext.add(ic3);
     var sl3=B(dW*0.65,0.06,0.03,glM,px,ledY2,dz2);ext.add(sl3);gls.push(sl3);
     var bgl=new THREE.PointLight(0x00e676,0.5,4);bgl.position.set(px,ledY2,dz2+0.26);ext.add(bgl);gls.push(bgl);
-    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(px).translateY(TY+skH+0.06).translateZ(dz2));
+    ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),blM).translateX(px).translateY(TY+skH+0.35).translateZ(dz2));
   }
 }
 
 function addExtStairs(px,pz,dir){
   var stW=0.7,numSteps=4,gap=0.06;
-  var groundY=TY-0.15,topY=TY+skH-0.02;
+  var groundY=0,topY=TY+skH-0.02;
   var totalRise=topY-groundY,stH=totalRise/numSteps,stD=0.22,totalRun=numSteps*stD;
   var alMat=new THREE.MeshStandardMaterial({color:0xa8a8a8,roughness:0.3,metalness:0.7});
   var gripMat=new THREE.MeshStandardMaterial({color:0x555555,roughness:0.85,metalness:0.2});
@@ -356,8 +356,8 @@ ext.add(B(0.12,0.06,0.03,rlM,TW/2-0.15,TY+skH+0.15,backDoorZ));
 [-TW/2+0.08,TW/2-0.08].forEach(function(rx){ext.add(new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8),rlM).translateX(rx).translateY(TY+TH+0.05).translateZ(-TL/2-0.04))});
 
 // QR code on back
-ext.add(B(0.2,0.2,0.01,new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.5}),(bdX1+bdX2)/2,TY+skH+dH+0.15,backDoorZ+0.04));
-ext.add(B(0.16,0.16,0.012,bkM,(bdX1+bdX2)/2,TY+skH+dH+0.15,backDoorZ+0.042));
+ext.add(B(0.2,0.2,0.01,new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.5}),(bdX1+bdX2)/2,TY+skH+dH+0.48,backDoorZ+0.04));
+ext.add(B(0.16,0.16,0.012,bkM,(bdX1+bdX2)/2,TY+skH+dH+0.48,backDoorZ+0.042));
 
 // Stabilizer jacks
 [-TW/2+0.15,TW/2-0.15].forEach(function(jx){
