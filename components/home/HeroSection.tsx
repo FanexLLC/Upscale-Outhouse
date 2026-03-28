@@ -73,7 +73,7 @@ export default function HeroSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen bg-bg-primary flex flex-col items-center justify-center pt-16 md:pt-[72px] pb-20"
+      className="relative min-h-[85vh] md:min-h-screen bg-bg-primary flex flex-col items-center justify-center pt-20 md:pt-[72px] pb-12 md:pb-20"
     >
       {/* Hero background image */}
       <div className="absolute inset-0">
@@ -88,10 +88,10 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-b from-bg-primary/80 via-bg-primary/60 to-bg-primary" />
       </div>
 
-      <div ref={contentRef} className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div ref={contentRef} className="relative max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 text-center">
         {/* Overline */}
         <motion.div
-          className="mb-6"
+          className="mb-3 md:mb-6"
           variants={fadeIn}
           initial="hidden"
           animate="visible"
@@ -101,7 +101,7 @@ export default function HeroSection() {
 
         {/* Headline */}
         <motion.h1
-          className="font-display text-hero text-white leading-[1.05] max-w-4xl mx-auto mb-6"
+          className="font-display text-[clamp(2rem,7vw,7rem)] text-white leading-[1.1] max-w-4xl mx-auto mb-3 md:mb-6"
           variants={fadeUp}
           initial="hidden"
           animate="visible"
@@ -112,7 +112,7 @@ export default function HeroSection() {
 
         {/* Subtext */}
         <motion.p
-          className="font-body text-text-secondary text-body max-w-2xl mx-auto mb-10 leading-relaxed"
+          className="font-body text-text-secondary text-sm md:text-body max-w-2xl mx-auto mb-6 md:mb-10 leading-relaxed"
           variants={fadeUp}
           initial="hidden"
           animate="visible"
@@ -124,48 +124,48 @@ export default function HeroSection() {
         {/* Stats */}
         <motion.div
           ref={statsRef}
-          className="flex flex-wrap justify-center gap-8 md:gap-12 mb-10"
+          className="flex justify-center gap-6 md:gap-12 mb-6 md:mb-10"
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
           transition={{ delayChildren: 0.3 }}
         >
-          <motion.div variants={fadeUp}>
+          <motion.div variants={fadeUp} className="[&>span:first-child]:text-2xl [&>span:first-child]:md:text-4xl">
             <AnimatedCounter value={100} suffix="+" label={t('eventsServed')} />
           </motion.div>
-          <motion.div variants={fadeUp}>
+          <motion.div variants={fadeUp} className="[&>span:first-child]:text-2xl [&>span:first-child]:md:text-4xl">
             <AnimatedCounter value={5.0} suffix="" prefix="" label={t('starRating')} />
           </motion.div>
-          <motion.div variants={fadeUp}>
+          <motion.div variants={fadeUp} className="[&>span:first-child]:text-2xl [&>span:first-child]:md:text-4xl">
             <AnimatedCounter value={150} suffix="mi" label={t('serviceRadius')} />
           </motion.div>
         </motion.div>
 
         {/* CTAs */}
         <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mb-4 md:mb-6"
           variants={fadeUp}
           initial="hidden"
           animate="visible"
           transition={{ delay: 0.4 }}
         >
-          <Button variant="primary" size="lg" href="/quote">
+          <Button variant="primary" size="lg" href="/quote" className="w-full sm:w-auto">
             {t('ctaQuote')}
           </Button>
-          <Button variant="secondary" size="lg" href="/gallery">
+          <Button variant="secondary" size="lg" href="/gallery" className="w-full sm:w-auto">
             {t('ctaGallery')}
           </Button>
         </motion.div>
 
         {/* Mobile call button */}
-        <div className="sm:hidden mb-6">
-          <Button variant="phone" size="md" href="tel:+15596630356">
+        <div className="sm:hidden mb-4">
+          <Button variant="phone" size="md" href="tel:+15596630356" className="w-full">
             {t('callCta')}
           </Button>
         </div>
 
         {/* Small text */}
-        <p className="text-text-muted text-small font-body">
+        <p className="text-text-muted text-xs md:text-small font-body">
           {t('freeDelivery')}
         </p>
       </div>

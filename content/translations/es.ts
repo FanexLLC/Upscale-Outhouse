@@ -58,7 +58,7 @@ const es = {
     "veteranOwned": "EMPRESA DE VETERANOS",
     "freeDelivery": "ENTREGA GRATIS EN 50 MILLAS",
     "rated": "CALIFICACIÓN 5.0 EN CADA EVENTO",
-    "events": "MÁS DE 250 EVENTOS",
+    "events": "MÁS DE 100 EVENTOS",
     "climateControlled": "CLIMA CONTROLADO",
     "runningWater": "AGUA CORRIENTE"
   },

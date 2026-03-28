@@ -56,9 +56,9 @@ const en = {
   },
   "socialProof": {
     "veteranOwned": "VETERAN OWNED",
-    "freeDelivery": "FREE DELIVERY WITHIN 50 MI",
+    "freeDelivery": "FREE DELIVERY WITHIN 50 MILES",
     "rated": "5.0 RATED EVERY EVENT",
-    "events": "250+ EVENTS",
+    "events": "100+ EVENTS",
     "climateControlled": "CLIMATE CONTROLLED",
     "runningWater": "RUNNING WATER"
   },

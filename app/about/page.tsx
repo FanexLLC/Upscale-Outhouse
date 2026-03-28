@@ -153,7 +153,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <AnimatedCounter
-              value={250}
+              value={100}
               suffix="+"
               label="Events Served"
               className="[&>span:first-child]:text-text-on-light [&>span:last-child]:text-text-on-light/60"
