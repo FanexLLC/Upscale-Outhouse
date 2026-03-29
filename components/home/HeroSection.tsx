@@ -73,62 +73,90 @@ export default function HeroSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[85vh] md:min-h-screen bg-bg-primary flex flex-col items-center justify-center pt-20 md:pt-[72px] pb-12 md:pb-20"
+      className="relative min-h-[85vh] md:min-h-screen bg-bg-primary flex flex-col justify-end pt-20 md:pt-[72px]"
     >
-      {/* Hero background image */}
+      {/* Hero background — trailer pushed right so text has clear space on the left */}
       <div className="absolute inset-0">
         <Image
-          src="/images/gallery/gallery-exterior-showcase-01.jpeg"
-          alt="Upscale Outhouse luxury restroom trailer at an outdoor event"
+          src="/images/gallery/evt-winery-evening-front.jpg"
+          alt="Upscale Outhouse luxury restroom trailer at a winery event during golden hour"
           fill
           priority
-          className="object-cover"
+          className="object-cover object-[75%_30%] md:object-[65%_30%]"
         />
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-bg-primary/80 via-bg-primary/60 to-bg-primary" />
+        {/* Left-to-right gradient — dark on the left for text, fades out toward the trailer */}
+        <div className="absolute inset-0 bg-gradient-to-r from-bg-primary/95 via-bg-primary/60 via-[45%] to-transparent" />
+        {/* Bottom gradient — for stats row readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-bg-primary via-transparent via-[30%] to-transparent" />
       </div>
 
-      <div ref={contentRef} className="relative max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 text-center">
-        {/* Overline */}
-        <motion.div
-          className="mb-3 md:mb-6"
-          variants={fadeIn}
-          initial="hidden"
-          animate="visible"
-        >
-          <OverlineLabel>{t('overline')}</OverlineLabel>
-        </motion.div>
+      {/* Content — pinned to bottom so the trailer image is the star */}
+      <div ref={contentRef} className="relative max-w-7xl mx-auto w-full px-5 sm:px-6 lg:px-8 pb-8 md:pb-14">
+        <div className="max-w-2xl">
+          {/* Overline */}
+          <motion.div
+            className="mb-2 md:mb-3"
+            variants={fadeIn}
+            initial="hidden"
+            animate="visible"
+          >
+            <OverlineLabel>{t('overline')}</OverlineLabel>
+          </motion.div>
 
-        {/* Headline */}
-        <motion.h1
-          className="font-display text-[clamp(2rem,7vw,7rem)] text-white leading-[1.1] max-w-4xl mx-auto mb-3 md:mb-6"
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          transition={{ delay: 0.1 }}
-        >
-          {t('headline')}
-        </motion.h1>
+          {/* Headline */}
+          <motion.h1
+            className="font-display text-[clamp(2rem,5vw,4.5rem)] text-white leading-[1.1] mb-3 md:mb-4"
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.1 }}
+          >
+            {t('headline')}
+          </motion.h1>
 
-        {/* Subtext */}
-        <motion.p
-          className="font-body text-text-secondary text-sm md:text-body max-w-2xl mx-auto mb-6 md:mb-10 leading-relaxed"
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          transition={{ delay: 0.2 }}
-        >
-          {t('subtext')}
-        </motion.p>
+          {/* Subtext */}
+          <motion.p
+            className="font-body text-text-secondary text-sm md:text-body max-w-lg mb-5 md:mb-6 leading-relaxed"
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.2 }}
+          >
+            {t('subtext')}
+          </motion.p>
 
-        {/* Stats */}
+          {/* CTAs */}
+          <motion.div
+            className="flex flex-col sm:flex-row items-start gap-3 md:gap-4 mb-4 md:mb-6"
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.3 }}
+          >
+            <Button variant="primary" size="lg" href="/quote" className="w-full sm:w-auto">
+              {t('ctaQuote')}
+            </Button>
+            <Button variant="secondary" size="lg" href="/gallery" className="w-full sm:w-auto">
+              {t('ctaGallery')}
+            </Button>
+          </motion.div>
+
+          {/* Mobile call button */}
+          <div className="sm:hidden mb-4">
+            <Button variant="phone" size="md" href="tel:+15596630356" className="w-full">
+              {t('callCta')}
+            </Button>
+          </div>
+        </div>
+
+        {/* Stats row — spans full width at the bottom */}
         <motion.div
           ref={statsRef}
-          className="flex justify-center gap-6 md:gap-12 mb-6 md:mb-10"
+          className="flex gap-6 md:gap-12 pt-4 md:pt-6 border-t border-white/10"
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
-          transition={{ delayChildren: 0.3 }}
+          transition={{ delayChildren: 0.4 }}
         >
           <motion.div variants={fadeUp} className="[&>span:first-child]:text-2xl [&>span:first-child]:md:text-4xl">
             <AnimatedCounter value={100} suffix="+" label={t('eventsServed')} />
@@ -141,31 +169,8 @@ export default function HeroSection() {
           </motion.div>
         </motion.div>
 
-        {/* CTAs */}
-        <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mb-4 md:mb-6"
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          transition={{ delay: 0.4 }}
-        >
-          <Button variant="primary" size="lg" href="/quote" className="w-full sm:w-auto">
-            {t('ctaQuote')}
-          </Button>
-          <Button variant="secondary" size="lg" href="/gallery" className="w-full sm:w-auto">
-            {t('ctaGallery')}
-          </Button>
-        </motion.div>
-
-        {/* Mobile call button */}
-        <div className="sm:hidden mb-4">
-          <Button variant="phone" size="md" href="tel:+15596630356" className="w-full">
-            {t('callCta')}
-          </Button>
-        </div>
-
         {/* Small text */}
-        <p className="text-text-muted text-xs md:text-small font-body">
+        <p className="text-text-muted text-xs md:text-small font-body mt-3">
           {t('freeDelivery')}
         </p>
       </div>
