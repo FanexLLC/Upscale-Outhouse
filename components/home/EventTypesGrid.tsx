@@ -12,32 +12,32 @@ const eventData = [
   {
     key: 'weddings' as const,
     href: '/events/weddings',
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop',
-    imageAlt: 'Elegant outdoor wedding ceremony setting',
+    image: '/images/gallery/evt-winery-pavilion-roses.jpg',
+    imageAlt: 'Upscale Outhouse trailer at a winery wedding with roses and pavilion',
   },
   {
     key: 'corporate' as const,
     href: '/events/corporate',
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&h=800&fit=crop',
-    imageAlt: 'Professional corporate event venue',
+    image: '/images/gallery/gallery-exterior-side-01.jpg',
+    imageAlt: 'Luxury restroom trailer at a professional venue on manicured lawn',
   },
   {
     key: 'birthdays' as const,
     href: '/events/birthday-graduation',
-    image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&h=800&fit=crop',
-    imageAlt: 'Festive birthday celebration with decorations',
+    image: '/images/gallery/gallery-exterior-doors-01.jpg',
+    imageAlt: 'Upscale Outhouse trailer at a residential celebration with palm trees',
   },
   {
     key: 'festivals' as const,
     href: '/events/festivals',
-    image: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=600&h=800&fit=crop',
-    imageAlt: 'Outdoor festival crowd enjoying live music',
+    image: '/images/gallery/evt-winery-evening-front.jpg',
+    imageAlt: 'Upscale Outhouse trailer at an evening outdoor festival event',
   },
   {
     key: 'quinceaneras' as const,
     href: '/events/quinceanera',
-    image: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600&h=800&fit=crop',
-    imageAlt: 'Elegant cultural celebration with beautiful decorations',
+    image: '/images/gallery/gallery-exterior-showcase-01.jpeg',
+    imageAlt: 'Luxury restroom trailer setup for an elegant backyard celebration',
   },
 ];
 

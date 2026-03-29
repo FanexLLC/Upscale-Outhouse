@@ -16,13 +16,13 @@ export const metadata: Metadata = {
     url: 'https://www.upscaleouthouse.com/about',
     siteName: 'Upscale Outhouse',
     type: 'website',
-    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'About Upscale Outhouse — veteran-owned luxury restroom trailer company' }],
+    images: [{ url: '/images/gallery/evt-team-winery.jpg', width: 4032, height: 3024, alt: 'About Upscale Outhouse — veteran-owned luxury restroom trailer company' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'About Us — Veteran-Owned Luxury Restroom Rentals | Upscale Outhouse',
     description: 'Learn about Upscale Outhouse — a veteran-owned luxury bathroom trailer rental company serving Fresno and Central California with military precision and five-star service.',
-    images: ['/twitter-image.png'],
+    images: ['/images/gallery/evt-team-winery.jpg'],
   },
 };
 
@@ -47,14 +47,25 @@ export default function AboutPage() {
       <section className="bg-bg-primary py-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-start">
-            <div className="relative bg-bg-secondary aspect-[4/3] rounded-card overflow-hidden">
-              <Image
-                src="/images/about-us.jpg"
-                alt="Upscale Outhouse team"
-                fill
-                className="object-cover object-[center_25%]"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
+            <div className="space-y-6">
+              <div className="relative bg-bg-secondary aspect-[4/3] rounded-card overflow-hidden">
+                <Image
+                  src="/images/about-us.jpg"
+                  alt="Upscale Outhouse team"
+                  fill
+                  className="object-cover object-[center_25%]"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+              <div className="relative bg-bg-secondary aspect-[4/3] rounded-card overflow-hidden">
+                <Image
+                  src="/images/gallery/evt-team-winery.jpg"
+                  alt="Upscale Outhouse founders at a winery event"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
             </div>
             <div className="space-y-6">
               <p className="text-text-secondary text-body leading-relaxed">
