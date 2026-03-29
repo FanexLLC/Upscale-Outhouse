@@ -13,13 +13,11 @@ export const metadata: Metadata = {
     url: 'https://www.upscaleouthouse.com/blog',
     siteName: 'Upscale Outhouse',
     type: 'website',
-    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'Upscale Outhouse blog — event planning tips and insights' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Blog — Event Planning Tips & Industry Insights | Upscale Outhouse',
     description: "Read our latest articles on event planning, luxury restroom rentals, and making your events unforgettable. Tips from Fresno's premier restroom trailer company.",
-    images: ['/twitter-image.png'],
   },
 };
 

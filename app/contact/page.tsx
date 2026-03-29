@@ -15,13 +15,11 @@ export const metadata: Metadata = {
     url: 'https://www.upscaleouthouse.com/contact',
     siteName: 'Upscale Outhouse',
     type: 'website',
-    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'Contact Upscale Outhouse for luxury restroom trailer rentals' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Contact Us | Upscale Outhouse — Luxury Restroom Trailer Rentals',
     description: 'Contact Upscale Outhouse for luxury restroom trailer rentals in Fresno & Central California. Call (559) 663-0356 or fill out our form. We respond within 2 hours.',
-    images: ['/twitter-image.png'],
   },
 };
 

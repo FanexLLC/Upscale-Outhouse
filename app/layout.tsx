@@ -38,7 +38,6 @@ export const metadata: Metadata = {
   },
   description: "Premium luxury bathroom trailer rentals for weddings, corporate events, and special occasions in Fresno and Central California. Veteran-owned, serving within 150 miles.",
   metadataBase: new URL(siteUrl),
-  // TODO: Replace placeholder branding assets in /public/branding and /app with final logo/hero images.
   icons: {
     icon: "/images/gallery/logo-clear.jpg",
     apple: "/images/gallery/logo-clear.jpg",
@@ -50,20 +49,11 @@ export const metadata: Metadata = {
     siteName: "Upscale Outhouse",
     title: "Upscale Outhouse | Luxury Bathroom Trailer Rentals",
     description: "Premium luxury bathroom trailer rentals for weddings, corporate events, and special occasions in Fresno and Central California.",
-    images: [
-      {
-        url: "/images/gallery/hero-bg.jpg",
-        width: 1920,
-        height: 1280,
-        alt: "Upscale Outhouse luxury restroom trailer",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Upscale Outhouse | Luxury Bathroom Trailer Rentals",
     description: "Premium luxury bathroom trailer rentals for weddings, corporate events, and special occasions in Fresno and Central California.",
-    images: ["/images/gallery/hero-bg.jpg"],
   },
   robots: {
     index: true,

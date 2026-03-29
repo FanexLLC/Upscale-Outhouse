@@ -11,13 +11,11 @@ export const metadata: Metadata = {
     url: 'https://www.upscaleouthouse.com/events/quinceanera',
     siteName: 'Upscale Outhouse',
     type: 'website',
-    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'Luxury restroom trailer rental for quinceañeras in Fresno' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Quinceañera Luxury Restroom Rental Fresno | Baño de Lujo | Upscale Outhouse',
     description: 'Luxury portable restroom trailers for quinceañeras in Fresno and Central California. Renta de baño portátil de lujo para quinceañeras en Fresno y Central California. Free quote.',
-    images: ['/twitter-image.png'],
   },
 };
 
