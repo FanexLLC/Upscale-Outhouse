@@ -11,13 +11,11 @@ export const metadata: Metadata = {
     url: 'https://www.upscaleouthouse.com/events/festivals',
     siteName: 'Upscale Outhouse',
     type: 'website',
-    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'Luxury restroom trailer rental for festivals and concerts' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Festival & Concert Restroom Trailer Rental Central CA | Upscale Outhouse',
     description: 'Luxury restroom trailers for festivals, concerts, and outdoor events in Central California. High-capacity, VIP-level facilities. Multi-day service available.',
-    images: ['/twitter-image.png'],
   },
 };
 

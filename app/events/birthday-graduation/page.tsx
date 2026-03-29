@@ -11,13 +11,11 @@ export const metadata: Metadata = {
     url: 'https://www.upscaleouthouse.com/events/birthday-graduation',
     siteName: 'Upscale Outhouse',
     type: 'website',
-    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'Luxury restroom trailer rental for birthday and graduation parties' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Birthday & Graduation Party Restroom Rental Fresno | Upscale Outhouse',
     description: 'Luxury portable restroom trailers for birthday parties and graduation celebrations in Fresno, Clovis & Central CA. Upgrade your backyard party. Free quote.',
-    images: ['/twitter-image.png'],
   },
 };
 

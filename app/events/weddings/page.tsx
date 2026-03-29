@@ -11,13 +11,11 @@ export const metadata: Metadata = {
     url: 'https://www.upscaleouthouse.com/events/weddings',
     siteName: 'Upscale Outhouse',
     type: 'website',
-    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'Luxury restroom trailer rental for weddings in Fresno and Central California' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Wedding Restroom Trailer Rental Fresno | Luxury Portable Bathroom | Upscale Outhouse',
     description: 'Elevate your wedding with a luxury restroom trailer. Climate-controlled, running water, LED lighting. Serving Fresno, Clovis, Visalia & Central CA. Free quote.',
-    images: ['/twitter-image.png'],
   },
 };
 

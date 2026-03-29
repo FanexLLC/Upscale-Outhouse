@@ -11,13 +11,11 @@ export const metadata: Metadata = {
     url: 'https://www.upscaleouthouse.com/events/corporate',
     siteName: 'Upscale Outhouse',
     type: 'website',
-    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'Luxury restroom trailer rental for corporate events' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Corporate Event Restroom Trailer Rental | Professional Facilities | Upscale Outhouse',
     description: 'Professional luxury restroom trailers for corporate events, retreats, and conferences. Climate-controlled, immaculate facilities. Serving Central California.',
-    images: ['/twitter-image.png'],
   },
 };
 

@@ -15,13 +15,11 @@ export const metadata: Metadata = {
     url: 'https://www.upscaleouthouse.com/faq',
     siteName: 'Upscale Outhouse',
     type: 'website',
-    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'Frequently asked questions about luxury restroom trailer rentals' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'FAQ — Luxury Restroom Trailer Rental Questions | Upscale Outhouse',
     description: 'Get answers to common questions about luxury restroom trailer rentals. Pricing, delivery, setup, capacity, and more. Serving Fresno & Central California.',
-    images: ['/twitter-image.png'],
   },
 };
 

@@ -9,13 +9,11 @@ export const metadata: Metadata = {
     url: 'https://www.upscaleouthouse.com/terms',
     siteName: 'Upscale Outhouse',
     type: 'website',
-    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'Upscale Outhouse terms of service' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Terms of Service | Upscale Outhouse',
     description: 'Terms of Service for Upscale Outhouse luxury bathroom trailer rentals.',
-    images: ['/twitter-image.png'],
   },
 };
 

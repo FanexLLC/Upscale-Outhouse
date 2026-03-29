@@ -11,13 +11,11 @@ export const metadata: Metadata = {
     url: 'https://www.upscaleouthouse.com/quote',
     siteName: 'Upscale Outhouse',
     type: 'website',
-    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'Get an instant quote for luxury restroom trailer rental' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Get Your Instant Quote | Upscale Outhouse',
     description: 'Configure your luxury portable restroom trailer rental in minutes. Instant pricing for weddings, corporate events, and celebrations near Fresno, CA. Free delivery within 50 miles.',
-    images: ['/twitter-image.png'],
   },
 };
 
