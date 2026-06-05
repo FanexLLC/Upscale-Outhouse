@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Button from '@/components/ui/Button';
 import AvailabilityCalendar from './AvailabilityCalendar';
 import TimePicker from './TimePicker';
@@ -25,71 +25,75 @@ function generateTimes(): string[] {
 
 const TIME_SLOTS = generateTimes();
 
+// Loads the Google Maps JS API using the modern async loader so that
+// google.maps.importLibrary() is available.
+function loadMapsApi(apiKey: string): Promise<void> {
+  if (typeof window === 'undefined') return Promise.reject(new Error('no window'));
+  if (window.google?.maps) return Promise.resolve();
+
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector<HTMLScriptElement>('script[data-gmaps-loader]');
+    if (existing) {
+      existing.addEventListener('load', () => resolve());
+      existing.addEventListener('error', () => reject(new Error('maps load failed')));
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&loading=async&v=weekly`;
+    script.async = true;
+    script.defer = true;
+    script.setAttribute('data-gmaps-loader', '1');
+    script.addEventListener('load', () => resolve());
+    script.addEventListener('error', () => reject(new Error('maps load failed')));
+    document.head.appendChild(script);
+  });
+}
+
 export default function DateLocationStep({ data, updateData, onNext, onBack }: DateLocationStepProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [distanceLoading, setDistanceLoading] = useState(false);
-  const [placesLoaded, setPlacesLoaded] = useState(false);
-  const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [placesReady, setPlacesReady] = useState(false);
+  const [placesFailed, setPlacesFailed] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const autocompleteElRef = useRef<HTMLElement | null>(null);
 
-  // Try to initialize Google Places Autocomplete
-  useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-    if (!apiKey || !inputRef.current) return;
+  // Keep the selection handler in a ref so the once-only mount effect always
+  // calls the latest version (avoids stale closures over updateData).
+  const handleSelectRef = useRef<(event: Event) => void>(() => {});
+  handleSelectRef.current = async (event: Event) => {
+    // The runtime fires `gmp-select` with `placePrediction` on newer versions
+    // and `gmp-placeselect` with `place` on older ones — handle both.
+    const evt = event as unknown as {
+      placePrediction?: google.maps.places.PlacePrediction;
+      place?: google.maps.places.Place;
+    };
+    const place = evt.placePrediction?.toPlace() ?? evt.place;
+    if (!place) return;
 
-    // Check if Google Maps is already loaded
-    if (window.google?.maps?.places) {
-      initAutocomplete();
+    try {
+      await place.fetchFields({ fields: ['formattedAddress', 'location', 'addressComponents'] });
+    } catch {
       return;
     }
 
-    // Load the Google Maps script
-    const existingScript = document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]');
-    if (existingScript) {
-      existingScript.addEventListener('load', initAutocomplete);
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-    script.async = true;
-    script.defer = true;
-    script.onload = initAutocomplete;
-    document.head.appendChild(script);
-
-    function initAutocomplete() {
-      if (!inputRef.current || !window.google?.maps?.places) return;
-      autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
-        componentRestrictions: { country: 'us' },
-        fields: ['formatted_address', 'geometry', 'address_components'],
-      });
-      autocompleteRef.current.addListener('place_changed', handlePlaceSelect);
-      setPlacesLoaded(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handlePlaceSelect = useCallback(() => {
-    const place = autocompleteRef.current?.getPlace();
-    if (!place?.geometry?.location) return;
-
-    const lat = place.geometry.location.lat();
-    const lng = place.geometry.location.lng();
+    const loc = place.location;
+    if (!loc) return;
+    const lat = loc.lat();
+    const lng = loc.lng();
 
     let city: string | null = null;
     let state: string | null = null;
     let zip: string | null = null;
 
-    if (place.address_components) {
-      for (const component of place.address_components) {
-        if (component.types.includes('locality')) city = component.long_name;
-        if (component.types.includes('administrative_area_level_1')) state = component.short_name;
-        if (component.types.includes('postal_code')) zip = component.long_name;
-      }
+    for (const component of place.addressComponents ?? []) {
+      const types = component.types;
+      if (types.includes('locality')) city = component.longText;
+      if (types.includes('administrative_area_level_1')) state = component.shortText;
+      if (types.includes('postal_code')) zip = component.longText;
     }
 
     updateData({
-      eventLocation: place.formatted_address || '',
+      eventLocation: place.formattedAddress || '',
       eventLat: lat,
       eventLng: lng,
       eventCity: city,
@@ -97,10 +101,54 @@ export default function DateLocationStep({ data, updateData, onNext, onBack }: D
       eventZip: zip,
     });
 
-    // Calculate distance
     calculateDistance(lat, lng);
+  };
+
+  // Mount the modern Places Autocomplete element (Places API New).
+  useEffect(() => {
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    if (!apiKey) {
+      setPlacesFailed(true);
+      return;
+    }
+
+    let cancelled = false;
+    const listener = (e: Event) => handleSelectRef.current(e);
+
+    (async () => {
+      try {
+        await loadMapsApi(apiKey);
+        await google.maps.importLibrary('places');
+        if (cancelled || !containerRef.current) return;
+
+        const el = new google.maps.places.PlaceAutocompleteElement({
+          componentRestrictions: { country: 'us' },
+        });
+        el.style.width = '100%';
+        el.className = 'uo-place-autocomplete';
+        autocompleteElRef.current = el;
+        containerRef.current.appendChild(el);
+
+        el.addEventListener('gmp-select', listener);
+        el.addEventListener('gmp-placeselect', listener);
+        setPlacesReady(true);
+      } catch {
+        if (!cancelled) setPlacesFailed(true);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      const el = autocompleteElRef.current;
+      if (el) {
+        el.removeEventListener('gmp-select', listener);
+        el.removeEventListener('gmp-placeselect', listener);
+        el.remove();
+        autocompleteElRef.current = null;
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateData]);
+  }, []);
 
   const calculateDistance = async (lat: number, lng: number) => {
     setDistanceLoading(true);
@@ -223,21 +271,40 @@ export default function DateLocationStep({ data, updateData, onNext, onBack }: D
           <label className="block text-text-secondary text-sm font-body mb-1">
             Event address
           </label>
-          <input
-            ref={inputRef}
-            type="text"
-            value={placesLoaded ? undefined : data.eventLocation}
-            defaultValue={placesLoaded ? data.eventLocation : undefined}
-            onChange={
-              placesLoaded
-                ? undefined
-                : (e) => updateData({ eventLocation: e.target.value, eventLat: null, eventLng: null, distanceMiles: null, deliveryFee: null })
-            }
-            placeholder="Enter event address"
-            className={`w-full bg-bg-elevated border rounded-lg px-4 py-3 text-white font-body placeholder:text-text-muted/50 transition-colors focus:border-gold-primary focus:outline-none focus:ring-1 focus:ring-gold-primary/30 ${
-              errors.location ? 'border-error' : 'border-gold-dark/30'
-            }`}
-          />
+
+          {/* Modern Places Autocomplete element mounts here (Places API New) */}
+          <div ref={containerRef} className={placesReady ? 'block' : 'hidden'} />
+
+          {!placesReady && !placesFailed && (
+            <p className="text-text-muted text-sm">Loading address search&hellip;</p>
+          )}
+
+          {/* Fallback to manual entry if Google Maps fails to load */}
+          {placesFailed && (
+            <input
+              type="text"
+              value={data.eventLocation}
+              onChange={(e) =>
+                updateData({
+                  eventLocation: e.target.value,
+                  eventLat: null,
+                  eventLng: null,
+                  distanceMiles: null,
+                  deliveryFee: null,
+                })
+              }
+              placeholder="Enter event address"
+              className={`w-full bg-bg-elevated border rounded-lg px-4 py-3 text-white font-body placeholder:text-text-muted/50 transition-colors focus:border-gold-primary focus:outline-none focus:ring-1 focus:ring-gold-primary/30 ${
+                errors.location ? 'border-error' : 'border-gold-dark/30'
+              }`}
+            />
+          )}
+
+          {data.eventLocation && placesReady && (
+            <p className="text-text-secondary text-sm mt-2 font-body">
+              Selected: {data.eventLocation}
+            </p>
+          )}
           {errors.location && <p className="text-error text-sm mt-1">{errors.location}</p>}
         </div>
 

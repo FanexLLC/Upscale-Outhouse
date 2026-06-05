@@ -225,3 +225,15 @@
   color: var(--color-text-secondary);
   margin: 2rem 0;
 }
+
+/* Google Places Autocomplete element (Places API New) — match dark theme */
+.uo-place-autocomplete {
+  display: block;
+  width: 100%;
+  /* Hint the shadow-DOM input/dropdown to render in dark mode */
+  color-scheme: dark;
+  --gmp-mat-color-surface: var(--color-bg-elevated);
+  --gmp-mat-color-on-surface: var(--color-text-primary);
+  --gmp-mat-color-outline: var(--color-gold-dark);
+  --gmp-mat-color-primary: var(--color-gold-primary);
+}
