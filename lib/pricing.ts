@@ -2,6 +2,7 @@
 export const PRICING = {
   HOURLY_RATE: 100,           // $100/hour for events under 4 hours
   HOURLY_THRESHOLD: 4,        // Hours threshold — above this, use daily flat rate
+  MINIMUM_CHARGE: 400,        // Minimum rental charge regardless of hours booked
   DAILY_FLAT_RATE: 650,       // $650 flat rate per day (4+ hours)
   DEPOSIT_AMOUNT: 100,
   FREE_DELIVERY_MILES: 50,
@@ -106,7 +107,7 @@ export function getDiscountLabel(
  * Calculate the full quote based on event details.
  *
  * Pricing model:
- * - Single-day event under 4 hours: $100/hour
+ * - Single-day event under 4 hours: $100/hour (with a $400 minimum charge)
  * - Single-day event 4+ hours: $650 flat rate
  * - Multi-day event: $650 per day (with multi-day discounts)
  */
@@ -129,10 +130,17 @@ export function calculateQuote(
   let rentalDescription: string;
 
   if (numberOfDays === 1 && totalHours <= PRICING.HOURLY_THRESHOLD) {
-    // Under 4 hours on a single day — charge hourly
+    // Under 4 hours on a single day — charge hourly, with a minimum charge floor
     isHourlyRate = true;
-    baseRental = Math.ceil(totalHours) * hourlyRate;
-    rentalDescription = `${Math.ceil(totalHours)} ${Math.ceil(totalHours) === 1 ? 'hour' : 'hours'} × $${hourlyRate}/hr`;
+    const hours = Math.ceil(totalHours);
+    const hourlyTotal = hours * hourlyRate;
+    if (hourlyTotal < PRICING.MINIMUM_CHARGE) {
+      baseRental = PRICING.MINIMUM_CHARGE;
+      rentalDescription = `Minimum charge ($${PRICING.MINIMUM_CHARGE})`;
+    } else {
+      baseRental = hourlyTotal;
+      rentalDescription = `${hours} ${hours === 1 ? 'hour' : 'hours'} × $${hourlyRate}/hr`;
+    }
   } else {
     // 4+ hours or multi-day — flat daily rate
     isHourlyRate = false;
